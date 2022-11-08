@@ -354,20 +354,20 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.7.3.tgz#939534757a81f8d69cc854c7692805684ff3111e"
   integrity sha512-dGRS0agJzu8ybo44pCIf3xBaPQN/65AIXNgK8+4gzKd5kbvlqyxryUYVLJv7fK98Seyd2hDZzVEHSWAh0Bt1Yw==
 
-"@pendle/core-v2@ 0.16.4-testnet":
-  version "0.16.4-testnet"
-  resolved "https://registry.yarnpkg.com/@pendle/core-v2/-/core-v2-0.16.4-testnet.tgz#116b02aa4297d30e908ee74114743a036ca9c7c9"
-  integrity sha512-e3azMDvF9gFd2knLuZAOk9nUwE+8+D1H2HrvmbXPptL/sbZPbgKAjYJI2D0hi0NrBE9b5ZAzABteM/lx0QuWUA==
+"@pendle/core-v2@0.16.5-testnet":
+  version "0.16.5-testnet"
+  resolved "https://registry.yarnpkg.com/@pendle/core-v2/-/core-v2-0.16.5-testnet.tgz#e4842ab67286399e8c34419512389ff73acd21f6"
+  integrity sha512-qVee5b4SihJFSbW2R9GBGtL8cWIIRGreeOjDKLNEhIxe2dYK7VRskHuNSGWCz2/x8hvcj9T1u93irllXOpyAdw==
   dependencies:
     "@openzeppelin/contracts" "^4.7.3"
     "@openzeppelin/contracts-upgradeable" "^4.7.3"
 
-"@pendle/sdk-v2@^0.0.56-weekly":
-  version "0.0.56-weekly"
-  resolved "https://registry.yarnpkg.com/@pendle/sdk-v2/-/sdk-v2-0.0.56-weekly.tgz#0e65914df09af08107ad1bfbe7c547df48affcc4"
-  integrity sha512-u5DMUJx768bZkjRr5Imr0A8J+wFgY8rL9eiCQGmdolyCVxQXZnFel9RDMG/6SyawvgMsKFNDTmgnWkPPics7hQ==
+"@pendle/sdk-v2@^0.0.58-weekly":
+  version "0.0.58-weekly"
+  resolved "https://registry.yarnpkg.com/@pendle/sdk-v2/-/sdk-v2-0.0.58-weekly.tgz#b3dde0f3fe16ffd41acff2130dcfe8f22d481a67"
+  integrity sha512-Z09voSIHu7RrqwBYqeF076y4NAkbLeU4tfFFHtZknSOoh6dX1S+S26z5ocAKsRembIYvD6lPyRhnmZ1TMzkuYw==
   dependencies:
-    "@pendle/core-v2" " 0.16.4-testnet"
+    "@pendle/core-v2" "0.16.5-testnet"
     axios "^0.27.2"
     bignumber.js "^9.1.0"
     ethers "^5.7.1"
