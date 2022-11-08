@@ -1,0 +1,11 @@
+{
+  "name": "pendle-sdk-core-v2-docs",
+  "version": "1.0.0",
+  "description": "Documentation for Pendle SDK-v2",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@pendle/sdk-v2": "^0.0.56-weekly",
+    "node-metamask": "^1.1.2"
+  }
+}
