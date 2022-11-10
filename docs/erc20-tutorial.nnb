@@ -90,16 +90,16 @@
                             "value": [
                                 "Got error",
                                 "PendleSdkError: For contract creation, networkConnection.provider should be the same as networkConnection.signer.provider",
-                                "    at createContractObject (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/\u001b[4m@pendle\u001b[24m/sdk-v2/dist/sdk-v2.cjs.development.js:1288:11)",
-                                "    at new PendleEntity (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/\u001b[4m@pendle\u001b[24m/sdk-v2/dist/sdk-v2.cjs.development.js:1311:22)",
-                                "    at new ERC20 (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/\u001b[4m@pendle\u001b[24m/sdk-v2/dist/sdk-v2.cjs.development.js:1333:5)",
-                                "    at evalmachine.<anonymous>:18:5",
-                                "    at evalmachine.<anonymous>:25:3",
-                                "\u001b[90m    at sigintHandlersWrap (node:vm:276:12)\u001b[39m",
-                                "\u001b[90m    at Script.runInThisContext (node:vm:127:14)\u001b[39m",
-                                "\u001b[90m    at Object.runInThisContext (node:vm:313:38)\u001b[39m",
-                                "    at Object.execute (/usr/lib/node_modules/\u001b[4mtslab\u001b[24m/dist/executor.js:162:38)",
-                                "    at JupyterHandlerImpl.handleExecuteImpl (/usr/lib/node_modules/\u001b[4mtslab\u001b[24m/dist/jupyter.js:219:38)",
+                                "    at createContractObject (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/contracts/createContractObject.ts:159:15)",
+                                "    at new PendleEntity (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/PendleEntity.ts:31:26)",
+                                "    at new ERC20 (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/ERC20.ts:11:9)",
+                                "    at <Cell 12> [15, 13]",
+                                "    at <Cell 12> [18, 46]",
+                                "    at Script.runInContext (node:vm:141:12)",
+                                "    at Script.runInNewContext (node:vm:146:17)",
+                                "    at Object.runInNewContext (node:vm:306:38)",
+                                "    at C (/home/darkkcyan/.vscode-oss/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)",
+                                "    at t.execCode (/home/darkkcyan/.vscode-oss/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)",
                                 ""
                             ]
                         }
@@ -131,7 +131,7 @@
         {
             "language": "typescript",
             "source": [
-                "import { Address } from '@pendle/sdk-v2';\n\nasync function readonlyFunctionsExample(erc20: ERC20, ownerAddress: string, spenderAddress: string) {\n    const name = await erc20.name();\n    const symbol = await erc20.symbol();\n    \n    // convert ethersjs' BigNumber to string for readability\n    const decimals = (await erc20.decimals()).toString();\n    const totalSupply = (await erc20.totalSupply()).toString();\n    const balanceOf = (await erc20.balanceOf(ownerAddress)).toString();\n    const allowance = (await erc20.allowance(ownerAddress, spenderAddress)).toString();\n    return {ownerAddress, spenderAddress, name, symbol, decimals, totalSupply, balanceOf, allowance };\n}"
+                "import { Address } from '@pendle/sdk-v2';\n\nasync function readonlyFunctionsExample(erc20: ERC20, ownerAddress: Address, spenderAddress: Address) {\n    const name = await erc20.name();\n    const symbol = await erc20.symbol();\n    \n    // convert ethersjs' BigNumber to string for readability\n    const decimals = (await erc20.decimals()).toString();\n    const totalSupply = (await erc20.totalSupply()).toString();\n    const balanceOf = (await erc20.balanceOf(ownerAddress)).toString();\n    const allowance = (await erc20.allowance(ownerAddress, spenderAddress)).toString();\n    return {ownerAddress, spenderAddress, name, symbol, decimals, totalSupply, balanceOf, allowance };\n}"
             ],
             "outputs": []
         },
@@ -145,7 +145,7 @@
         {
             "language": "typescript",
             "source": [
-                "const ownerAddress = '0x5cb656d7605d9924c085fc859585f3ff2f7ad08f';\nconst spenderAddress = '0x221b0a202d7926fc1b9257310b5a16592f2ab852';"
+                "const ownerAddress: Address = '0x5cb656d7605d9924c085fc859585f3ff2f7ad08f';\nconst spenderAddress: Address = '0x221b0a202d7926fc1b9257310b5a16592f2ab852';"
             ],
             "outputs": []
         },
@@ -172,17 +172,26 @@
                                 "",
                                 "For more details: https://docs.ethers.io/api-keys/",
                                 "==========================",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/plain",
+                            "value": [
                                 "{",
                                 "  ownerAddress: \u001b[32m'0x5cb656d7605d9924c085fc859585f3ff2f7ad08f'\u001b[39m,",
                                 "  spenderAddress: \u001b[32m'0x221b0a202d7926fc1b9257310b5a16592f2ab852'\u001b[39m,",
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38514266086829550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
-                                "}",
-                                ""
+                                "}"
                             ]
                         }
                     ]
@@ -212,7 +221,7 @@
                 {
                     "items": [
                         {
-                            "mime": "application/vnd.code.notebook.stdout",
+                            "mime": "text/plain",
                             "value": [
                                 "{",
                                 "  ownerAddress: \u001b[32m'0x5cb656d7605d9924c085fc859585f3ff2f7ad08f'\u001b[39m,",
@@ -220,11 +229,10 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38514266086829550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
-                                "}",
-                                ""
+                                "}"
                             ]
                         }
                     ]
@@ -296,7 +304,7 @@
                 {
                     "items": [
                         {
-                            "mime": "application/vnd.code.notebook.stdout",
+                            "mime": "text/plain",
                             "value": [
                                 "{",
                                 "  ownerAddress: \u001b[32m'0x5cb656d7605d9924c085fc859585f3ff2f7ad08f'\u001b[39m,",
@@ -304,11 +312,10 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38514266086829550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
-                                "}",
-                                ""
+                                "}"
                             ]
                         }
                     ]
@@ -352,7 +359,7 @@
                 {
                     "items": [
                         {
-                            "mime": "application/vnd.code.notebook.stdout",
+                            "mime": "text/plain",
                             "value": [
                                 "{",
                                 "  ownerAddress: \u001b[32m'0x5cb656d7605d9924c085fc859585f3ff2f7ad08f'\u001b[39m,",
@@ -360,11 +367,10 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38514266086829550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
-                                "}",
-                                ""
+                                "}"
                             ]
                         }
                     ]
@@ -394,7 +400,7 @@
                 {
                     "items": [
                         {
-                            "mime": "application/vnd.code.notebook.stdout",
+                            "mime": "text/plain",
                             "value": [
                                 "{",
                                 "  ownerAddress: \u001b[32m'0x5cb656d7605d9924c085fc859585f3ff2f7ad08f'\u001b[39m,",
@@ -402,11 +408,10 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38514266086829550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
-                                "}",
-                                ""
+                                "}"
                             ]
                         }
                     ]
@@ -593,10 +598,12 @@
                 {
                     "items": [
                         {
-                            "mime": "application/vnd.code.notebook.stdout",
+                            "mime": "text/plain",
                             "value": [
-                                "{ isApproved: \u001b[33mtrue\u001b[39m, transferable: \u001b[33mtrue\u001b[39m }",
-                                ""
+                                "{",
+                                "  isApproved: \u001b[33mtrue\u001b[39m,",
+                                "  transferable: \u001b[33mtrue\u001b[39m",
+                                "}"
                             ]
                         }
                     ]
@@ -626,10 +633,12 @@
                 {
                     "items": [
                         {
-                            "mime": "application/vnd.code.notebook.stdout",
+                            "mime": "text/plain",
                             "value": [
-                                "{ isApproved: \u001b[33mtrue\u001b[39m, transferable: \u001b[33mtrue\u001b[39m }",
-                                ""
+                                "{",
+                                "  isApproved: \u001b[33mtrue\u001b[39m,",
+                                "  transferable: \u001b[33mtrue\u001b[39m",
+                                "}"
                             ]
                         }
                     ]
@@ -659,10 +668,12 @@
                 {
                     "items": [
                         {
-                            "mime": "application/vnd.code.notebook.stdout",
+                            "mime": "text/plain",
                             "value": [
-                                "{ approveGasUsed: \u001b[32m'40160'\u001b[39m, transferGasUsed: \u001b[32m'43348'\u001b[39m }",
-                                ""
+                                "{",
+                                "  approveGasUsed: \u001b[32m'40160'\u001b[39m,",
+                                "  transferGasUsed: \u001b[32m'43348'\u001b[39m",
+                                "}"
                             ]
                         }
                     ]
@@ -694,7 +705,7 @@
                         {
                             "mime": "application/vnd.code.notebook.stdout",
                             "value": [
-                                "{ isApproved: \u001b[33mtrue\u001b[39m, isApprovedWithMulticall: \u001b[33mtrue\u001b[39m, gasUsed: \u001b[32m'40160'\u001b[39m }",
+                                "{ isApproved: true, isApprovedWithMulticall: true, gasUsed: '40160' }",
                                 "Please set ACTUALLY_RUN_WRITE_FUNCTION to true to run the function",
                                 ""
                             ]
