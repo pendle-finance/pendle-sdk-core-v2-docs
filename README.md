@@ -3,17 +3,17 @@
 ---
 
 # Documentation for Pendle SDK-v2
-**In jupyter notebook format!**
+**In notebook format!**
 
 ## How can I view the notebook?
-You can view it right here, on Github!
+The documentation are rendered to markdown. You can see the documentation in the [`./rendered-docs`](./rendered-docs) folder.
 
 ## How can I run the notebook?
 
 ### Prequisites
 
-- [Jupyter notebook](https://jupyter.org/install)
-- [tslab kernel](https://github.com/yunabe/tslab)
+- Install [vscode](https://code.visualstudio.com/)
+- Install [Node.js Notebooks (REPL) extendsion for vscode](https://marketplace.visualstudio.com/items?itemName=donjayamanne.typescript-notebook)
 - `@pendle/sdk-v2` package. Install it with
 
 ```
@@ -22,3 +22,9 @@ yarn install
 
 ### Open and run a notebook
 After installing the above dependencies, you are good to explore the notebook just like a normal Python Jupyter notebook!
+
+## Render the notebook to Markdown
+Use the `render-docs` script.
+```
+yarn render-docs
+```

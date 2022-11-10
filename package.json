@@ -6,6 +6,10 @@
   "license": "MIT",
   "dependencies": {
     "@pendle/sdk-v2": "^0.0.58-weekly",
+    "ansi-to-html": "^0.7.2",
     "node-metamask": "^1.1.2"
+  },
+  "scripts": {
+    "render-docs": "node ./scripts/render-all-docs.js"
   }
 }
