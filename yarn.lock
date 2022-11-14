@@ -362,10 +362,8 @@
     "@openzeppelin/contracts" "^4.7.3"
     "@openzeppelin/contracts-upgradeable" "^4.7.3"
 
-"@pendle/sdk-v2@^0.0.61-weekly":
+"@pendle/sdk-v2@../pendle-sdk-core-v2":
   version "0.0.61-weekly"
-  resolved "https://registry.yarnpkg.com/@pendle/sdk-v2/-/sdk-v2-0.0.61-weekly.tgz#a9b2fc029eb3ee5b1df2e3b39f6db62ab154b21a"
-  integrity sha512-bDk7QT1CGEIuqeLnmnc4BEX7ZBdCZfmV5V1QTpVbUUw68Xfv3DYCw3OUbMHuTNpXrcY5PnZolaLJ/3U37+bhPA==
   dependencies:
     "@pendle/core-v2" "0.16.5-testnet"
     axios "^0.27.2"

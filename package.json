@@ -5,11 +5,12 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@pendle/sdk-v2": "^0.0.61-weekly",
+    "@pendle/sdk-v2": "../pendle-sdk-core-v2",
     "ansi-to-html": "^0.7.2",
     "node-metamask": "^1.1.2"
   },
   "scripts": {
-    "render-docs": "node ./scripts/render-all-docs.js"
+    "render-docs": "node ./scripts/render-all-docs.js md ./rendered-docs",
+    "render-ts": "node ./scripts/render-all-docs.js ts ./rendered-ts"
   }
 }

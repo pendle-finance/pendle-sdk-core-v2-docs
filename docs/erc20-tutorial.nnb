@@ -24,14 +24,14 @@
         {
             "language": "markdown",
             "source": [
-                "Let’s say we want to interact with the USDC contract on Ethereum. USDC contract has address `0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48`, and Ethereum has the chain ID of `1`."
+                "Let’s say we want to interact with the USDC contract on Ethereum. USDC contract has address `0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48`."
             ],
             "outputs": []
         },
         {
             "language": "typescript",
             "source": [
-                "const USDCAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';\nconst chainId = 1;"
+                "const USDCAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';"
             ],
             "outputs": []
         },
@@ -52,35 +52,35 @@
         {
             "language": "markdown",
             "source": [
-                " With this information, we can create an ERC20 entity as follows"
+                "Here we did not pass any parameters to ethers' [`getDefaultProvider()`](https://docs.ethers.io/v5/api/providers/#providers-getDefaultProvider). By default, the network will be **mainnet**."
             ],
             "outputs": []
         },
         {
             "language": "typescript",
             "source": [
-                "import { ERC20 } from '@pendle/sdk-v2';\n\n\n// ERC20 entity with read-only functionalities\nconst readonlyErc20 = new ERC20(USDCAddress, chainId, { provider });\n\n// ERC20 entity with read-write functionalities\nconst readWriteErc20 = new ERC20(USDCAddress, chainId, { signer });"
+                "import { ERC20 } from '@pendle/sdk-v2';\n\n\n// ERC20 entity with read-only functionalities\nconst readonlyErc20 = new ERC20(USDCAddress, { provider });\n\n// ERC20 entity with read-write functionalities\nconst readWriteErc20 = new ERC20(USDCAddress, { signer });"
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "Other entities have roughly the same constructor signature: \n- the contract address,\n- the network chain ID, and\n- the network connection.\n\nThe chain ID parameter should satisfy the type `ChainId`, a union of the supported chain ID number. The `ChainId` type is specified as follows:\n\n```ts\ntype ChainId = 1 | 43113 | 80001 | 43114;\n```"
+                "Other entities have roughly the same constructor signature: \n- the contract address,\n- the entity configuration, including the network connection."
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "The network connection parameter should be an object that has either the property provider: `ethers.providers.Provider`, or `signer: ethers.Signer`. Pass signer if all contract functionalities are required. Otherwise, just pass in a provider. If both provider and signer are presented, the signer must be connected to the passed-in provider (an error will be thrown otherwise)."
+                "The network connection parameter inside the entity configuration should be an object that has either the property provider: `ethers.providers.Provider`, or `signer: ethers.Signer`. Pass signer if all contract functionalities are required. Otherwise, just pass in a provider. If both provider and signer are presented, the signer must be connected to the passed-in provider (an error will be thrown otherwise)."
             ],
             "outputs": []
         },
         {
             "language": "typescript",
             "source": [
-                "const provider = getDefaultProvider();\nconst unconnectedWallet = Wallet.createRandom();\nconst connectedWallet = unconnectedWallet.connect(provider);\n\nconst contractAddress = USDCAddress;\n\n// The following constructions work fine\nnew ERC20(contractAddress, chainId, { provider });\nnew ERC20(contractAddress, chainId, { signer: connectedWallet });\nnew ERC20(contractAddress, chainId, { signer: unconnectedWallet });\nnew ERC20(contractAddress, chainId, { provider, signer: connectedWallet });\n\n// The following construction will throw an error\ntry {\n    new ERC20(contractAddress, chainId, { provider, signer: unconnectedWallet });  // Error\n} catch (e) {\n    console.log('Got error');\n    console.log(e);\n}"
+                "const provider = getDefaultProvider();\nconst unconnectedWallet = Wallet.createRandom();\nconst connectedWallet = unconnectedWallet.connect(provider);\n\nconst contractAddress = USDCAddress;\n\n// The following constructions work fine\nnew ERC20(contractAddress, { provider });\nnew ERC20(contractAddress, { signer: connectedWallet });\nnew ERC20(contractAddress, { signer: unconnectedWallet });\nnew ERC20(contractAddress, { provider, signer: connectedWallet });\n\n// The following construction will throw an error\ntry {\n    new ERC20(contractAddress, { provider, signer: unconnectedWallet });  // Error\n} catch (e) {\n    console.log('Got error');\n    console.log(e);\n}"
             ],
             "outputs": [
                 {
@@ -90,11 +90,11 @@
                             "value": [
                                 "Got error",
                                 "PendleSdkError: For contract creation, networkConnection.provider should be the same as networkConnection.signer.provider",
-                                "    at createContractObject (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/contracts/createContractObject.ts:159:15)",
-                                "    at new PendleEntity (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/PendleEntity.ts:31:26)",
-                                "    at new ERC20 (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/ERC20.ts:11:9)",
-                                "    at <Cell 12> [15, 13]",
-                                "    at <Cell 12> [18, 46]",
+                                "    at createContractObject (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/contracts/createContractObject.ts:160:15)",
+                                "    at new PendleEntity (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/PendleEntity.ts:29:26)",
+                                "    at new ERC20 (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/ERC20.ts:18:9)",
+                                "    at <Cell 13> [15, 13]",
+                                "    at <Cell 13> [18, 46]",
                                 "    at Script.runInContext (node:vm:141:12)",
                                 "    at Script.runInNewContext (node:vm:146:17)",
                                 "    at Object.runInNewContext (node:vm:306:38)",
@@ -158,28 +158,6 @@
                 {
                     "items": [
                         {
-                            "mime": "application/vnd.code.notebook.stdout",
-                            "value": [
-                                "========= NOTICE =========",
-                                "Request-Rate Exceeded  (this message will not be repeated)",
-                                "",
-                                "The default API keys for each service are provided as a highly-throttled,",
-                                "community resource for low-traffic projects and early prototyping.",
-                                "",
-                                "While your application will continue to function, we highly recommended",
-                                "signing up for your own API keys to improve performance, increase your",
-                                "request rate/limit and enable other perks, such as metrics and advanced APIs.",
-                                "",
-                                "For more details: https://docs.ethers.io/api-keys/",
-                                "==========================",
-                                ""
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "items": [
-                        {
                             "mime": "text/plain",
                             "value": [
                                 "{",
@@ -188,7 +166,7 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'40157324583559550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
                                 "}"
@@ -229,7 +207,7 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'40157324583559550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
                                 "}"
@@ -256,14 +234,14 @@
         {
             "language": "typescript",
             "source": [
-                "import { Multicall } from '@pendle/sdk-v2';\n\nconst multicall = new Multicall({ chainId: chainId, provider: provider });"
+                "import { Multicall } from '@pendle/sdk-v2';\n\nconst multicall = new Multicall({ chainId: 1, provider });"
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "`chainId` and `provider` are the required parameters. There are two more optional parameters:\n\n- `callLimit: number` (default: `64`), the maximum number of calls per multicall request.\n- `blockTag: string` (default: `latest`), the block tag for the multicall requests."
+                "`chainId` and `provider` are the required parameters. The `chainId` is `1`, as we are querying the Ethereum network. There are two more optional parameters:\n\n- `callLimit: number` (default: `64`), the maximum number of calls per multicall request.\n- `blockTag: string` (default: `latest`), the block tag for the multicall requests."
             ],
             "outputs": []
         },
@@ -284,7 +262,7 @@
         {
             "language": "typescript",
             "source": [
-                "const readonlyErc20WithMulticall = new ERC20(USDCAddress, chainId, { provider: provider, multicall: multicall });"
+                "const readonlyErc20WithMulticall = new ERC20(USDCAddress, { provider, multicall });"
             ],
             "outputs": []
         },
@@ -312,7 +290,7 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'40157324583559550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
                                 "}"
@@ -367,7 +345,7 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'40157324583559550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
                                 "}"
@@ -408,7 +386,7 @@
                                 "  name: \u001b[32m'USD Coin'\u001b[39m,",
                                 "  symbol: \u001b[32m'USDC'\u001b[39m,",
                                 "  decimals: \u001b[32m'6'\u001b[39m,",
-                                "  totalSupply: \u001b[32m'38612653556139550'\u001b[39m,",
+                                "  totalSupply: \u001b[32m'40157324583559550'\u001b[39m,",
                                 "  balanceOf: \u001b[32m'0'\u001b[39m,",
                                 "  allowance: \u001b[32m'0'\u001b[39m",
                                 "}"
@@ -759,14 +737,14 @@
         {
             "language": "typescript",
             "source": [
-                "import { PendlePrincipalToken } from '@pendle/sdk-v2';\n\nclass ERC20ForPT extends ERC20 {\n    // ...\n    \n    get myContract(): WrappedContract<PendlePrincipalToken> {\n        return this._contract as WrappedContract<PendlePrincipalToken>;\n    }\n}"
+                "import { PendlePrincipalToken } from '@pendle/sdk-v2';\n\nclass ERC20ForPT extends ERC20 {\n    // ...\n    \n    get contract(): WrappedContract<PendlePrincipalToken> {\n        return this._contract as WrappedContract<PendlePrincipalToken>;\n    }\n}"
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "This is exactly what is done under the hood of Pendle SDK, as `PendlePrincipalToken` does indeed extend `PendleERC20` on the contract side. See PtEntity (TODO link).\n> Note: in our code base we actually use `get contract` instead of `get myContract`. But this notebook kernel is a bit old. The code could not be compiled with `get contract`, so we put `get myContract` instead. "
+                "This is exactly what is done under the hood of Pendle SDK, as `PendlePrincipalToken` does indeed extend `PendleERC20` on the contract side. See PtEntity (TODO link)."
             ],
             "outputs": []
         }

@@ -1,4 +1,13 @@
+/**
+ * Usage:
+ * node render-all-docs <mode> <output-dirs>
+ * 
+ * mode value:
+ * - md: render to markdown
+ * - ts: render to a typescript file
+ */
 const { nnbToMd } = require('./nnb-to-md');
+const { nnbToTs } = require('./nnb-to-ts');
 const fs = require('fs');
 const path = require('path');
 
@@ -33,14 +42,18 @@ async function writeFile(filePath, data) {
 }
 
 const docsDir = './docs/';
-const renderedDocsDir = './rendered-docs/';
+const mode = process.argv[2];
+const renderedDocsDir = process.argv[3];
+
+const convertFn = mode === 'md' ? nnbToMd : nnbToTs;
+const ext = mode;
 
 async function processFile(fileName) {
     const data = await fs.promises.readFile(fileName, {encoding: 'utf-8'});
-    const result = nnbToMd(JSON.parse(data));
+    const result = convertFn(JSON.parse(data));
     const dir = path.dirname(fileName);
     const baseName = path.basename(fileName, '.nnb');
-    const outputFileName = path.join(renderedDocsDir, dir, baseName + '.md');
+    const outputFileName = path.join(renderedDocsDir, dir, baseName + '.' + ext);
     await writeFile(outputFileName, result);
 }
 
