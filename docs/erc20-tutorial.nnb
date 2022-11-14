@@ -3,6 +3,13 @@
         {
             "language": "markdown",
             "source": [
+                "# ERC20 contract interaction tutorial with Pendle SDK\n\n--- "
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
                 "_**Caution**_: In this notebook, we are using a dummy address. If you wish to see a more natural result without the risk of losing money, please specify your own address and change the chain ID to testnet ID (for example, `43113` for Fuji).\n\n---"
             ],
             "outputs": []
@@ -17,7 +24,7 @@
         {
             "language": "markdown",
             "source": [
-                "# Entity creation"
+                "## Entity creation"
             ],
             "outputs": []
         },
@@ -110,7 +117,7 @@
         {
             "language": "markdown",
             "source": [
-                "# Read-only functions"
+                "## Read-only functions"
             ],
             "outputs": []
         },
@@ -220,7 +227,7 @@
         {
             "language": "markdown",
             "source": [
-                "## Multicall support"
+                "### Multicall support"
             ],
             "outputs": []
         },
@@ -248,7 +255,7 @@
         {
             "language": "markdown",
             "source": [
-                "### Passing multicall to entity constructor"
+                "#### Passing multicall to entity constructor"
             ],
             "outputs": []
         },
@@ -310,7 +317,7 @@
         {
             "language": "markdown",
             "source": [
-                "### Passing multicall to the methods"
+                "#### Passing multicall to the methods"
             ],
             "outputs": []
         },
@@ -399,7 +406,7 @@
         {
             "language": "markdown",
             "source": [
-                "# Write functions"
+                "## Write functions"
             ],
             "outputs": []
         },
@@ -488,7 +495,7 @@
         {
             "language": "markdown",
             "source": [
-                "## Meta-methods"
+                "### Meta-methods"
             ],
             "outputs": []
         },
@@ -502,7 +509,7 @@
         {
             "language": "markdown",
             "source": [
-                "### `send` meta-method"
+                "#### `send` meta-method"
             ],
             "outputs": []
         },
@@ -549,7 +556,7 @@
         {
             "language": "markdown",
             "source": [
-                "### `callStatic` meta-method"
+                "#### `callStatic` meta-method"
             ],
             "outputs": []
         },
@@ -591,7 +598,7 @@
         {
             "language": "markdown",
             "source": [
-                "### `multicallStatic` meta-method\n\nThis is the same as `callStatic` but with Multicall. Note that `multicall` effects only happen for this meta-method if the entity is initialized with `Multicall`. If you want to pass a multicall instance to the method call, see [`meta-method` meta-method.](https://www.notion.so/ERC20-contract-interaction-tutorial-with-Pendle-SDK-db0bd481eed541cd88c5f226887d8600)"
+                "#### `multicallStatic` meta-method\n\nThis is the same as `callStatic` but with Multicall. Note that `multicall` effects only happen for this meta-method if the entity is initialized with `Multicall`. If you want to pass a multicall instance to the method call, see [`meta-method` meta-method.](https://www.notion.so/ERC20-contract-interaction-tutorial-with-Pendle-SDK-db0bd481eed541cd88c5f226887d8600)"
             ],
             "outputs": []
         },
@@ -626,7 +633,7 @@
         {
             "language": "markdown",
             "source": [
-                "### `estimateGas` meta-method\nUse this meta method to estimate the amount of gas consumed for the method calls."
+                "#### `estimateGas` meta-method\nUse this meta method to estimate the amount of gas consumed for the method calls."
             ],
             "outputs": []
         },
@@ -661,7 +668,7 @@
         {
             "language": "markdown",
             "source": [
-                "### `meta-method` meta-method\nTo have more control over the write method, meta-method can be used."
+                "#### `meta-method` meta-method\nTo have more control over the write method, meta-method can be used."
             ],
             "outputs": []
         },
@@ -695,14 +702,14 @@
         {
             "language": "markdown",
             "source": [
-                "# Other functionalities"
+                "## Other functionalities"
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "## The inner contract\n\nERC20 entity has a property called `contract: WrappedContract<PendleERC20>`. `PendleERC20` is the contract interface generated to be compatible with ethers.js’s `Contract` object via [`@typechain/hardhat`](https://www.npmjs.com/package/@typechain/hardhat) plugin. `WrappedContract` is our custom type that wraps around the generated interface to have additional functionalities, such as catching Pendle contract errors and calling contracts with multicall and meta-methods. See [`WrappedContract`](https://www.notion.so/Pendle-SDK-s-WrappedContract-18444f7d35d6411b87ce487812be4b58) // TODO fix link."
+                "### The inner contract\n\nERC20 entity has a property called `contract: WrappedContract<PendleERC20>`. `PendleERC20` is the contract interface generated to be compatible with ethers.js’s `Contract` object via [`@typechain/hardhat`](https://www.npmjs.com/package/@typechain/hardhat) plugin. `WrappedContract` is our custom type that wraps around the generated interface to have additional functionalities, such as catching Pendle contract errors and calling contracts with multicall and meta-methods. See [`WrappedContract`](https://www.notion.so/Pendle-SDK-s-WrappedContract-18444f7d35d6411b87ce487812be4b58) // TODO fix link."
             ],
             "outputs": []
         },
@@ -716,7 +723,7 @@
         {
             "language": "markdown",
             "source": [
-                "\n## Setting the ABI\n\nIf you wish to extend `ERC20` classes with a different contract ABI, you can set the ABI via the constructor configuration parameters. The ABI should have a compatible type with the `ERC20` ABI. Be careful to do otherwise, as Pendle SDK does not check to ABI compatibility."
+                "### Setting the ABI\n\nIf you wish to extend `ERC20` classes with a different contract ABI, you can set the ABI via the constructor configuration parameters. The ABI should have a compatible type with the `ERC20` ABI. Be careful to do otherwise, as Pendle SDK does not check to ABI compatibility."
             ],
             "outputs": []
         },

@@ -8,11 +8,21 @@ ${source}
 ${threeTicks}`
 }
 
+/**
+ * @param {string} source 
+ */
+function preprocessMarkdown(source) {
+    // convert notebook ext to md.
+    // TODO find a better way to do this
+    source = source.replaceAll('.nnb', '.md');
+    return source;
+}
+
 module.exports.nnbToMd = function nnbToMd(nnbJson) {
     const results = [];
     for (const cell of nnbJson.cells) {
         if (cell.language === 'markdown') {
-            results.push(cell.source);
+            results.push(preprocessMarkdown(cell.source.join('\n')));
         } else {
             results.push(markdownCodeBlock(cell.language, cell.source));
             if (cell.outputs.length) {

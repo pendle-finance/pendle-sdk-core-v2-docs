@@ -31,7 +31,7 @@
         {
             "language": "markdown",
             "source": [
-                "### `type PendleEntityConfigOptionalAbi`"
+                "### type `PendleEntityConfigOptionalAbi`"
             ],
             "outputs": []
         },
@@ -52,7 +52,7 @@
         {
             "language": "markdown",
             "source": [
-                "### `type PendleEntityConfig`"
+                "### type `PendleEntityConfig`"
             ],
             "outputs": []
         },
@@ -73,7 +73,7 @@
         {
             "language": "markdown",
             "source": [
-                "## `class PendleEntity`"
+                "## class `PendleEntity`"
             ],
             "outputs": []
         },
@@ -87,14 +87,14 @@
         {
             "language": "markdown",
             "source": [
-                "```ts\nclass PendleEntity;\n```"
+                "```ts\nclass PendleEntity\n```"
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "### constructor\n\n```tsx\nconstructor(\n\taddress: Address,\n\tconfig: PendleEntityConfig\n)\n```\n\nParameters:\n\n- `address: Address` — The inner contract address\n- `config: PendleEntityConfig` — the configuration.\n"
+                "### constructor\n\n```tsx\nconstructor(\n\taddress: Address,\n\tconfig: PendleEntityConfig\n)\n```\n\n##### Parameters\n- `address: Address` — The inner contract address\n- `config: PendleEntityConfig` — the configuration.\n"
             ],
             "outputs": []
         },
@@ -150,7 +150,42 @@
         {
             "language": "markdown",
             "source": [
-                "#### `addExtraParams`\n\n```ts\naddExtraParams<T extends MetaMethodType>(params: MetaMethodExtraParams<T>): MetaMethodExtraParams<T>;\n```\n\n**Please see [`WrappedContract`](../WrappedContract.nnb) first.**\n\nMerge user-defined parameters with the default parameters (from `getDefaultMetaMethodExtraParam()`) and return the result to use use in a write method."
+                "#### `addExtraParams()`\n\n```ts\naddExtraParams<T extends MetaMethodType>(params: MetaMethodExtraParams<T>): MetaMethodExtraParams<T>;\n```\n\n**Please see [`WrappedContract`](../WrappedContract.nnb) first.**\n\nMerge user-defined parameters with the default parameters (from `getDefaultMetaMethodExtraParam()`) and return the result to use use in a write method."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Function documentation template\n\nIn the subclasses of PendleEntity, there are read and write functions, with take complex additional parameters, and return complex return type. Fortunately, these parameters, as well as the return types, have the same shape. The following are the template of these function."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Read function template"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "```ts\nfunctionName(arg1: T1, arg2: T2, ..., params?: MulticallStaticParams): Promise<R>\n```\n\n##### Parameters\n- `arg1`: T1\n- `arg2`: T2\n- `params?`: [MulticallStaticParams] - the additional parameters for read method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\n`R`\n\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Write function template"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "```ts\nfunctionName<T extends MetaMethodType>(\n    arg1: T1,\n    arg2: T2,\n    params: MetaMethodExtraParams<T> = {}\n): MetaMethodReturnType<\n    T,\n    C, // the contract type\n    'methodName',\n    MetaMethodExtraParams<T>\n>;\n```\n\n##### Type parameters\n- `T` extends [MetaMethodType]: The type of the meta method. This should be infer by `tsc` to determine the correct return type. See [ERC20 contract interaction tutorial with Pendle SDK][ERC20-tutorial] to see the example usage with explanation. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Parameters\n- `params?`: [MetaMethodExtraParams<T>][MetaMethodExtraParams] - the additional parameters for **write** method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nWhen `params` is not defined, or when `params.method` is not defined, this method will perform the transaction, and return `Promise<ethers.ContractTransaction>`.\n\nOtherwise, `params.method`'s value is used to determine the return type:\n- for `'send'`, this method will perform the transaction, and return `Promise<ethers.ContractTransaction>`.\n- for `'estimateGas'`, this method will estimate the gas required to send the transaction, and return `Promise<BN>`.\n- for `'callStatic'` and `'multicallStatic'`, this method will \nask a node to perform the contract method, and return the result, without changing the contract's state, then return `Promise<???>`.\n- for `meta-method`, this method will just perform the required calculation, and return `Promise<ContractMetaMethod<C, 'methodName', MetaMethodExtraParams<T>>>`. The `data` field of the awaited result is a copy of `params`, and will have the following fields:\n    - `multicall?`: [Multicall] - the multicall instance.\n    - `overrides?`: `ethers.CallOverrides` - the overrides. This can overridden with `params.overrides`.\n    - `method`: The meta-method type. In this case it will be `meta-method`, the same value as `params.method`.\n\n\n\n\n[MetaMethodType]: ../WrappedContract.nnb\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb\n[MetaMethodExtraParams]: ../WrappedContract.nnb\n[Multicall]: ../Multicall.nnb\n[ERC20-tutorial]: ../erc20-tutorial.nnb"
             ],
             "outputs": []
         }

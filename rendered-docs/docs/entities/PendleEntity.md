@@ -17,7 +17,7 @@ import {
     PendleERC20, PendleERC20ABI, WrappedContract,
 
     // Types for parameters
-    Address, ChainId, BigNumberish, BN,
+    Address, BigNumberish, BN,
 
     // MulticallStaticParams for read-methods
     MulticallStaticParams,
@@ -35,12 +35,10 @@ export type MyERC20Config = PendleEntityConfigOptionalAbi;
 class MyERC20 extends PendleEntity {
     constructor(
         readonly address: Address,
-        readonly chainId: ChainId,
         config: MyERC20Config   // use the custom config
     ) {
         super(
             address,
-            chainId,
             {
                 // passing in the abi
                 // but does not overwrite the abi of the config
@@ -107,7 +105,7 @@ class MyERC20 extends PendleEntity {
 
 ## Utility types
 
-### `type PendleEntityConfigOptionalAbi`
+### type `PendleEntityConfigOptionalAbi`
 
 ```typescript
 import { PendleEntityConfigOptionalAbi } from '@pendle/sdk-v2';
@@ -126,7 +124,7 @@ See `NetworkConnection` in [Utilities types and functions](https://www.notion.so
 
 Pass in `Multicall` to use contract methods with `Multicall` (via `multicallStatic`).
 
-### `type PendleEntityConfig`
+### type `PendleEntityConfig`
 
 ```typescript
 import { PendleEntityConfig } from '@pendle/sdk-v2';
@@ -140,14 +138,14 @@ type PendleEntityConfig = PendleEntityConfigOptionalAbi & {
 
 This is the same type as `PendleEntityConfigOptionalAbi`, but with forced ABI.
 
-## `class PendleEntity`
+## class `PendleEntity`
 
 ```typescript
 import { PendleEntity } from '@pendle/sdk-v2';
 ```
 
 ```ts
-class PendleEntity;
+class PendleEntity
 ```
 
 ### constructor
@@ -155,15 +153,12 @@ class PendleEntity;
 ```tsx
 constructor(
 	address: Address,
-	chainId: ChainId,
 	config: PendleEntityConfig
 )
 ```
 
-Parameters:
-
+##### Parameters
 - `address: Address` — The inner contract address
-- `chainId: ChainId` — The chain’s ID of the contract. See `ChainId` type in [Utilities types and functions](../utilities-types-and-functions.nnb).
 - `config: PendleEntityConfig` — the configuration.
 
 
@@ -176,7 +171,7 @@ protected readonly _contract: WrappedContract
 
 The _wrapped_ contract that the entity is holding. This should not be used directly. Instead the getter `contract` should be used to have the correct _type_ of the wrapped contract.
 
-See [`WrappedContract`](../WrappedContract.nnb).
+See [`WrappedContract`](../WrappedContract.md).
 
 #### `contract`
 ```ts
@@ -197,7 +192,7 @@ The `Multicall` instance used by this entity. See [`Multicall`](TODO) <span styl
 readonly networkConnection: NetworkConnection;
 ```
 
-The `networkConnection` of this entity. See [Utilities types and functions](../utilities-types-and-functions.nnb).
+The `networkConnection` of this entity. See [Utilities types and functions](../utilities-types-and-functions.md).
 
 #### `entityConfig`
 ```
@@ -212,16 +207,82 @@ This getter returns the config of the current entity. It can be used to pass as 
 getDefaultMetaMethodExtraParams<T extends MetaMethodType>(): MetaMethodExtraParams<T>;
 ```
 
-**Please see [`WrappedContract`](../WrappedContract.nnb) first.**
+**Please see [`WrappedContract`](../WrappedContract.md) first.**
 
 Return the set of parameters for an entity's write-method (that will do a `metaCall`). It should be overridden in the subclass.
 
-#### `addExtraParams`
+#### `addExtraParams()`
 
 ```ts
 addExtraParams<T extends MetaMethodType>(params: MetaMethodExtraParams<T>): MetaMethodExtraParams<T>;
 ```
 
-**Please see [`WrappedContract`](../WrappedContract.nnb) first.**
+**Please see [`WrappedContract`](../WrappedContract.md) first.**
 
 Merge user-defined parameters with the default parameters (from `getDefaultMetaMethodExtraParam()`) and return the result to use use in a write method.
+
+## Function documentation template
+
+In the subclasses of PendleEntity, there are read and write functions, with take complex additional parameters, and return complex return type. Fortunately, these parameters, as well as the return types, have the same shape. The following are the template of these function.
+
+### Read function template
+
+```ts
+functionName(arg1: T1, arg2: T2, ..., params?: MulticallStaticParams): Promise<R>
+```
+
+##### Parameters
+- `arg1`: T1
+- `arg2`: T2
+- `params?`: [MulticallStaticParams] - the additional parameters for read method. See [WrappedContract](../WrappedContract.md) for more details.
+
+##### Returns
+`R`
+
+[Address]: ../utilities-types-and-functions.md
+[MulticallStaticParams]: ../WrappedContract.md
+
+
+### Write function template
+
+```ts
+functionName<T extends MetaMethodType>(
+    arg1: T1,
+    arg2: T2,
+    params: MetaMethodExtraParams<T> = {}
+): MetaMethodReturnType<
+    T,
+    C, // the contract type
+    'methodName',
+    MetaMethodExtraParams<T>
+>;
+```
+
+##### Type parameters
+- `T` extends [MetaMethodType]: The type of the meta method. This should be infer by `tsc` to determine the correct return type. See [ERC20 contract interaction tutorial with Pendle SDK][ERC20-tutorial] to see the example usage with explanation. See [WrappedContract](../WrappedContract.md) for more details.
+
+##### Parameters
+- `params?`: [MetaMethodExtraParams<T>][MetaMethodExtraParams] - the additional parameters for **write** method. See [WrappedContract](../WrappedContract.md) for more details.
+
+##### Returns
+When `params` is not defined, or when `params.method` is not defined, this method will perform the transaction, and return `Promise<ethers.ContractTransaction>`.
+
+Otherwise, `params.method`'s value is used to determine the return type:
+- for `'send'`, this method will perform the transaction, and return `Promise<ethers.ContractTransaction>`.
+- for `'estimateGas'`, this method will estimate the gas required to send the transaction, and return `Promise<BN>`.
+- for `'callStatic'` and `'multicallStatic'`, this method will 
+ask a node to perform the contract method, and return the result, without changing the contract's state, then return `Promise<???>`.
+- for `meta-method`, this method will just perform the required calculation, and return `Promise<ContractMetaMethod<C, 'methodName', MetaMethodExtraParams<T>>>`. The `data` field of the awaited result is a copy of `params`, and will have the following fields:
+    - `multicall?`: [Multicall] - the multicall instance.
+    - `overrides?`: `ethers.CallOverrides` - the overrides. This can overridden with `params.overrides`.
+    - `method`: The meta-method type. In this case it will be `meta-method`, the same value as `params.method`.
+
+
+
+
+[MetaMethodType]: ../WrappedContract.md
+[Address]: ../utilities-types-and-functions.md
+[MulticallStaticParams]: ../WrappedContract.md
+[MetaMethodExtraParams]: ../WrappedContract.md
+[Multicall]: ../Multicall.md
+[ERC20-tutorial]: ../erc20-tutorial.md

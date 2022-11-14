@@ -1,0 +1,177 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "# ERC20 entity\n\n---"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "The class that represents a `ERC20` token, with Pendle SDK functionalities such as Multicall and MetaMethod. Please see [ERC20 tutorial with Pendle SDK](../erc20-tutorial.nnb) for example usage, as well as details explanation of this class."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Utility types"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### type `ERC20Config`"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "Error",
+                                "message": "Failed to generate code object, \n# `ERC20Config`;\n ^\n\nUnexpected character ';'",
+                                "stack": ""
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { ERC20Config, PendleEntityConfig } from '@pendle/sdk-v2';"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "```ts\ntype ERC20Config = PendleEntityConfig;\n```\n\nThe configuration for an `ERC20` entity. As `ERC20` extends `PendleEntity`, its config should be the subtype of `PendleEntity`'s config type. See [PendleEntity](./PendleEntity.nnb)."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## class `ERC20`"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { ERC20, PendleEntity } from '@pendle/sdk-v2';"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "```ts\nclass ERC20 extends PendleEntity;\n```\n\nSee [PendleEntity](./ERC20Entity.nnb)"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### `constructor()`\n\n```ts\nconstructor(address: Address, config: ERC20Config)\n```"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "Error",
+                                "message": "Failed to generate code object, \n# `constructor()`;\n ^\n\nUnexpected character ';'",
+                                "stack": ""
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Properties and methods"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `address`\n```ts\nreadonly address: Address\n```\nThe contract address"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `contract`\n```ts\nget contract(): WrappedContract<PendleERC20>;\n```\nThe **typed** wrapped contract object of the entity."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `allowance(...)`\n```ts\nallowance(owner: Address, spender: Address, params?: MulticallStaticParams): Promise<BN>;\n```\n\nExecute ERC20's `allowance` method.\n\n##### Parameters\n- `owner`: [Address] - the owner of the asset.\n- `spender`: [Address] - the spender to query.\n- `params?`: [MulticallStaticParams] - the additional parameters for read method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nThe allowance of the `spender`.\n\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `balanceOf(...)`\n```ts\nbalanceOf(account: Address, params?: MulticallStaticParams): Promise<BN>\n```\n\nExecute ERC20's `allowance` method.\n\n##### Parameters\n- `account`: [Address] - the account.\n- `params?`: [MulticallStaticParams] - the additional parameters for read method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nThe balance of the `account`.\n\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `decimals(...)`\n```ts\ndecimals(params?: MulticallStaticParams): Promise<number>\n```\n\nExecute ERC20's `decimals` method.\n\n##### Parameters\n- `params?`: [MulticallStaticParams] - the additional parameters for read method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nThe `decimals` of the `token`.\n\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `name(...)`\n```ts\nname(params?: MulticallStaticParams): Promise<string>\n```\n\nExecute ERC20's `name` method.\n\n##### Parameters\n- `params?`: [MulticallStaticParams] - the additional parameters for read method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nThe `name` of the `token`.\n\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `symbol(...)`\n```ts\nsymbol(params?: MulticallStaticParams): Promise<string> {\n```\n\nExecute ERC20's `symbol` method.\n\n##### Parameters\n- `params?`: [MulticallStaticParams] - the additional parameters for read method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nThe `symbol` of the `token`.\n\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `totalSupply(...)`\n```ts\ntotalSupply(params?: MulticallStaticParams): Promise<string> {\n```\n\nExecute ERC20's `totalSupply` method.\n\n##### Parameters\n- `params?`: [MulticallStaticParams] - the additional parameters for read method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nThe `totalSupply` of the `token`.\n\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `approve(...)`\n```ts\napprove<T extends MetaMethodType>(\n    spender: Address,\n    amount: BigNumberish,\n    params: MetaMethodExtraParams<T> = {}\n): MetaMethodReturnType<T, PendleERC20, 'approve', MetaMethodExtraParams<T>>;\n```\n\n##### Type parameters\n- `T` extends [MetaMethodType]: The type of the meta method. This should be infer by `tsc` to determine the correct return type. See [ERC20 contract interaction tutorial with Pendle SDK][ERC20-tutorial] to see the example usage with explanation. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Parameters\n- `spender`: [Address] - the spender's Address.\n- `amount`: `ethers.BigNumberish` - the amount to approve.\n- `params?`: [MetaMethodExtraParams<T>][MetaMethodExtraParams] - the additional parameters for **write** method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nWhen `params` is not defined, or when `params.method` is not defined, this method will perform the transaction, and return `Promise<ethers.ContractTransaction>`.\n\nOtherwise, `params.method`'s value is used to determine the return type:\n- for `'send'`, this method will perform the transaction, and return `Promise<ethers.ContractTransaction>`.\n- for `'estimateGas'`, this method will estimate the gas required to send the transaction, and return `Promise<BN>`.\n- for `'callStatic'` and `'multicallStatic'`, this method will \nask a node to perform the contract method, and return the result, without changing the contract's state, then return **`Promise<boolean>`** - wether or not the approval is successful.\n- for `meta-method`, this method will just perform the required calculation, and return `Promise<ContractMetaMethod<C, 'methodName', MetaMethodExtraParams<T>>>`. The `data` field of the awaited result is a copy of `params`, and will have the following fields:\n    - `multicall?`: [Multicall] - the multicall instance.\n    - `overrides?`: `ethers.CallOverrides` - the overrides. This can overridden with `params.overrides`.\n    - `method`: The meta-method type. In this case it will be `meta-method`, the same value as `params.method`.\n\n\n\n\n[MetaMethodType]: ../WrappedContract.nnb\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb\n[MetaMethodExtraParams]: ../WrappedContract.nnb\n[Multicall]: ../Multicall.nnb\n[ERC20-tutorial]: ../erc20-tutorial.nnb"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "#### `transfer(...)`\n```ts\ntransfer<T extends MetaMethodType>(\n    to: Address,\n    amount: BigNumberish,\n    params: MetaMethodExtraParams<T> = {}\n): MetaMethodReturnType<T, PendleERC20, 'approve', MetaMethodExtraParams<T>>;\n```\n\n##### Type parameters\n- `T` extends [MetaMethodType]: The type of the meta method. This should be infer by `tsc` to determine the correct return type. See [ERC20 contract interaction tutorial with Pendle SDK][ERC20-tutorial] to see the example usage with explanation. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Parameters\n- `to`: [Address] - the receiver's Address.\n- `amount`: `ethers.BigNumberish` - the amount to transfer.\n- `params?`: [MetaMethodExtraParams<T>][MetaMethodExtraParams] - the additional parameters for **write** method. See [WrappedContract](../WrappedContract.nnb) for more details.\n\n##### Returns\nWhen `params` is not defined, or when `params.method` is not defined, this method will perform the transaction, and return `Promise<ethers.ContractTransaction>`.\n\nOtherwise, `params.method`'s value is used to determine the return type:\n- for `'send'`, this method will perform the transaction, and return `Promise<ethers.ContractTransaction>`.\n- for `'estimateGas'`, this method will estimate the gas required to send the transaction, and return `Promise<BN>`.\n- for `'callStatic'` and `'multicallStatic'`, this method will \nask a node to perform the contract method, and return the result, without changing the contract's state, then return **`Promise<boolean>`** - wether or not the approval is successful.\n- for `meta-method`, this method will just perform the required calculation, and return `Promise<ContractMetaMethod<C, 'methodName', MetaMethodExtraParams<T>>>`. The `data` field of the awaited result is a copy of `params`, and will have the following fields:\n    - `multicall?`: [Multicall] - the multicall instance.\n    - `overrides?`: `ethers.CallOverrides` - the overrides. This can overridden with `params.overrides`.\n    - `method`: The meta-method type. In this case it will be `meta-method`, the same value as `params.method`.\n\n\n\n\n[MetaMethodType]: ../WrappedContract.nnb\n[Address]: ../utilities-types-and-functions.nnb\n[MulticallStaticParams]: ../WrappedContract.nnb\n[MetaMethodExtraParams]: ../WrappedContract.nnb\n[Multicall]: ../Multicall.nnb\n[ERC20-tutorial]: ../erc20-tutorial.nnb"
+            ],
+            "outputs": []
+        }
+    ]
+}

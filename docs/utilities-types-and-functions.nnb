@@ -24,7 +24,7 @@
         {
             "language": "markdown",
             "source": [
-                "## `type Address`\n"
+                "## type `Address`\n"
             ],
             "outputs": []
         },
@@ -38,21 +38,42 @@
         {
             "language": "markdown",
             "source": [
-                "```ts\ntype Address = string;\n```"
+                "```ts\ntype Address = `0x${string}`;\n```"
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "This is just an alias type, but it should be more readable than just using `string`."
+                "In Pendle SDK, we force `Address` to be a string that has `0x` as its prefix. It is used to avoid direct assignment from a string to an Address."
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "## `function isSameAddress`"
+                "# function `toAddress(...)`"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { toAddress } from '@pendle/sdk-v2';"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "```ts\nfunction toAddress(rawAddress: string): Address\n```\n\n_Cast_ a rawAddress to the `Address` type. This function **does not** validate the `rawAddress` string. The resulting `Address` will be transformed to lowercase."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## function `isSameAddress(...)`"
             ],
             "outputs": []
         },
@@ -80,7 +101,7 @@
         {
             "language": "markdown",
             "source": [
-                "## `type ChainId`"
+                "## type `ChainId`"
             ],
             "outputs": []
         },
@@ -101,7 +122,7 @@
         {
             "language": "markdown",
             "source": [
-                "## `type MainchainId`"
+                "## type `MainchainId`"
             ],
             "outputs": []
         },
@@ -122,7 +143,7 @@
         {
             "language": "markdown",
             "source": [
-                "## `function IsMainchain`"
+                "## function `isMainchain(...)`"
             ],
             "outputs": []
         },
@@ -186,7 +207,7 @@
         {
             "language": "markdown",
             "source": [
-                "## `type NetworkConnection`"
+                "## type `NetworkConnection`"
             ],
             "outputs": []
         },
@@ -221,7 +242,7 @@
         {
             "language": "markdown",
             "source": [
-                "## `function copyNetworkConnection`"
+                "## function `copyNetworkConnection(..)`"
             ],
             "outputs": []
         },
@@ -270,7 +291,7 @@
         {
             "language": "markdown",
             "source": [
-                "## `ContractLike<T>`"
+                "## type `ContractLike<T>`"
             ],
             "outputs": []
         },
