@@ -1,3 +1,238 @@
 {
-    "cells": []
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "# Multicall\n\n---\n\nMulticall is the preferred way to call contract methods and get hypothetical results. Pendle SDK has integrated https://github.com/makerdao/multicall by makerdao as a core component. Our multicall component is designed so that it is compatible with ethersjs’ Contract, as well as  [Pendle SDK’s WrappedContract](https://www.notion.so/Pendle-SDK-s-WrappedContract-18444f7d35d6411b87ce487812be4b58), can be used everywhere comfortably, but users also have the option to opt-out of using it if they don’t want to.\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "Error",
+                                "message": "Failed to generate code object, Unexpected character ';' (19:8)",
+                                "stack": ""
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Usage"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Multicall creation"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { getDefaultProvider } from 'ethers';\nimport { Multicall } from '@pendle/sdk-v2';\n\nconst provider = getDefaultProvider();\nconst chainId = 1;  // 1 for ethereum\n\nconst multicall = new Multicall({chainId, provider});"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Multicall accepts 2 required parameters in its configuration, which are\n\n- `chainId: ChainId` — the id of the chain to use multicall with. See `ChainId` type in  [Utilities types and functions](./utilities-types-and-functions.nnb) - `provider: Provider` — the connection to the network.\n\nAdditionally, it accepts the following optional parameters:\n\n- `callLimit: number = 64` — the maximum number of *calls* to be included in a *multicall*."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Calling contract methods\n\nTo use multicall with ethresjs’ contract, first wrap it, then call it with `callStatic` (which is the only method)."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { PendleERC20, PendleERC20ABI, Address } from '@pendle/sdk-v2';\nimport { Contract } from 'ethers';\n\n// an ERC20 contract object\nconst USDCAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';\nconst contract = new Contract(USDCAddress, PendleERC20ABI, provider) as PendleERC20;\n\nconst contractWithMulticall = multicall.wrap(contract);\n\nasync function singleCall(userAddress: Address) {\n\treturn await contractWithMulticall.callStatic.balanceOf(userAddress);\n}\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "To test the `singleCall` function, we should pass in some addresses. Some interesting addresses can be taken from [etherscan.io's USDC holders page](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48#balances)."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { toAddress } from '@pendle/sdk-v2';\n\nconst USDC_HOLDERS = {\n    'Maker: PSM-USDC-A': toAddress('0x0a59649758aa4d66e25f08dd01271e891fe52199'),\n    'Polygon (Matic): ERC20 Bridge': toAddress('0x40ec5b33f54e0e8a33a975908c5ba1c14e5bbbdf'),\n    'Arbitrum One: L1 Arb - Custom Gateway': toAddress('0xcee284f754e854890e311e3280b767f80797180d'),\n    'Binance 14': toAddress('0x28c6c06298d514db089934071355e5743bf21d60'),\n} as const;"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Now to test our function"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "String(await singleCall(USDC_HOLDERS['Maker: PSM-USDC-A']))"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/plain",
+                            "value": [
+                                "\u001b[32m'2322640642649563'\u001b[39m"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "To have the *batching* effect, use it with `Promise.all`"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "async function multicallCall(userAddresses: Address[]) {\n  return await Promise.all(userAddresses.map(\n\t\tuserAddress => contractWithMulticall.callStatic.balanceOf(userAddress)\n  );\n}"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { zip } from '@pendle/sdk-v2';\n\nconst balances = await multicallCall(Object.values(USDC_HOLDERS));\nfor (const [holder, balance] of zip(Object.keys(USDC_HOLDERS), balances)) {\n    console.log(`${holder} is holding ${String(balance)} USDC`);\n}"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "Maker: PSM-USDC-A is holding 2322640642649563 USDC",
+                                "Polygon (Matic): ERC20 Bridge is holding 884085231002102 USDC",
+                                "Arbitrum One: L1 Arb - Custom Gateway is holding 838755112899474 USDC",
+                                "Binance 14 is holding 637584841341174 USDC",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "You can even use `singleCall` for batching:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "async function multicallCall2(userAddresses: Address[]) {\n  return await Promise.all(userAddresses.map(singleCall));\n}"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Result caching\n\n`Multicall#wrap` will only wrap each contract *once*. If the same contract is called with the same multicall instance, the cached result will be returned. The cached result is stored right in the contract object itself. To access the cached result, you can use the `multicallStaticSymbol` of the `multicall` instance. For example, we can get the cache result of the above USDC `contract` instance as follows:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "const cachedResult = contract[multicall.multicallStaticSymbol]\nconsole.log(cachedResult);\nconsole.log(cachedResult === contractWithMulticall);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "{",
+                                "  callStatic: {",
+                                "    allowance: [Function (anonymous)],",
+                                "    approve: [Function (anonymous)],",
+                                "    balanceOf: [Function (anonymous)],",
+                                "    decimals: [Function (anonymous)],",
+                                "    name: [Function (anonymous)],",
+                                "    symbol: [Function (anonymous)],",
+                                "    totalSupply: [Function (anonymous)],",
+                                "    transfer: [Function (anonymous)],",
+                                "    transferFrom: [Function (anonymous)]",
+                                "  }",
+                                "}",
+                                "true",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "**Note**: the `Multicall#multicallStaticSymbol` is not *static*. It is local to each `multicall` instance."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Let the user decides whether to use Multicall\n\nIt is also `Multicall.wrap` function, that accepts an optional parameter `Multicall?`. If it is undefined, the calling method will act just like `callStatic`, that is, no multicall!"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "async function singleCallOptional(userAddress: Address, multicall?: Multicall) {\n  return await Multicall.wrap(contract, multicall).callStatic.balanceOf(userAddress);\n}\n\nasync function multicallCallOptional(userAddresses: Address[], multicall?: Multicall) {\n  return await Promise.all(userAddresses.map(\n    (userAddress) => singleCallOptional(userAddress, multicall)\n  ));\n}\n\n\n// have batching\nconst balances1 = await multicallCallOptional(Object.values(USDC_HOLDERS), multicall);\n// no batching\nconst balances2 = await multicallCallOptional(Object.values(USDC_HOLDERS));\n\nconsole.log(balances1.map(String));\nconsole.log(balances2.map(String));"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "[",
+                                "  '2322640642649563',",
+                                "  '884085231002102',",
+                                "  '838755112899474',",
+                                "  '637584841341174'",
+                                "]",
+                                "[",
+                                "  '2322640642649563',",
+                                "  '884085231002102',",
+                                "  '838755112899474',",
+                                "  '637584841341174'",
+                                "]",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
