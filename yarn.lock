@@ -363,7 +363,7 @@
     "@openzeppelin/contracts-upgradeable" "^4.7.3"
 
 "@pendle/sdk-v2@../pendle-sdk-core-v2":
-  version "0.0.61-weekly"
+  version "0.0.62-weekly"
   dependencies:
     "@pendle/core-v2" "0.16.5-testnet"
     axios "^0.27.2"
