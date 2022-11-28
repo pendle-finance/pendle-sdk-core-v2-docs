@@ -62,7 +62,9 @@ import { PendleContractError } from '@pendle/sdk-v2';
 ```
 
 When error, Pendle contracts will thrown an Error message defined in [this contract](https://github.com/pendle-finance/pendle-core-internal-v2/blob/main/contracts/core/libraries/Errors.sol). Those error will be wrapped into the `PendleContractError`. The instance of this class has two main properties:
-- `errorName` - the name of the error. The type of this property is not `string`, but an union of all Pendle contracts error's name for type safety.
+- `errorName` - the name of the error. The type of this property is not `string`, but an union of all Pendle contracts error's name for type safety. For example:
+  - `'marketExpired'`, `'RouterInsufficientLpOut'`, `'RouterExceededLimitYtIn'`, ... are valid values for `errorName`
+  - `'RandomError'` - is not a valid value, as it is not defined in the contracts. 
 - `args` - the arguments that passed to the error on the contract side. You can think it is like `any[]`, but in reality it is also an union of tuples of the errors' parameters. 
 
 ### Catching the error
