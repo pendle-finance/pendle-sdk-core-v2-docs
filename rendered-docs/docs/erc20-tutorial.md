@@ -31,14 +31,13 @@ const signer = wallet;
 Here we did not pass any parameters to ethers' [`getDefaultProvider()`](https://docs.ethers.io/v5/api/providers/#providers-getDefaultProvider). By default, the network will be **mainnet**.
 
 ```typescript
-import { ERC20 } from '@pendle/sdk-v2';
-
+import { ERC20Entity } from '@pendle/sdk-v2';
 
 // ERC20 entity with read-only functionalities
-const readonlyErc20 = new ERC20(USDCAddress, { provider });
+const readonlyErc20 = new ERC20Entity(USDCAddress, { provider });
 
 // ERC20 entity with read-write functionalities
-const readWriteErc20 = new ERC20(USDCAddress, { signer });
+const readWriteErc20 = new ERC20Entity(USDCAddress, { signer });
 ```
 
 Other entities have roughly the same constructor signature: 
@@ -55,14 +54,14 @@ const connectedWallet = unconnectedWallet.connect(provider);
 const contractAddress = USDCAddress;
 
 // The following constructions work fine
-new ERC20(contractAddress, { provider });
-new ERC20(contractAddress, { signer: connectedWallet });
-new ERC20(contractAddress, { signer: unconnectedWallet });
-new ERC20(contractAddress, { provider, signer: connectedWallet });
+new ERC20Entity(contractAddress, { provider });
+new ERC20Entity(contractAddress, { signer: connectedWallet });
+new ERC20Entity(contractAddress, { signer: unconnectedWallet });
+new ERC20Entity(contractAddress, { provider, signer: connectedWallet });
 
 // The following construction will throw an error
 try {
-    new ERC20(contractAddress, { provider, signer: unconnectedWallet });  // Error
+    new ERC20Entity(contractAddress, { provider, signer: unconnectedWallet });  // Error
 } catch (e) {
     console.log('Got error');
     console.log(e);
@@ -74,13 +73,13 @@ Outputs:
 <pre><code>Got error
 PendleSdkError: For contract creation, networkConnection.provider should be the same as networkConnection.signer.provider
     at createContractObject (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/contracts/createContractObject.ts:160:15)
-    at new PendleEntity (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/PendleEntity.ts:29:26)
-    at new ERC20 (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/ERC20.ts:18:9)
-    at <Cell 13> [15, 13]
+    at new PendleEntity (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/PendleEntity.ts:61:26)
+    at new ERC20Entity (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/erc20/ERC20Entity.ts:41:9)
+    at <Cell 13> [15, 19]
     at <Cell 13> [18, 46]
     at Script.runInContext (node:vm:141:12)
     at Script.runInNewContext (node:vm:146:17)
-    at Object.runInNewContext (node:vm:306:38)
+    at Object.runInNewContext (node:vm:300:38)
     at C (/home/darkkcyan/.vscode-oss/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)
     at t.execCode (/home/darkkcyan/.vscode-oss/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)
 
@@ -103,7 +102,7 @@ You can use these functions similarly to calling them in a contract:
 ```typescript
 import { Address } from '@pendle/sdk-v2';
 
-async function readonlyFunctionsExample(erc20: ERC20, ownerAddress: Address, spenderAddress: Address) {
+async function readonlyFunctionsExample(erc20: ERC20Entity, ownerAddress: Address, spenderAddress: Address) {
     const name = await erc20.name();
     const symbol = await erc20.symbol();
     
@@ -136,8 +135,8 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'40157324583559550'<span style="color:#FFF">,
-  balanceOf: <span style="color:#0A0">'0'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
 </code></pre><br>
@@ -145,7 +144,7 @@ Outputs:
 The function `readonlyFunctionsExample` sends the calls _sequentially_. To send the all the calls to the provider at the same time, use `Promise.all`.
 
 ```typescript
-async function readonlyFunctionExamplePromiseAll(erc20: ERC20, ownerAddress: string, spenderAddress: string) {
+async function readonlyFunctionExamplePromiseAll(erc20: ERC20Entity, ownerAddress: string, spenderAddress: string) {
     const [name, symbol, decimals, totalSupply, balanceOf, allowance] = await Promise.all([
         erc20.name(),
         erc20.symbol(),
@@ -172,8 +171,8 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'40157324583559550'<span style="color:#FFF">,
-  balanceOf: <span style="color:#0A0">'0'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
 </code></pre><br>
@@ -198,7 +197,7 @@ const multicall = new Multicall({ chainId: 1, provider });
 ERC20 entity’s contractor’s third parameter also accept multicall. You can pass in `multicall` to ERC20 as follows:
 
 ```typescript
-const readonlyErc20WithMulticall = new ERC20(USDCAddress, { provider, multicall });
+const readonlyErc20WithMulticall = new ERC20Entity(USDCAddress, { provider, multicall });
 ```
 
 After that, you can use it as in readonlyFunctionExamplePromiseAll, and Pendle SDK will handle the batching for you:
@@ -215,8 +214,8 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'40157324583559550'<span style="color:#FFF">,
-  balanceOf: <span style="color:#0A0">'0'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
 </code></pre><br>
@@ -229,7 +228,7 @@ If an ERC20 entity was not initialized with `multicall`, it can still be called 
 
 ```typescript
 async function readonlyFunctionExample_multicallToMethods(
-    erc20: ERC20,
+    erc20: ERC20Entity,
     ownerAddress: string,
     spenderAddress: string,
     multicall?: Multicall
@@ -265,8 +264,8 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'40157324583559550'<span style="color:#FFF">,
-  balanceOf: <span style="color:#0A0">'0'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
 </code></pre><br>
@@ -292,8 +291,8 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'40157324583559550'<span style="color:#FFF">,
-  balanceOf: <span style="color:#0A0">'0'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
 </code></pre><br>
@@ -332,7 +331,7 @@ As the read-only function, you can also use these functions similarly to calling
 import { BigNumberish } from '@pendle/sdk-v2';
 
 const writeFunctionExample = guardWrite(async (
-    erc20: ERC20,
+    erc20: ERC20Entity,
     spenderAddress: string,
     rawAmount: BigNumberish
 ) => {
@@ -376,7 +375,7 @@ This meta-method is the default behavior for a method call, which is to perform 
 import { Overrides } from 'ethers'; 
 
 const writeFunctionExample_sendMetaMethod = guardWrite(async (
-    erc20: ERC20,
+    erc20: ERC20Entity,
     spenderAddress: string,
     rawAmount: BigNumberish,
     overrides?: Overrides
@@ -404,7 +403,7 @@ Use this meta-method to ask a node to execute the contract and return the hypoth
 
 ```typescript
 async function writeFunctionExample_callStaticMetaMethod(
-    erc20: ERC20,
+    erc20: ERC20Entity,
     spenderAddress: string,
     rawAmount: BigNumberish,
     overrides?: Overrides
@@ -433,7 +432,7 @@ This is the same as `callStatic` but with Multicall. Note that `multicall` effec
 
 ```typescript
 async function writeFunctionExample_multicallStaticMetaMethod(
-     erc20: ERC20,
+     erc20: ERC20Entity,
      spenderAddress: string,
      amount: BigNumberish,
      multicall?: Multicall
@@ -463,7 +462,7 @@ Use this meta method to estimate the amount of gas consumed for the method calls
 
 ```typescript
 async function writeFunctionExample_estimateGasMetaMethod(
-    erc20: ERC20,
+    erc20: ERC20Entity,
     spenderAddress: Address,
     amount: BigNumberish,
     overrides?: Overrides
@@ -497,7 +496,7 @@ To have more control over the write method, meta-method can be used.
 
 ```typescript
 async function writeFunctionExample_metaMethodMetaMethod(
-    erc20: ERC20,
+    erc20: ERC20Entity,
     spenderAddress: string,
     amount: BigNumberish,
     multicall?: Multicall,
@@ -568,7 +567,7 @@ If you wish to create a subclass of `ERC20`, you can do as follows:
 ```typescript
 import { PendlePrincipalToken } from '@pendle/sdk-v2';
 
-class ERC20ForPT extends ERC20 {
+class ERC20ForPT extends ERC20Entity {
     // ...
     
     get contract(): WrappedContract<PendlePrincipalToken> {
