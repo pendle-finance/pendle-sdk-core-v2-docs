@@ -47,10 +47,10 @@ try {
     // some contract operation.
 } catch (e) {
     if (e instanceof PanicBuiltinContractError) {
-        console.log('Panic with code', c.code);
+        console.log('Panic with code', e.code);
     }
     if (e instanceof ErrorBuiltinContractError) {
-        console.log('Error with message', c.message);
+        console.log('Error with message', e.message);
     }
 }
 ```

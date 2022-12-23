@@ -68,7 +68,7 @@ String(await singleCall(USDC_HOLDERS['Maker: PSM-USDC-A']))
 
 Outputs:
 
-<pre><code><span style="color:#0A0">'2322640642649563'<span style="color:#FFF"></span></span>
+<pre><code><span style="color:#0A0">'2317971865737562'<span style="color:#FFF"></span></span>
 </code></pre><br>
 
 To have the *batching* effect, use it with `Promise.all`
@@ -92,10 +92,8 @@ for (const [holder, balance] of zip(Object.keys(USDC_HOLDERS), balances)) {
 
 Outputs:
 
-<pre><code>Maker: PSM-USDC-A is holding 2322640642649563 USDC
-Polygon (Matic): ERC20 Bridge is holding 884085231002102 USDC
-Arbitrum One: L1 Arb - Custom Gateway is holding 838755112899474 USDC
-Binance 14 is holding 637584841341174 USDC
+<pre><code>Maker: PSM-USDC-A is holding 2317971865737562 USDC
+Binance 14 is holding 147748016369406 USDC
 
 </code></pre><br>
 
@@ -166,16 +164,16 @@ console.log(balances2.map(String));
 Outputs:
 
 <pre><code>[
-  '2322640642649563',
-  '884085231002102',
-  '838755112899474',
-  '637584841341174'
+  '2317971865737562',
+  '896297842020264',
+  '682110479216568',
+  '147748016369406'
 ]
 [
-  '2322640642649563',
-  '884085231002102',
-  '838755112899474',
-  '637584841341174'
+  '2317971865737562',
+  '896297842020264',
+  '682110479216568',
+  '147748016369406'
 ]
 
 </code></pre><br>

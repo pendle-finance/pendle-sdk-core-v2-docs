@@ -305,7 +305,7 @@
         {
             "language": "markdown",
             "source": [
-                "```tsx\ntype ContractLike<T extends Contract = Contract> = T | WrappedContract<T>;\n```\n\nSee this type in [Pendle SDK’s WrappedContract](TODO) <span style=\"color: red\">(TODO link)</span>"
+                "```tsx\ntype ContractLike<T extends Contract = Contract> = T | WrappedContract<T>;\n```\n\nSee this type in [Pendle SDK’s WrappedContract](./WrappedContract.nnb)"
             ],
             "outputs": []
         }

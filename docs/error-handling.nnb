@@ -78,7 +78,7 @@
         {
             "language": "typescript",
             "source": [
-                "try {\n    // some contract operation.\n} catch (e) {\n    if (e instanceof PanicBuiltinContractError) {\n        console.log('Panic with code', c.code);\n    }\n    if (e instanceof ErrorBuiltinContractError) {\n        console.log('Error with message', c.message);\n    }\n}"
+                "try {\n    // some contract operation.\n} catch (e) {\n    if (e instanceof PanicBuiltinContractError) {\n        console.log('Panic with code', e.code);\n    }\n    if (e instanceof ErrorBuiltinContractError) {\n        console.log('Error with message', e.message);\n    }\n}"
             ],
             "outputs": []
         },

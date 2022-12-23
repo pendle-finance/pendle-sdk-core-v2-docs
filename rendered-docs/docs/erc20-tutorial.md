@@ -135,7 +135,7 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815306451559550'<span style="color:#FFF">,
   balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
@@ -171,7 +171,7 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815306451559550'<span style="color:#FFF">,
   balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
@@ -214,7 +214,7 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815306451559550'<span style="color:#FFF">,
   balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
@@ -264,7 +264,7 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815306451559550'<span style="color:#FFF">,
   balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
@@ -291,7 +291,7 @@ Outputs:
   name: <span style="color:#0A0">'USD Coin'<span style="color:#FFF">,
   symbol: <span style="color:#0A0">'USDC'<span style="color:#FFF">,
   decimals: <span style="color:#0A0">'6'<span style="color:#FFF">,
-  totalSupply: <span style="color:#0A0">'41815035787559550'<span style="color:#FFF">,
+  totalSupply: <span style="color:#0A0">'41815306451559550'<span style="color:#FFF">,
   balanceOf: <span style="color:#0A0">'187'<span style="color:#FFF">,
   allowance: <span style="color:#0A0">'0'<span style="color:#FFF">
 }</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>

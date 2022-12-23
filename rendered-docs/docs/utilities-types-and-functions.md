@@ -190,4 +190,4 @@ import { ContractLike } from '@pendle/sdk-v2';
 type ContractLike<T extends Contract = Contract> = T | WrappedContract<T>;
 ```
 
-See this type in [Pendle SDK’s WrappedContract](TODO) <span style="color: red">(TODO link)</span>
+See this type in [Pendle SDK’s WrappedContract](./WrappedContract.md)

@@ -76,7 +76,7 @@ Before doing any action, we should first have an address of a Pendle Market to i
 
 ```typescript
 import { toAddress } from '@pendle/sdk-v2';
-const marketAddress = toAddress('0x94f1997da3ea57875ab97747d2bf744c6895a0ad');
+const marketAddress = toAddress('0x0e303bbd4f9f316c797aaedc71ebe7342a5269c6');
 ```
 
 Since our signer is random, we need to fund ourselves first using the [AVAX faucet]. We can also check our balance also with Pendle SDK.
@@ -92,7 +92,7 @@ console.log(`balance of ${signerAddress} is ${String(await nativeToken.balanceOf
 
 Outputs:
 
-<pre><code>balance of 0xc9871ed8fe3f8b445d7b8b12388b9f9b8542e71d is 2000000000000000000
+<pre><code>balance of 0xc9871ed8fe3f8b445d7b8b12388b9f9b8542e71d is 1746292450000000000
 
 </code></pre><br>
 
@@ -128,7 +128,13 @@ try {
 
 Outputs:
 
-<pre><code>See on block explorer: https://testnet.snowtrace.io/tx/0x17f6ddeb7bff6e4c6d48d94b6dd2b37da5a376959eef09225dd62b85eafa3578
+<pre><code>NoRouteFoundError: No route found to swap from 0x0000000000000000000000000000000000000000 to 0xb7a1e3afa053e2ff4b525900b3359749beab101f
+    at Function.action (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/errors.ts:50:16)
+    at /home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/Router.ts:868:37
+    at Generator.next (<anonymous>)
+    at asyncGeneratorStep (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/dist/sdk-v2.cjs.development.js:54:24)
+    at _next (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/dist/sdk-v2.cjs.development.js:73:9)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
 
 </code></pre><br>
 
@@ -146,7 +152,7 @@ console.log(`Pt balance of ${signerAddress} is ${String(ptBalance)}`);
 
 Outputs:
 
-<pre><code>Pt balance of 0xc9871ed8fe3f8b445d7b8b12388b9f9b8542e71d is 202531908674234759
+<pre><code>Pt balance of 0xc9871ed8fe3f8b445d7b8b12388b9f9b8542e71d is 0
 
 </code></pre><br>
 
@@ -184,7 +190,13 @@ try {
 
 Outputs:
 
-<pre><code>See on block explorer: https://testnet.snowtrace.io/tx/0x918cdb2ac611f15c32f6f15bd0be085f616919100fd475e6ce81aa7629c9a903
+<pre><code>NoRouteFoundError: No route found to swap from 0x0000000000000000000000000000000000000000 to 0x4cfe3ab9cf4bda9b668497e373baa00e875f722c
+    at Function.action (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/errors.ts:50:16)
+    at /home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/src/entities/Router.ts:868:37
+    at Generator.next (<anonymous>)
+    at asyncGeneratorStep (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/dist/sdk-v2.cjs.development.js:54:24)
+    at _next (/home/darkkcyan/projects/pendle-sdk-core-v2-docs/node_modules/@pendle/sdk-v2/dist/sdk-v2.cjs.development.js:73:9)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
 
 </code></pre><br>
 
@@ -204,10 +216,6 @@ console.log(gasUsed);
 ```
 
 Outputs:
-
-<pre><code>517575
-
-</code></pre><br>
 
 ### `callStatic` example
 
