@@ -24,10 +24,10 @@ First, we need to have a `Signer` and/or a `Provider`. Most of the time, `Signer
 import { providers } from 'ethers';
 import { BasicRouter } from '@pendle/sdk-v2';
 
-let providerUrl = 'https://rpc.ankr.com/eth'
-let provider = new providers.StaticJsonRpcProvider(providerUrl);
+const providerUrl = 'https://rpc.ankr.com/eth'
+const provider = new providers.StaticJsonRpcProvider(providerUrl);
 
-let basicRouter = BasicRouter.getBasicRouter({ chainId, provider });
+const basicRouter = BasicRouter.getBasicRouter({ chainId, provider });
 ```
 
 ## Example: swap from known amount of token to PT
@@ -50,9 +50,9 @@ Now suppose we want to simulate trade some USDC to the market's PT token. We can
 ```typescript
 import { BN } from '@pendle/sdk-v2';
 // BN is the alias of ethers.BigNumber
-let slippage = 1 / 100; // 1% slippage
-let amount = BN.from(100000000); // 100 USDC
-let metaMethod = await basicRouter.swapExactTokenForPt(
+const slippage = 1 / 100; // 1% slippage
+const amount = BN.from(100000000); // 100 USDC
+const metaMethod = await basicRouter.swapExactTokenForPt(
     marketAddress,
     tokenAddress,    // token address
     amount,          // token amount
@@ -81,8 +81,8 @@ console.log({
 Outputs:
 
 <pre><code>{
-  netPtOut: '100271780419527236182',
-  minPtOut: '99269062615331963820',
+  netPtOut: '100271344825931312524',
+  minPtOut: '99268631377671999398',
   tokenInputData: {
     tokenIn: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     netTokenIn: BigNumber { _hex: '0x05f5e100', _isBigNumber: true },
@@ -92,9 +92,9 @@ Outputs:
     kyberRouter: '0x0000000000000000000000000000000000000000'
   },
   guessParams: {
-    guessMin: BigNumber { _hex: '0x0529f91460a0cba904', _isBigNumber: true },
-    guessMax: BigNumber { _hex: '0x057d774b8f26e8b0ff', _isBigNumber: true },
-    guessOffchain: BigNumber { _hex: '0x056f8ced0765e3da56', _isBigNumber: true },
+    guessMin: BigNumber { _hex: '0x0529f79c0411525811', _isBigNumber: true },
+    guessMax: BigNumber { _hex: '0x057d75bb6d6b578b71', _isBigNumber: true },
+    guessOffchain: BigNumber { _hex: '0x056f8b60dbdc56ad8c', _isBigNumber: true },
     maxIteration: 9,
     eps: '1000000000000000'
   }
@@ -117,8 +117,8 @@ routerContract.connect(/* signer */).swapExactTokenForPt(
 ## Example: swap from known amount of PT to Token
 
 ```typescript
-let exactPtIn = BN.from(10).pow(18).mul(100); // 100 PT
-let ptForTokenMetaMethod = await basicRouter.swapExactPtForToken(
+const exactPtIn = BN.from(10).pow(18).mul(100); // 100 PT
+const metaMethod = await basicRouter.swapExactPtForToken(
     marketAddress,
     exactPtIn,     // amount of pt in
     tokenAddress,  // token address
@@ -145,11 +145,11 @@ console.log({
 Outputs:
 
 <pre><code>{
-  netTokenOut: '99687744',
-  minTokenOut: '98690866',
+  netTokenOut: '99688722',
+  minTokenOut: '98691834',
   tokenOutputData: {
     tokenOut: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    minTokenOut: BigNumber { _hex: '0x05e1e732', _isBigNumber: true },
+    minTokenOut: BigNumber { _hex: '0x05e1eafa', _isBigNumber: true },
     tokenRedeemSy: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     kybercall: [],
     bulk: '0x0000000000000000000000000000000000000000',
@@ -183,7 +183,7 @@ When error, Pendle contracts will thrown an Error message defined in [this contr
 import { PendleContractError, BN } from '@pendle/sdk-v2';
 try {
     const veryLargeAmount = BN.from(10).pow(18); // 1e12 USDC
-    let metaMethod = await basicRouter.swapExactTokenForPt(
+    const metaMethod = await basicRouter.swapExactTokenForPt(
         marketAddress,
         tokenAddress,    // token address
         veryLargeAmount, // token amount
@@ -210,6 +210,6 @@ try {
 Outputs:
 
 <pre><code>ErrorName:  ApproxFail
-ApproxFail
+ApproxFail []
 
 </code></pre><br>
