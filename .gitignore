@@ -5,3 +5,4 @@ node_modules
 rendered-ts/
 
 .private-key*
+.yarn

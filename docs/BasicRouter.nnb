@@ -1,0 +1,210 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "# Pendle SDK `BasicRouter`\n\n---"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "`Router` is the main feature of Pendle SDK. It handles all the trading logic while ensuring the user will receive the optimal amount after trades. It also returns the intermediate results, allowing us to do further calculations.\n\n`BasicRouter` is a simple implementation of `Router` that doesn't support the use of aggregator (e.g KyberSwap), and doesn't support bulkSeller."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Getting started"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Create a Basic Router instance"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Suppose that we want to create a router on Mainnet(with chain id of `1`). "
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "const chainId = 1;"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "First, we need to have a `Signer` and/or a `Provider`. Most of the time, `Signer` can be used. But when sending transaction is not required, `Provider` is enough. "
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "\n\nimport { providers } from 'ethers';\nimport { BasicRouter } from '@pendle/sdk-v2';\n\nlet providerUrl = 'https://rpc.ankr.com/eth'\nlet provider = new providers.StaticJsonRpcProvider(providerUrl);\n\nlet basicRouter = BasicRouter.getBasicRouter({ chainId, provider });"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Example: swap from known amount of token to PT\n\nBefore doing any action, we should first have an address of a Pendle Market to interact with. [Pendle Backend][Pendle-Backend] can be used to obtain the whitelisted markets. For demonstration, we are going to use the FRAX USDC market, with the token in is USDC:\n\n<!-- TODO update docs link -->\n[Pendle-Backend]: https://api-v2.pendle.finance/core/graphql"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { toAddress } from '@pendle/sdk-v2';\n// FRAX USDC market address\nconst marketAddress = toAddress('0x7b246b8dbc2a640bf2d8221890cee8327fc23917');\n// USDC token address\nconst tokenAddress = toAddress('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48');"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Now suppose we want to simulate trade some USDC to the market's PT token. We can use `BasicRouter`'s `swapExactTokenForPt` method as follows:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { BN } from '@pendle/sdk-v2';\n// BN is the alias of ethers.BigNumber\nlet slippage = 1 / 100; // 1% slippage\nlet amount = BN.from(100000000); // 100 USDC\nlet metaMethod = await basicRouter.swapExactTokenForPt(\n    marketAddress,\n    tokenAddress,    // token address\n    amount,          // token amount\n    slippage,\n    {\n        method: 'meta-method'\n    }\n);"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { calcSlippedDownAmount } from '@pendle/sdk-v2';\nconst simulateData = metaMethod.data;\nconst netPtOut = simulateData.netPtOut;\nconst minPtOut = calcSlippedDownAmount(netPtOut, slippage);\nconst guessParams = simulateData.route.context.guessOutApproxParams(netPtOut, slippage);\nconst tokenInputData = simulateData.input;\nconsole.log({\n    'netPtOut': netPtOut.toString(),\n    'minPtOut': minPtOut.toString(),\n    'tokenInputData': tokenInputData, // this is the input data to pass in the router contract\n    'guessParams': guessParams\n});"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "{",
+                                "  netPtOut: '100271780419527236182',",
+                                "  minPtOut: '99269062615331963820',",
+                                "  tokenInputData: {",
+                                "    tokenIn: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',",
+                                "    netTokenIn: BigNumber { _hex: '0x05f5e100', _isBigNumber: true },",
+                                "    tokenMintSy: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',",
+                                "    kybercall: [],",
+                                "    bulk: '0x0000000000000000000000000000000000000000',",
+                                "    kyberRouter: '0x0000000000000000000000000000000000000000'",
+                                "  },",
+                                "  guessParams: {",
+                                "    guessMin: BigNumber { _hex: '0x0529f91460a0cba904', _isBigNumber: true },",
+                                "    guessMax: BigNumber { _hex: '0x057d774b8f26e8b0ff', _isBigNumber: true },",
+                                "    guessOffchain: BigNumber { _hex: '0x056f8ced0765e3da56', _isBigNumber: true },",
+                                "    maxIteration: 9,",
+                                "    eps: '1000000000000000'",
+                                "  }",
+                                "}",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Now we can use those calculated values to call the router contract's `swapExactTokenForPt` method:\n```ts\nconst routerContract = /* get the router contract */\nrouterContract.connect(/* signer */).swapExactTokenForPt(\n    receiver,\n    marketAddress,\n    minPtOut,\n    guessParams,\n    input\n);\n```"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Example: swap from known amount of PT to Token"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "let exactPtIn = BN.from(10).pow(18).mul(100); // 100 PT\nlet ptForTokenMetaMethod = await basicRouter.swapExactPtForToken(\n    marketAddress,\n    exactPtIn,     // amount of pt in\n    tokenAddress,  // token address\n    slippage,\n    {\n        method: 'meta-method'\n    }\n);"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { calcSlippedDownAmount } from '@pendle/sdk-v2';\nconst simulateData = metaMethod.data;\nconst netTokenOut = simulateData.netTokenOut;\nconst minTokenOut = calcSlippedDownAmount(netTokenOut, slippage);\nconst tokenOutputData = simulateData.output;\nconsole.log({\n    'netTokenOut': netTokenOut.toString(),\n    'minTokenOut': minTokenOut.toString(),\n    'tokenOutputData': tokenOutputData,\n});"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "{",
+                                "  netTokenOut: '99687744',",
+                                "  minTokenOut: '98690866',",
+                                "  tokenOutputData: {",
+                                "    tokenOut: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',",
+                                "    minTokenOut: BigNumber { _hex: '0x05e1e732', _isBigNumber: true },",
+                                "    tokenRedeemSy: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',",
+                                "    kybercall: [],",
+                                "    bulk: '0x0000000000000000000000000000000000000000',",
+                                "    kyberRouter: '0x0000000000000000000000000000000000000000'",
+                                "  }",
+                                "}",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Now we can use those calculated values to call the router contract's `swapExactPtForToken` method:\n```ts\nconst routerContract = /* get the router contract */\nrouterContract.connect(/* signer */).swapExactPtForToken(\n    receiver,\n    marketAddress,\n    exactPtIn,\n    output\n);\n```"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Handling error\n\nPendle SDK is based on Ethersjs, which is a very versatile library. But while handling all the interactions with the contract, Ethersjs’ error handling process is very cryptic. Ethersjs Error does not support typing, as well as the actual error is often nested very deeply. Pendle SDK includes some utilities that helps aid the error handling process while interacting with the contracts.\n\n\nWhen error, Pendle contracts will thrown an Error message defined in [this contract](https://github.com/pendle-finance/pendle-core-v2/blob/main/contracts/core/libraries/Errors.sol). Those error will be wrapped into the `PendleContractError`. The instance of this class has two main properties:\n- `errorName` - the name of the error.\n- `args` - the arguments that passed to the error on the contract side. "
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { PendleContractError, BN } from '@pendle/sdk-v2';\ntry {\n    const veryLargeAmount = BN.from(10).pow(18); // 1e12 USDC\n    let metaMethod = await basicRouter.swapExactTokenForPt(\n        marketAddress,\n        tokenAddress,    // token address\n        veryLargeAmount, // token amount\n        slippage,\n        {\n            method: 'meta-method'\n        }\n    );\n} catch (e) {\n    if (e instanceof PendleContractError) {\n        console.log(\"ErrorName: \", e.errorName);\n        if (e.isType('ApproxFail')) {\n            console.log('ApproxFail', e.args);\n            // do something\n        } else if (e.isType('MarketExpired')) {\n            // do something\n        } else {\n            // ...\n        }\n    }\n}"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "ErrorName:  ApproxFail",
+                                "ApproxFail",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
