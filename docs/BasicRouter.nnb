@@ -52,7 +52,7 @@
         {
             "language": "javascript",
             "source": [
-                "\n\nimport { providers } from 'ethers';\nimport { BasicRouter } from '@pendle/sdk-v2';\n\nlet providerUrl = 'https://rpc.ankr.com/eth'\nlet provider = new providers.StaticJsonRpcProvider(providerUrl);\n\nlet basicRouter = BasicRouter.getBasicRouter({ chainId, provider });"
+                "\n\nimport { providers } from 'ethers';\nimport { BasicRouter } from '@pendle/sdk-v2';\n\nconst providerUrl = 'https://rpc.ankr.com/eth'\nconst provider = new providers.StaticJsonRpcProvider(providerUrl);\n\nconst basicRouter = BasicRouter.getBasicRouter({ chainId, provider });"
             ],
             "outputs": []
         },
@@ -80,7 +80,7 @@
         {
             "language": "typescript",
             "source": [
-                "import { BN } from '@pendle/sdk-v2';\n// BN is the alias of ethers.BigNumber\nlet slippage = 1 / 100; // 1% slippage\nlet amount = BN.from(100000000); // 100 USDC\nlet metaMethod = await basicRouter.swapExactTokenForPt(\n    marketAddress,\n    tokenAddress,    // token address\n    amount,          // token amount\n    slippage,\n    {\n        method: 'meta-method'\n    }\n);"
+                "import { BN } from '@pendle/sdk-v2';\n// BN is the alias of ethers.BigNumber\nconst slippage = 1 / 100; // 1% slippage\nconst amount = BN.from(100000000); // 100 USDC\nconst metaMethod = await basicRouter.swapExactTokenForPt(\n    marketAddress,\n    tokenAddress,    // token address\n    amount,          // token amount\n    slippage,\n    {\n        method: 'meta-method'\n    }\n);"
             ],
             "outputs": []
         },
@@ -96,8 +96,8 @@
                             "mime": "application/vnd.code.notebook.stdout",
                             "value": [
                                 "{",
-                                "  netPtOut: '100271780419527236182',",
-                                "  minPtOut: '99269062615331963820',",
+                                "  netPtOut: '100271344825931312524',",
+                                "  minPtOut: '99268631377671999398',",
                                 "  tokenInputData: {",
                                 "    tokenIn: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',",
                                 "    netTokenIn: BigNumber { _hex: '0x05f5e100', _isBigNumber: true },",
@@ -107,9 +107,9 @@
                                 "    kyberRouter: '0x0000000000000000000000000000000000000000'",
                                 "  },",
                                 "  guessParams: {",
-                                "    guessMin: BigNumber { _hex: '0x0529f91460a0cba904', _isBigNumber: true },",
-                                "    guessMax: BigNumber { _hex: '0x057d774b8f26e8b0ff', _isBigNumber: true },",
-                                "    guessOffchain: BigNumber { _hex: '0x056f8ced0765e3da56', _isBigNumber: true },",
+                                "    guessMin: BigNumber { _hex: '0x0529f79c0411525811', _isBigNumber: true },",
+                                "    guessMax: BigNumber { _hex: '0x057d75bb6d6b578b71', _isBigNumber: true },",
+                                "    guessOffchain: BigNumber { _hex: '0x056f8b60dbdc56ad8c', _isBigNumber: true },",
                                 "    maxIteration: 9,",
                                 "    eps: '1000000000000000'",
                                 "  }",
@@ -138,7 +138,7 @@
         {
             "language": "typescript",
             "source": [
-                "let exactPtIn = BN.from(10).pow(18).mul(100); // 100 PT\nlet ptForTokenMetaMethod = await basicRouter.swapExactPtForToken(\n    marketAddress,\n    exactPtIn,     // amount of pt in\n    tokenAddress,  // token address\n    slippage,\n    {\n        method: 'meta-method'\n    }\n);"
+                "const exactPtIn = BN.from(10).pow(18).mul(100); // 100 PT\nconst metaMethod = await basicRouter.swapExactPtForToken(\n    marketAddress,\n    exactPtIn,     // amount of pt in\n    tokenAddress,  // token address\n    slippage,\n    {\n        method: 'meta-method'\n    }\n);"
             ],
             "outputs": []
         },
@@ -154,11 +154,11 @@
                             "mime": "application/vnd.code.notebook.stdout",
                             "value": [
                                 "{",
-                                "  netTokenOut: '99687744',",
-                                "  minTokenOut: '98690866',",
+                                "  netTokenOut: '99688722',",
+                                "  minTokenOut: '98691834',",
                                 "  tokenOutputData: {",
                                 "    tokenOut: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',",
-                                "    minTokenOut: BigNumber { _hex: '0x05e1e732', _isBigNumber: true },",
+                                "    minTokenOut: BigNumber { _hex: '0x05e1eafa', _isBigNumber: true },",
                                 "    tokenRedeemSy: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',",
                                 "    kybercall: [],",
                                 "    bulk: '0x0000000000000000000000000000000000000000',",
@@ -189,7 +189,7 @@
         {
             "language": "typescript",
             "source": [
-                "import { PendleContractError, BN } from '@pendle/sdk-v2';\ntry {\n    const veryLargeAmount = BN.from(10).pow(18); // 1e12 USDC\n    let metaMethod = await basicRouter.swapExactTokenForPt(\n        marketAddress,\n        tokenAddress,    // token address\n        veryLargeAmount, // token amount\n        slippage,\n        {\n            method: 'meta-method'\n        }\n    );\n} catch (e) {\n    if (e instanceof PendleContractError) {\n        console.log(\"ErrorName: \", e.errorName);\n        if (e.isType('ApproxFail')) {\n            console.log('ApproxFail', e.args);\n            // do something\n        } else if (e.isType('MarketExpired')) {\n            // do something\n        } else {\n            // ...\n        }\n    }\n}"
+                "import { PendleContractError, BN } from '@pendle/sdk-v2';\ntry {\n    const veryLargeAmount = BN.from(10).pow(18); // 1e12 USDC\n    const metaMethod = await basicRouter.swapExactTokenForPt(\n        marketAddress,\n        tokenAddress,    // token address\n        veryLargeAmount, // token amount\n        slippage,\n        {\n            method: 'meta-method'\n        }\n    );\n} catch (e) {\n    if (e instanceof PendleContractError) {\n        console.log(\"ErrorName: \", e.errorName);\n        if (e.isType('ApproxFail')) {\n            console.log('ApproxFail', e.args);\n            // do something\n        } else if (e.isType('MarketExpired')) {\n            // do something\n        } else {\n            // ...\n        }\n    }\n}"
             ],
             "outputs": [
                 {
@@ -198,7 +198,7 @@
                             "mime": "application/vnd.code.notebook.stdout",
                             "value": [
                                 "ErrorName:  ApproxFail",
-                                "ApproxFail",
+                                "ApproxFail []",
                                 ""
                             ]
                         }

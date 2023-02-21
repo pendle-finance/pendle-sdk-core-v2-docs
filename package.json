@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@pendle/sdk-v2": "1.6.1-mainnet",
+    "@pendle/sdk-v2": "1.6.2-mainnet",
     "ansi-to-html": "^0.7.2",
     "node-metamask": "^1.1.2"
   },

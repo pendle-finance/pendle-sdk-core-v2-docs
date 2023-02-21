@@ -431,16 +431,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pendle/sdk-v2@npm:1.6.1-mainnet":
-  version: 1.6.1-mainnet
-  resolution: "@pendle/sdk-v2@npm:1.6.1-mainnet"
+"@pendle/sdk-v2@npm:1.6.2-mainnet":
+  version: 1.6.2-mainnet
+  resolution: "@pendle/sdk-v2@npm:1.6.2-mainnet"
   dependencies:
     "@pendle/core-v2": ^1.4.0-mainnet
     axios: ^0.27.2
     bignumber.js: ^9.1.0
     ethers: ^5.7.1
     tslib: ^2.5.0
-  checksum: d7a59cf7b1f6ccd28edc593326d189da89ea608a364d12c05d409c67aa83d036513b9f0a0c2409a254c5ab8a0c970306289f78ebc875b8b1c0d0cd0e60a83a7d
+  checksum: 3aa7e3b4258cb42cc796cb7943587935809b22def62173c9bd91696fc28eb8ebab027ba467054b1a1ea0cea8deff76622be1cd3452fc0a74d7f2c6da524180de
   languageName: node
   linkType: hard
 
@@ -1044,7 +1044,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "pendle-sdk-core-v2-docs@workspace:."
   dependencies:
-    "@pendle/sdk-v2": 1.6.1-mainnet
+    "@pendle/sdk-v2": 1.6.2-mainnet
     ansi-to-html: ^0.7.2
     node-metamask: ^1.1.2
   languageName: unknown
