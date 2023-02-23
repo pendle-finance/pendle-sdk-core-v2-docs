@@ -64,11 +64,11 @@ const metaMethod = await basicRouter.swapExactTokenForPt(
 ```
 
 ```typescript
-import { calcSlippedDownAmount } from '@pendle/sdk-v2';
+import { calcSlippedDownAmount, BaseRouter } from '@pendle/sdk-v2';
 const simulateData = metaMethod.data;
 const netPtOut = simulateData.netPtOut;
 const minPtOut = calcSlippedDownAmount(netPtOut, slippage);
-const guessParams = simulateData.route.context.guessOutApproxParams(netPtOut, slippage);
+const guessParams = BaseRouter.guessOutApproxParams(netPtOut, slippage);
 const tokenInputData = simulateData.input;
 console.log({
     'netPtOut': netPtOut.toString(),

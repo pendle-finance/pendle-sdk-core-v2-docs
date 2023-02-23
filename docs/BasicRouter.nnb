@@ -87,7 +87,7 @@
         {
             "language": "typescript",
             "source": [
-                "import { calcSlippedDownAmount } from '@pendle/sdk-v2';\nconst simulateData = metaMethod.data;\nconst netPtOut = simulateData.netPtOut;\nconst minPtOut = calcSlippedDownAmount(netPtOut, slippage);\nconst guessParams = simulateData.route.context.guessOutApproxParams(netPtOut, slippage);\nconst tokenInputData = simulateData.input;\nconsole.log({\n    'netPtOut': netPtOut.toString(),\n    'minPtOut': minPtOut.toString(),\n    'tokenInputData': tokenInputData, // this is the input data to pass in the router contract\n    'guessParams': guessParams\n});"
+                "import { calcSlippedDownAmount, BaseRouter } from '@pendle/sdk-v2';\nconst simulateData = metaMethod.data;\nconst netPtOut = simulateData.netPtOut;\nconst minPtOut = calcSlippedDownAmount(netPtOut, slippage);\nconst guessParams = BaseRouter.guessOutApproxParams(netPtOut, slippage);\nconst tokenInputData = simulateData.input;\nconsole.log({\n    'netPtOut': netPtOut.toString(),\n    'minPtOut': minPtOut.toString(),\n    'tokenInputData': tokenInputData, // this is the input data to pass in the router contract\n    'guessParams': guessParams\n});"
             ],
             "outputs": [
                 {
