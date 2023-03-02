@@ -6,11 +6,13 @@
   "license": "MIT",
   "dependencies": {
     "@pendle/sdk-v2": "^2.0.2-mainnet",
-    "ansi-to-html": "^0.7.2"
+    "ansi-to-html": "^0.7.2",
+    "hardhat": "^2.12.7"
   },
   "scripts": {
     "render-docs": "node ./scripts/render-all-docs.js md ./rendered-docs",
-    "render-ts": "node ./scripts/render-all-docs.js ts ./rendered-ts"
+    "render-ts": "node ./scripts/render-all-docs.js ts ./rendered-ts",
+    "local-fork": "yarn hardhat node"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",
