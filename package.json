@@ -11,5 +11,9 @@
   "scripts": {
     "render-docs": "node ./scripts/render-all-docs.js md ./rendered-docs",
     "render-ts": "node ./scripts/render-all-docs.js ts ./rendered-ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
   }
 }
