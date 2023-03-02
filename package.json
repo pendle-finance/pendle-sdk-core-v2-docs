@@ -5,9 +5,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@pendle/sdk-v2": "^1.0.12-mainnet",
-    "ansi-to-html": "^0.7.2",
-    "node-metamask": "^1.1.2"
+    "@pendle/sdk-v2": "^2.0.2-mainnet",
+    "ansi-to-html": "^0.7.2"
   },
   "scripts": {
     "render-docs": "node ./scripts/render-all-docs.js md ./rendered-docs",
