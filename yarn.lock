@@ -773,6 +773,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pendle/constants@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "@pendle/constants@npm:1.3.3"
+  dependencies:
+    ethers: ^5.7.2
+  checksum: c153bb83e40f0a70631e7229ea9798c38368c879422388d138763a523896543cc814cce796bfc56e3b452f07011af73db8fc4846ae537defa958785b2c9c5feb
+  languageName: node
+  linkType: hard
+
 "@pendle/core-v2@npm:2.0.1-mainnet":
   version: 2.0.1-mainnet
   resolution: "@pendle/core-v2@npm:2.0.1-mainnet"
@@ -1910,7 +1919,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:^5.7.1":
+"ethers@npm:^5.7.1, ethers@npm:^5.7.2":
   version: 5.7.2
   resolution: "ethers@npm:5.7.2"
   dependencies:
@@ -3273,10 +3282,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "pendle-sdk-core-v2-docs@workspace:."
   dependencies:
+    "@pendle/constants": ^1.3.3
     "@pendle/sdk-v2": ^2.0.2-mainnet
     ansi-to-html: ^0.7.2
     glob: ^9.3.0
     hardhat: ^2.12.7
+    prettier: ^2.8.4
     ts-node: ^10.9.1
     typescript: ^4.9.5
   languageName: unknown
@@ -3286,6 +3297,15 @@ __metadata:
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
   checksum: 050c865ce81119c4822c45d3c84f1ced46f93a0126febae20737bd05ca20589c564d6e9226977df859ed5e03dc73f02584a2b0faad36e896936238238b0446cf
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.8.4":
+  version: 2.8.4
+  resolution: "prettier@npm:2.8.4"
+  bin:
+    prettier: bin-prettier.js
+  checksum: c173064bf3df57b6d93d19aa98753b9b9dd7657212e33b41ada8e2e9f9884066bb9ca0b4005b89b3ab137efffdf8fbe0b462785aba20364798ff4303aadda57e
   languageName: node
   linkType: hard
 
