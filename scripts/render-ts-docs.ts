@@ -1,5 +1,9 @@
 import { execTypescript } from './exec-typescript';
 import { zip } from '@pendle/sdk-v2';
+import { glob } from 'glob';
+import fs from 'fs';
+import path from 'path';
+
 export const docTagRegex = /\/\*\s*@beginDoc(.*)@endDoc\s*\*\//gs;
 export const outputSpearatorTag = '=====\n====='
 
@@ -29,4 +33,37 @@ export async function renderTsDocs(content: string) {
         return curResult;
     }).join('\n');
     return result;
+}
+
+async function main() {
+    function printUsage() {
+        console.info(`Usage:
+    yarn ts-node scripts/render-ts-docs <outDir> <file1> [<file2> ...]
+`);
+    }
+    const outDir = process.argv[2];
+    const fileArgs = process.argv.slice(3);
+    if (outDir == undefined || fileArgs.length === 0) {
+        printUsage();
+        return ;
+    }
+    
+    const processSingleFile = async (inFileName: string) => {
+        const fileContent = await fs.promises.readFile(inFileName, { encoding: 'utf8' });
+        const generatedContent = await renderTsDocs(fileContent);
+        const outFileName = path.join(outDir, inFileName).replace(/\.ts$/, '.md');
+        await fs.promises.writeFile(outFileName, generatedContent);
+    };
+    
+    const files = (await Promise.all(fileArgs.map((fileArg) => glob(fileArg)))).flat();
+    await Promise.all(files.map(processSingleFile));
+}
+
+if (require.main === module) {
+    main()
+        .then(() => process.exit(0))
+        .catch((e) => {
+            console.error(e);
+            process.exit(1);
+        });
 }

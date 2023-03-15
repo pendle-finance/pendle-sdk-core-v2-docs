@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { exec } from 'child_process';
-import { Buffer } from 'buffer';
+import { decodeBuffer } from './util';
 
 const tempDir = './temp-dir';
 const mkTempDirPromise = fs.promises.mkdir(tempDir, { recursive: true });
@@ -13,14 +13,6 @@ async function writeTempFile(content: string, extension = '.ts'): Promise<string
     await fs.promises.writeFile(fileName, content);
     return fileName;
 }
-
-function decodeBuffer(buff: Buffer | string): string {
-    if (Buffer.isBuffer(buff)) {
-        return buff.toString('utf8');
-    }
-    return buff;
-}
-
 export async function execTypescript(typescriptCode: string): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
         const tsFile = await writeTempFile(typescriptCode);
