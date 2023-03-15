@@ -4,8 +4,9 @@ import { glob } from 'glob';
 import fs from 'fs';
 import path from 'path';
 
-export const docTagRegex = /\/\*\s*@beginDoc(.*)@endDoc\s*\*\//gs;
+export const docTagRegex = /\/\*\s*@beginDoc(.*?)@endDoc\s*\*\//gs;
 export const outputSpearatorTag = '=====\n====='
+export const outputSeparatorTagRegex = new RegExp(`(${outputSpearatorTag})`, 'gs');
 
 export async function renderTsDocs(content: string) {
     const parsedContent = content.split(docTagRegex);
@@ -14,18 +15,21 @@ export async function renderTsDocs(content: string) {
         if (index % 2 === 0) {
             return block;
         }
-        return outputSpearatorTag;
+        return `console.log(${JSON.stringify(outputSpearatorTag)});`;
     }).join('\n');
     
     const output = await execTypescript(typescriptCode);
-    
-    const parsedOutput = output.split(outputSpearatorTag);
+    const parsedOutput = output.split(outputSeparatorTagRegex);
     
     const result = Array.from(zip(parsedContent, parsedOutput), ([content, output], index) => {
+        content = content.trim();
         if (index % 2 === 1) {
             return content;
         }
         
+        if (content.length === 0) {
+            return '';
+        }
         let curResult = '```ts\n' + content + '\n```';
         if (output.trim() !== '') {
             curResult += '\nOutput:\n```' + output + '\n```';
@@ -51,7 +55,7 @@ async function main() {
     const processSingleFile = async (inFileName: string) => {
         const fileContent = await fs.promises.readFile(inFileName, { encoding: 'utf8' });
         const generatedContent = await renderTsDocs(fileContent);
-        const outFileName = path.join(outDir, inFileName).replace(/\.ts$/, '.md');
+        const outFileName = path.join(outDir, inFileName) + '.md';
         await fs.promises.writeFile(outFileName, generatedContent);
     };
     
