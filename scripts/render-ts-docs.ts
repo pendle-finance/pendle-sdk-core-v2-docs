@@ -4,7 +4,7 @@ import { glob } from 'glob';
 import fs from 'fs';
 import path from 'path';
 
-export const docTagRegex = /\/\*\s*@beginDoc(.*?)@endDoc\s*\*\//gs;
+export const docTagRegex = /\/\*\s===(.*?)===\s*\*\//gs;
 export const outputSpearatorTag = '=====\n====='
 export const outputSeparatorTagRegex = new RegExp(`(${outputSpearatorTag})`, 'gs');
 
