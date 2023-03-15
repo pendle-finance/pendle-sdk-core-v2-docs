@@ -1,6 +1,8 @@
 import { execTypescript } from './exec-typescript';
 import { zip } from '@pendle/sdk-v2';
+import { providers } from 'ethers';
 import { glob } from 'glob';
+import { evm_revert, evm_snapshot } from './util';
 import fs from 'fs';
 import path from 'path';
 
@@ -60,7 +62,18 @@ async function main() {
     };
     
     const files = (await Promise.all(fileArgs.map((fileArg) => glob(fileArg)))).flat();
-    await Promise.all(files.map(processSingleFile));
+    
+    const localForkProvider = new providers.StaticJsonRpcProvider();
+    const snapshot = await evm_snapshot(localForkProvider);
+    
+    for (const file of files) {
+        console.log(`Processing ${file}`);
+        try {
+            await processSingleFile(file);
+        } finally {
+            await evm_revert(localForkProvider, snapshot);
+        }
+    }
 }
 
 if (require.main === module) {
