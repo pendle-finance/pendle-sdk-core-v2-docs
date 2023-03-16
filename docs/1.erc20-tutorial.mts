@@ -21,7 +21,7 @@ const USDCAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 To communicate with the contract, we also need two things:
 - A provider and/or signer.
 - Some accounts with filled balance.
-We have already prepared a module called [playground.ts](./playground.ts) to provide these things.
+We have already prepared a module called [playground](./playground.mts) to provide these things.
 Let's import them!
 === */
 
@@ -238,7 +238,7 @@ const erc20OfAlice = new ERC20Entity(USDCAddress, { signer: Alice.wallet });
 const USDCDecimals = await erc20OfAlice.decimals();
 const USDCDecimalsFactor = BN.from(10).pow(USDCDecimals);
 {
-    const approvalAmount = USDCDecimalsFactor.mul(10);  // 10 USDC
+    const approvalAmount = USDCDecimalsFactor.mul(10); // 10 USDC
 
     console.log("Bob's allowance before: ", await erc20OfAlice.allowance(Alice.address, Bob.address));
 
@@ -253,7 +253,7 @@ And here is an example on how to send some USDC from Alice to Bob. Very similar 
 === */
 
 {
-    const transferAmount = USDCDecimalsFactor.mul(10);  // 10 USDC 
+    const transferAmount = USDCDecimalsFactor.mul(10); // 10 USDC
     console.log("Alice's balance before: ", await erc20OfAlice.balanceOf(Alice.address));
     console.log("Bob's balance before: ", await erc20OfAlice.balanceOf(Bob.address));
 
@@ -282,8 +282,6 @@ type MetaMethodType = 'send' | 'callStatic' | 'estimateGas' | 'meta-method' | 'm
 /* ===
 This meta-method is the default behavior for a method call, which is to perform a transaction
 === */
-
-import { Overrides } from 'ethers';
 
 {
     const testAmount = USDCDecimalsFactor.mul(11);
@@ -314,8 +312,16 @@ Use this meta-method to ask a node to execute the contract and return the hypoth
 
 /* ===
 #### `multicallStatic` meta-method
-This is the same as `callStatic` but with Multicall. Note that `multicall` effects only happen for this meta-method
-if the entity is initialized with `Multicall`, or passing it in the third parameter.
+This is the same as `callStatic` but with Multicall. Note that `multicall`
+effects only happen for this meta-method if the entity is initialized with
+`Multicall`, or passing it in the third parameter.
+
+**Important note:** Because we are using **multicall**, the **sender** will not
+the original sender, but it is the multicall contract itself!
+
+Because of that, the below only _demonstrate_ the `approve` function, and the
+owner here is **the multicall contract**. Even though this is not very useful
+in this context, `multicallStatic` can still be used with other entities.
 === */
 
 /* ===
@@ -324,13 +330,11 @@ With `multicall` passed in the third parameter
 {
     const testAmount = USDCDecimalsFactor.mul(13);
     console.log({ testAmount });
-    console.log({ aliceBalance: await erc20OfAlice.balanceOf(Alice.address) });
-    const [isApproved, transferable] = await Promise.all([
-        // erc20OfAlice.approve(Bob.address, testAmount, { method: 'multicallStatic', multicall }),
-        false,
-        erc20OfAlice.transfer(Bob.address, testAmount, { method: 'multicallStatic', multicall }),
+    const [isApprovedForBob, isApprovedForAlice] = await Promise.all([
+        readonlyErc20.approve(Bob.address, testAmount, { method: 'multicallStatic', multicall }),
+        readonlyErc20.approve(Alice.address, testAmount, { method: 'multicallStatic', multicall }),
     ]);
-    console.log({ isApproved, transferable });
+    console.log({ isApprovedForBob, isApprovedForAlice });
 }
 
 /* ===
@@ -338,15 +342,14 @@ With ERC20 entity constructed with `multicall`.
 === */
 
 {
-    const erc20 = new ERC20Entity(USDCAddress, { signer: Alice.wallet, multicall });
-    const testAmount = USDCDecimalsFactor.mul(14);
-    const [isApproved, transferable] = await Promise.all([
-        erc20.approve(Bob.address, testAmount, { method: 'multicallStatic' }),
-        erc20.transfer(Bob.address, testAmount, { method: 'multicallStatic' }),
+    const testAmount = USDCDecimalsFactor.mul(13);
+    console.log({ testAmount });
+    const [isApprovedForBob, isApprovedForAlice] = await Promise.all([
+        readonlyErc20WithMulticall.approve(Bob.address, testAmount, { method: 'multicallStatic' }),
+        readonlyErc20WithMulticall.approve(Alice.address, testAmount, { method: 'multicallStatic' }),
     ]);
-    console.log({ isApproved, transferable });
+    console.log({ isApprovedForBob, isApprovedForAlice });
 }
-
 
 /* ===
 #### `estimateGas` meta-method
@@ -373,7 +376,6 @@ built object.
     const testAmount = USDCDecimalsFactor.mul(16);
     const approveMetaMethod = await erc20OfAlice.approve(Bob.address, testAmount, { method: 'meta-method' });
     console.log('isApproved', await approveMetaMethod.callStatic());
-    console.log('isApprovedWithMulticall', await approveMetaMethod.multicallStatic({ multicall }));
     console.log('Gas usage', await approveMetaMethod.estimateGas());
 
     console.log("Bob's allowance before: ", await erc20OfAlice.allowance(Alice.address, Bob.address));
@@ -432,7 +434,7 @@ import { WrappedContract, PendleERC20 } from '@pendle/sdk-v2';
 
 const wrappedContract: WrappedContract<PendleERC20> = readWriteErc20.contract;
 
-/* ==
+/* ===
 ### Setting the ABI
 
 If you wish to extend `ERC20` classes with a different contract ABI, you can set the ABI via the constructor configuration parameters. The ABI should have a compatible type with the `ERC20` ABI. Be careful to do otherwise, as Pendle SDK does not check to ABI compatibility.
