@@ -9,6 +9,28 @@ import path from 'path';
 export const docTagRegex = /\/\*\s===(.*?)===\s*\*\//gs;
 export const outputSpearatorTag = '=====\n=====';
 export const outputSeparatorTagRegex = new RegExp(`(${outputSpearatorTag})`, 'gs');
+export const hideOutputTag = /\/\/\s*?@hideOutput\s*?$/gm;
+
+const headerCode = `
+// From https://2ality.com/2022/07/nodejs-esm-main.html
+import * as url from 'node:url';
+
+let console = global.console;
+if (import.meta.url.startsWith('file:')) { // (A)
+    const modulePath = url.fileURLToPath(import.meta.url);
+    const isMainModule = process.argv[1] === modulePath;
+    if (!isMainModule) {
+        const doNothingConsole = new Proxy(console, { get: () => () => {} });
+        console = doNothingConsole;
+    }
+}
+
+function __printSeparator() {
+    console.log(${JSON.stringify(outputSpearatorTag)});
+}
+`;
+
+const footerCode = ``;
 
 export async function renderTsDocs(content: string, fileName: string) {
     const parsedContent = content.split(docTagRegex);
@@ -16,18 +38,31 @@ export async function renderTsDocs(content: string, fileName: string) {
         if (process.env['NO_EVAL'] === '1') {
             return Array.from({ length: parsedContent.length }, () => '');
         }
-        const typescriptCode = parsedContent
-            .map((block, index) => {
-                if (index % 2 === 0) {
-                    return block;
-                }
-                return `console.log(${JSON.stringify(outputSpearatorTag)});`;
-            })
-            .join('\n');
+        const typescriptCode =
+            headerCode +
+            parsedContent
+                .map((block, index) => {
+                    if (index % 2 === 0) {
+                        return block;
+                    }
+                    return `__printSeparator();`;
+                })
+                .join('\n') +
+            footerCode;
 
         const output = await execTypescript(typescriptCode, fileName.replace(/\.ts$/, '.mts'));
         return output.split(outputSeparatorTagRegex);
     })();
+    
+    const processTypeScriptContent = (content: string) => {
+        let curContent: string;
+        let hideOutput = false;
+        if ((curContent = content.replace(hideOutputTag, '')).length !== content.length) {
+            content = curContent;
+            hideOutput = true;
+        }
+        return { processedContent: content, hideOutput };
+    };
 
     const result = Array.from(zip(parsedContent, parsedOutput), ([content, output], index) => {
         content = content.trim();
@@ -38,8 +73,9 @@ export async function renderTsDocs(content: string, fileName: string) {
         if (content.length === 0) {
             return '';
         }
-        let curResult = '```ts\n' + content + '\n```';
-        if (output.trim() !== '') {
+        const { processedContent, hideOutput } = processTypeScriptContent(content);
+        let curResult = '```ts\n' + processedContent + '\n```';
+        if (output.trim() !== '' && !hideOutput) {
             curResult += '\nOutput:\n```' + output + '\n```';
         }
         return curResult;
