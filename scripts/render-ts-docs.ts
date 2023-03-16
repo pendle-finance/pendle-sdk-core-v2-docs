@@ -10,7 +10,7 @@ export const docTagRegex = /\/\*\s===(.*?)===\s*\*\//gs;
 export const outputSpearatorTag = '=====\n=====';
 export const outputSeparatorTagRegex = new RegExp(`(${outputSpearatorTag})`, 'gs');
 
-export async function renderTsDocs(content: string) {
+export async function renderTsDocs(content: string, fileName: string) {
     const parsedContent = content.split(docTagRegex);
     const parsedOutput = await (async () => {
         if (process.env['NO_EVAL'] === '1') {
@@ -25,7 +25,7 @@ export async function renderTsDocs(content: string) {
             })
             .join('\n');
 
-        const output = await execTypescript(typescriptCode);
+        const output = await execTypescript(typescriptCode, fileName.replace(/\.ts$/, '.mts'));
         return output.split(outputSeparatorTagRegex);
     })();
 
@@ -62,7 +62,7 @@ async function main() {
 
     const processSingleFile = async (inFileName: string) => {
         const fileContent = await fs.promises.readFile(inFileName, { encoding: 'utf8' });
-        const generatedContent = await renderTsDocs(fileContent);
+        const generatedContent = await renderTsDocs(fileContent, inFileName);
         const outFileName = path.join(outDir, inFileName) + '.md';
         await fs.promises.writeFile(outFileName, generatedContent);
     };
