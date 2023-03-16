@@ -25,7 +25,7 @@ We have already prepared a module called [playground.ts](./playground.ts) to pro
 Let's import them!
 === */
 
-import { provider, testAccounts } from './playground';
+import { provider, testAccounts } from './playground.mjs';
 const [Alice, Bob] = testAccounts;
 
 console.log("Alice's address: ", Alice.address);
@@ -254,12 +254,14 @@ And here is an example on how to send some USDC from Alice to Bob. Very similar 
 
 {
     const transferAmount = USDCDecimalsFactor.mul(10);  // 10 USDC 
-    console.log("Bob's balance before: ", await erc20OfAlice.balanceOf(Alice.address, Bob.address));
+    console.log("Alice's balance before: ", await erc20OfAlice.balanceOf(Alice.address));
+    console.log("Bob's balance before: ", await erc20OfAlice.balanceOf(Bob.address));
 
     const contractTransaction = await erc20OfAlice.transfer(Bob.address, transferAmount);
     await contractTransaction.wait(/* confirmation= */ 1);
 
-    console.log("Bob's allowance after: ", await erc20OfAlice.allowance(Alice.address, Bob.address));
+    console.log("Alice's balance after: ", await erc20OfAlice.balanceOf(Alice.address));
+    console.log("Bob's balance after: ", await erc20OfAlice.balanceOf(Bob.address));
 }
 
 /* ===
@@ -286,11 +288,13 @@ import { Overrides } from 'ethers';
 {
     const testAmount = USDCDecimalsFactor.mul(11);
     console.log('Before');
+    console.log("Alice's balance:", await erc20OfAlice.balanceOf(Alice.address));
     console.log("Bob's balance:", await erc20OfAlice.balanceOf(Bob.address));
     console.log("Bob's allowance:", await erc20OfAlice.balanceOf(Alice.address, Bob.address));
     await erc20OfAlice.approve(Bob.address, testAmount, { method: 'send' }).then((transaction) => transaction.wait(1));
     await erc20OfAlice.transfer(Bob.address, testAmount, { method: 'send' }).then((transaction) => transaction.wait(1));
     console.log('After');
+    console.log("Alice's balance:", await erc20OfAlice.balanceOf(Alice.address));
     console.log("Bob's balance:", await erc20OfAlice.balanceOf(Bob.address));
     console.log("Bob's allowance:", await erc20OfAlice.allowance(Alice.address, Bob.address));
 }
@@ -319,8 +323,11 @@ With `multicall` passed in the third parameter
 === */
 {
     const testAmount = USDCDecimalsFactor.mul(13);
+    console.log({ testAmount });
+    console.log({ aliceBalance: await erc20OfAlice.balanceOf(Alice.address) });
     const [isApproved, transferable] = await Promise.all([
-        erc20OfAlice.approve(Bob.address, testAmount, { method: 'multicallStatic', multicall }),
+        // erc20OfAlice.approve(Bob.address, testAmount, { method: 'multicallStatic', multicall }),
+        false,
         erc20OfAlice.transfer(Bob.address, testAmount, { method: 'multicallStatic', multicall }),
     ]);
     console.log({ isApproved, transferable });
@@ -339,6 +346,7 @@ With ERC20 entity constructed with `multicall`.
     ]);
     console.log({ isApproved, transferable });
 }
+
 
 /* ===
 #### `estimateGas` meta-method
