@@ -38,10 +38,10 @@ assets, such as USDC, USDT, ... We'll demonstrate how to get the balance of thes
 account shortly.
 === */
 
-/* ==
+/* ===
 ## ERC20 entity creation
 Pendle ERC20 Entity can be constructed as follows:
-== */
+=== */
 
 import { ERC20Entity } from '@pendle/sdk-v2';
 
@@ -155,10 +155,8 @@ const multicall = new Multicall({ chainId: 1, provider });
 
 /* ===
 `chainId` and `provider` are the required parameters. The `chainId` is `1`, as
-we are querying the Ethereum network. There are two more optional parameters:
-
+we are querying the Ethereum network. There is one more optional parameters:
 - `callLimit: number` (default: `64`), the maximum number of calls per multicall request.
-- `blockTag: string` (default: `latest`), the block tag for the multicall requests.
 === */
 
 /* ===
@@ -196,8 +194,6 @@ async function readonlyFunctionExample_multicallToMethods(erc20: ERC20Entity, mu
     const [name, symbol, decimals, totalSupply, AliceBalance, BobBalance] = await Promise.all([
         erc20.name({ multicall }),
         erc20.symbol({ multicall }),
-
-        // convert ethersjs' BigNumber to string for readability
         erc20.decimals({ multicall }),
         erc20.totalSupply({ multicall }),
         erc20.balanceOf(Alice.address, { multicall }),
@@ -240,8 +236,9 @@ import { BN } from '@pendle/sdk-v2';
 const erc20OfAlice = new ERC20Entity(USDCAddress, { signer: Alice.wallet });
 
 const USDCDecimals = await erc20OfAlice.decimals();
+const USDCDecimalsFactor = BN.from(10).pow(USDCDecimals);
 {
-    const approvalAmount = BN.from(10).mul(USDCDecimals).mul(10); // 10 USDC
+    const approvalAmount = USDCDecimalsFactor.mul(10);  // 10 USDC
 
     console.log("Bob's allowance before: ", await erc20OfAlice.allowance(Alice.address, Bob.address));
 
@@ -256,7 +253,7 @@ And here is an example on how to send some USDC from Alice to Bob. Very similar 
 === */
 
 {
-    const transferAmount = BN.from(10).mul(USDCDecimals).mul(10); // 10 USDC
+    const transferAmount = USDCDecimalsFactor.mul(10);  // 10 USDC 
     console.log("Bob's balance before: ", await erc20OfAlice.balanceOf(Alice.address, Bob.address));
 
     const contractTransaction = await erc20OfAlice.transfer(Bob.address, transferAmount);
@@ -287,7 +284,7 @@ This meta-method is the default behavior for a method call, which is to perform 
 import { Overrides } from 'ethers';
 
 {
-    const testAmount = BN.from(10);
+    const testAmount = USDCDecimalsFactor.mul(11);
     console.log('Before');
     console.log("Bob's balance:", await erc20OfAlice.balanceOf(Bob.address));
     console.log("Bob's allowance:", await erc20OfAlice.balanceOf(Alice.address, Bob.address));
@@ -305,7 +302,7 @@ Use this meta-method to ask a node to execute the contract and return the hypoth
 === */
 
 {
-    const testAmount = BN.from(10);
+    const testAmount = USDCDecimalsFactor.mul(12);
     const isApproved = await erc20OfAlice.approve(Bob.address, testAmount, { method: 'callStatic' });
     const transferable = await erc20OfAlice.transfer(Bob.address, testAmount, { method: 'callStatic' });
     console.log({ isApproved, transferable });
@@ -321,7 +318,7 @@ if the entity is initialized with `Multicall`, or passing it in the third parame
 With `multicall` passed in the third parameter
 === */
 {
-    const testAmount = BN.from(10);
+    const testAmount = USDCDecimalsFactor.mul(13);
     const [isApproved, transferable] = await Promise.all([
         erc20OfAlice.approve(Bob.address, testAmount, { method: 'multicallStatic', multicall }),
         erc20OfAlice.transfer(Bob.address, testAmount, { method: 'multicallStatic', multicall }),
@@ -335,7 +332,7 @@ With ERC20 entity constructed with `multicall`.
 
 {
     const erc20 = new ERC20Entity(USDCAddress, { signer: Alice.wallet, multicall });
-    const testAmount = BN.from(10);
+    const testAmount = USDCDecimalsFactor.mul(14);
     const [isApproved, transferable] = await Promise.all([
         erc20.approve(Bob.address, testAmount, { method: 'multicallStatic' }),
         erc20.transfer(Bob.address, testAmount, { method: 'multicallStatic' }),
@@ -349,7 +346,7 @@ Use this meta method to estimate the amount of gas consumed for the method calls
 === */
 
 {
-    const testAmount = BN.from(10);
+    const testAmount = USDCDecimalsFactor.mul(15);
     const [approvalGasUsed, transferGasUsed] = await Promise.all([
         erc20OfAlice.approve(Bob.address, testAmount, { method: 'estimateGas' }),
         erc20OfAlice.transfer(Bob.address, testAmount, { method: 'estimateGas' }),
@@ -365,7 +362,7 @@ built object.
 === */
 
 {
-    const testAmount = BN.from(100);
+    const testAmount = USDCDecimalsFactor.mul(16);
     const approveMetaMethod = await erc20OfAlice.approve(Bob.address, testAmount, { method: 'meta-method' });
     console.log('isApproved', await approveMetaMethod.callStatic());
     console.log('isApprovedWithMulticall', await approveMetaMethod.multicallStatic({ multicall }));
