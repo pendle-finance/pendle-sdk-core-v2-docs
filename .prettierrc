@@ -1,7 +1,7 @@
 {
   "overrides": [
     {
-      "files": "*.{ts,js,json}",
+      "files": "*.{ts,js,mts,json}",
       "options": {
         "bracketSpacing": true,
         "printWidth": 120,
