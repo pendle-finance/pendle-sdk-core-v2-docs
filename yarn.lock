@@ -782,26 +782,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pendle/core-v2@npm:2.0.1-mainnet":
-  version: 2.0.1-mainnet
-  resolution: "@pendle/core-v2@npm:2.0.1-mainnet"
+"@pendle/core-v2@npm:2.3.1-mainnet":
+  version: 2.3.1-mainnet
+  resolution: "@pendle/core-v2@npm:2.3.1-mainnet"
   dependencies:
     "@openzeppelin/contracts": 4.7.3
     "@openzeppelin/contracts-upgradeable": 4.7.3
-  checksum: a5bd11bf379f8f339cc5333fef319f546cd7dc764b11eaa80cb212244e7661350d49a77e7c438a7ee08bd24933d3a4d2f89f39ebec062c7140d5a5ebacf55949
+  checksum: ab33308e8113e03d4d3834a9d7aa80c0dc2bcebf9d3ff71aad0c0dfe9c9e1c78ba6e718f13405a727796f5b6bfe2f60b29147bbecf9ccb9dd9be8d224786b5bd
   languageName: node
   linkType: hard
 
-"@pendle/sdk-v2@npm:^2.0.2-mainnet":
-  version: 2.0.2-mainnet
-  resolution: "@pendle/sdk-v2@npm:2.0.2-mainnet"
+"@pendle/sdk-v2@npm:^2.1.3-mainnet":
+  version: 2.1.3-mainnet
+  resolution: "@pendle/sdk-v2@npm:2.1.3-mainnet"
   dependencies:
-    "@pendle/core-v2": 2.0.1-mainnet
+    "@pendle/core-v2": 2.3.1-mainnet
     axios: ^0.27.2
     bignumber.js: ^9.1.0
     ethers: ^5.7.1
     tslib: ^2.5.0
-  checksum: 38f915d03f61500b06d9a8bf57ae5c8be1f3cfa5ebb7508b83ab6b4b1b4296fdf04d2847aaa2cd23d7686fb2d55d664c8e8e063d0d73a50dfd60069fa111eb4f
+  checksum: 18c6a4fdce20174f7a1b01369b79118fe633553eeb424057c4b011b76223f6bbab7d27a1e8ac67f07501870524a2d6eaa4582837edfbea12e01f49387cfb4671
   languageName: node
   linkType: hard
 
@@ -3283,7 +3283,7 @@ __metadata:
   resolution: "pendle-sdk-core-v2-docs@workspace:."
   dependencies:
     "@pendle/constants": ^1.3.3
-    "@pendle/sdk-v2": ^2.0.2-mainnet
+    "@pendle/sdk-v2": ^2.1.3-mainnet
     ansi-to-html: ^0.7.2
     glob: ^9.3.0
     hardhat: ^2.12.7
