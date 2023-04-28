@@ -19,7 +19,7 @@ type Provider = providers.Provider;
 import { Address } from '@pendle/sdk-v2';
 ```
 ```ts
-  type Address = `0x${string}`;
+type Address = `0x${string}`;
 ```
 
 In Pendle SDK, we force `Address` to be a string that has `0x` as its prefix. It is used to avoid direct assignment from a string to an Address.
