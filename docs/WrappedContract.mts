@@ -27,7 +27,7 @@ const readWriteWrappedContract = createContractObject<PendleERC20>(USDCAddress, 
 /* ===
 This function accepts a type parameter `C`, which is the generated contract’s typechain type. Next is the contract’s addresses, and its ABI. The final parameter is the configuration.
 
-The configuration has the `signer` and `provider` similar to the configuration of `PendleEntity`. See [ERC20 contract interaction tutorial with Pendle SDK](./erc20-tutorial.md), as well as the `NetworkConnection` type in [Utilities types and functions](./utilities-types-and-functions.md).
+The configuration has the `signer` and `provider` similar to the configuration of `PendleEntity`. See [ERC20 contract interaction tutorial with Pendle SDK](./erc20-tutorial.mts.md), as well as the `NetworkConnection` type in [Utilities types and functions](./utilities-types-and-functions.mts.md).
 By default, this function returns `WrappedContract<C>`, but it can also return ethersjs’ Contract, if `doWrap: false` is passed to the configuration. 
 === */
 
@@ -96,7 +96,7 @@ async function exampleWriteFunctions(contract: ContractLike<PendleERC20>, receiv
 
 
 /* ===
-Though the interfaces are the same, there is a key difference: when there is an error, Pendle SDK will throw a custom error, especially for Pendle Contracts. See [Error handling](./error-handling.md).
+Though the interfaces are the same, there is a key difference: when there is an error, Pendle SDK will throw a custom error, especially for Pendle Contracts. See [Error handling](./error-handling.mts.md).
 
 
 
@@ -129,7 +129,7 @@ type MulticallStaticParams = {
 /* ===
 The `multicallStatic` is guaranteed to work **correctly**. If `multicall` is not specified, the methods of this meta-class will act as `callStatic`.
 
-Similarly to a `PendleEntity`, like our `ERC20` entity (see [ERC20 contract interaction tutorial with Pendle SDK](./erc20-tutorial.md)), there are two way to use `multicall`.
+Similarly to a `PendleEntity`, like our `ERC20` entity (see [ERC20 contract interaction tutorial with Pendle SDK](./erc20-tutorial.mts.md)), there are two way to use `multicall`.
 
 
 
@@ -201,7 +201,7 @@ We encourage using the _wass `Multicall` to `multicallStatic` methods_ style for
 
 ### Meta-methods — the `metaCall` meta class.
 
-Similar to an ERC20 entity, all PendleEntity classes will support calling write functions with meta-methods. See [ERC20 contract interaction tutorial with Pendle SDK](./erc20-tutorial.md), the Meta-methods section for examples.
+Similar to an ERC20 entity, all PendleEntity classes will support calling write functions with meta-methods. See [ERC20 contract interaction tutorial with Pendle SDK](./erc20-tutorial.mts.md), the Meta-methods section for examples.
 
 To aid the development of these write functions, `WrappedContract` methods can also be called directly with meta-methods via the meta-class `metaCall`. 
 
