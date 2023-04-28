@@ -12,10 +12,10 @@ Multicall is the preferred way to call contract methods and get hypothetical res
 ### Multicall creation
 === */
 
-import { getDefaultProvider } from 'ethers';
 import { Multicall, MulticallStatic } from '@pendle/sdk-v2';
+import { providers } from 'ethers';
+const provider = new providers.StaticJsonRpcProvider();
 
-const provider = getDefaultProvider();
 const chainId = 1;  // 1 for ethereum
 
 const multicall = new Multicall({chainId, provider});

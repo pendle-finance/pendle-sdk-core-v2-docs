@@ -9,10 +9,10 @@ Multicall is the preferred way to call contract methods and get hypothetical res
 
 ### Multicall creation
 ```ts
-import { getDefaultProvider } from 'ethers';
 import { Multicall, MulticallStatic } from '@pendle/sdk-v2';
+import { providers } from 'ethers';
+const provider = new providers.StaticJsonRpcProvider();
 
-const provider = getDefaultProvider();
 const chainId = 1;  // 1 for ethereum
 
 const multicall = new Multicall({chainId, provider});
@@ -59,7 +59,7 @@ console.log(String(await singleCall(USDC_HOLDERS['Maker: PSM-USDC-A'])))
 ```
 Output:
 ```
-2037158841069861
+2016607719400274
 
 ```
 To have the *batching* effect, use it with `Promise.all`
@@ -79,10 +79,10 @@ for (const [holder, balance] of zip(Object.keys(USDC_HOLDERS), balances)) {
 ```
 Output:
 ```
-Maker: PSM-USDC-A is holding 2037158841069861 USDC
-Polygon (Matic): ERC20 Bridge is holding 608173158463890 USDC
-Arbitrum One: L1 Arb - Custom Gateway is holding 1348932001905346 USDC
-Binance 14 is holding 210479504721077 USDC
+Maker: PSM-USDC-A is holding 2016607719400274 USDC
+Polygon (Matic): ERC20 Bridge is holding 637027784047075 USDC
+Arbitrum One: L1 Arb - Custom Gateway is holding 1352989279461167 USDC
+Binance 14 is holding 132410706717295 USDC
 
 ```
 You can even use `singleCall` for batching:
@@ -129,15 +129,31 @@ async function singleCallOptional(userAddress: Address, multicall?: Multicall) {
 
 async function multicallCallOptional(userAddresses: Address[], multicall?: Multicall) {
   return await Promise.all(userAddresses.map(
-    (userAddress) => singleCall(userAddress)
+    (userAddress) => singleCallOptional(userAddress, multicall)
   ));
 }
 
 // have batching
 const balances1 = await multicallCallOptional(Object.values(USDC_HOLDERS), multicall);
-// // no batching
-// const balances2 = await multicallCallOptional(Object.values(USDC_HOLDERS));
+// no batching
+const balances2 = await multicallCallOptional(Object.values(USDC_HOLDERS));
 
-// console.log(balances1.map(String));
-// console.log(balances2.map(String));
+console.log(balances1.map(String));
+console.log(balances2.map(String));
+```
+Output:
+```
+[
+  '2016607719400274',
+  '637027784047075',
+  '1352989279461167',
+  '132410706717295'
+]
+[
+  '2016607719400274',
+  '637027784047075',
+  '1352989279461167',
+  '132410706717295'
+]
+
 ```
