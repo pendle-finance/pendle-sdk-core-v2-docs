@@ -19,7 +19,7 @@ const multicall = new Multicall({chainId, provider});
 ```
 Multicall accepts 2 required parameters in its configuration, which are
 
-- `chainId: ChainId` — the id of the chain to use multicall with. See `ChainId` type in  [Utilities types and functions](./utilities-types-and-functions.md) - `provider: Provider` — the connection to the network.
+- `chainId: ChainId` — the id of the chain to use multicall with. See `ChainId` type in  [Utilities types and functions](./utilities-types-and-functions.mts.md) - `provider: Provider` — the connection to the network.
 
 Additionally, it accepts the following optional parameters:
 
