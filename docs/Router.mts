@@ -19,7 +19,7 @@ First, we need to have a `Signer` and/or a `Provider`. Most of the time, `Signer
 
 import { Wallet, providers } from 'ethers';
 
-const provider = new providers.StaticJsonRpcProvider();
+import { provider } from './playground.mjs';
 
 import { promises as fs } from 'fs';
 
@@ -70,9 +70,9 @@ Before doing any action, we should first have an address of a Pendle Market to i
 const marketAddress = toAddress('0x9ec4c502d989f04ffa9312c9d6e3f872ec91a0f9');
 
 
-import { createERC20, NATIVE_ADDRESS_0xEE } from '@pendle/sdk-v2';
+import { createERC20 } from '@pendle/sdk-v2';
 
-const nativeToken = createERC20(NATIVE_ADDRESS_0xEE, { provider });
+const nativeToken = createERC20(NATIVE_ADDRESS_0x00, { provider });
 console.log(`balance of ${signerAddress} is ${String(await nativeToken.balanceOf(toAddress(signer.address)))}`);
 
 /* ===
@@ -83,7 +83,7 @@ Now suppose we want to trade some ETH to the market's PT token. We can use `Rout
 
 import { BN, NATIVE_ADDRESS_0x00 } from '@pendle/sdk-v2';
 
-function swapAvaxForPt(amount: BN, slippage: number) {
+function swapNativeForPt(amount: BN, slippage: number) {
     return router.swapExactTokenForPt(
         marketAddress,
         NATIVE_ADDRESS_0x00,    // token address
@@ -99,7 +99,7 @@ For example, if we want to trade `0.05` ETH with `0.1%` slippage.
 const amountToTrade = BN.from(10).pow((await nativeToken.decimals()) - 2).mul(5);  // 0.05 token
 
 try {
-    const transaction = await swapAvaxForPt(amountToTrade, 0.1);
+    const transaction = await swapNativeForPt(amountToTrade, 0.1);
     console.log(transaction);
 } catch (e) {
     console.error(e);
@@ -204,9 +204,12 @@ In the case of [`swapExactTokenForPt`][Router-SwapExactTokenForPt], the result w
   );
   
   // getting the interesting data:
-  const { netPtOut, netSyFee, priceImpact } = metaMethod.data;
+  const { route, netPtOut, netSyFee, priceImpact } = metaMethod.data;
   
+  const input = await route.buildTokenInput();
+
   console.log({
+    input,
     netPtOut: netPtOut.toString(),
     netSyFee: netSyFee.toString(),
     priceImpact: priceImpact.toString()
@@ -221,3 +224,107 @@ In the case of [`swapExactTokenForPt`][Router-SwapExactTokenForPt], the result w
     console.error(e);
   }
 }
+
+/* ===
+## Methods of `Router`
+
+### Swap **exact** `X` for `Y`
+
+|            | to Token              | to Pt                 | to  Yt                | to Sy              |
+| ---------- | --------------------- | --------------------- | --------------------- | ------------------ |
+| from Token | x                     | [swapExactTokenForPt] | [swapExactTokenForYt] |                    |
+| from Pt    | [swapExactPtForToken] | x                     | [swapExactPtForYt]    | [swapExactPtForSy] |
+| from Yt    | [swapExactYtForToken] | [swapExactYtForPt]    | x                     | [swapExactYtForSy] |
+| from Sy    |                       | [swapExactSyForPt]    | [swapExactSyForYt]    | x                  |
+
+[swapExactPtForSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactPtForSy
+[swapExactPtForToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactPtForToken
+[swapExactPtForYt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactPtForYt
+
+[swapExactSyForPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactSyForPt
+[swapExactSyForYt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactSyForYt
+
+[swapExactTokenForPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactTokenForPt
+[swapExactTokenForYt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactTokenForYt
+
+[swapExactYtForPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactYtForPt
+[swapExactYtForSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactYtForSy
+[swapExactYtForToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactYtForToken
+
+
+For swapping between token and `sy`, see [mintSyFromToken] and [redeemSyToToken].
+
+[mintSyFromToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#mintSyFromToken
+[redeemSyToToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#redeemSyToToken
+
+### Swap `X` for **exact** `Y`
+
+|            | to Token | to Pt              | to  Yt             | to Sy              |
+| ---------- | -------- | ------------------ | ------------------ | ------------------ |
+| from Token | x        | x                  | x                  | x                  |
+| from Pt    | x        | x                  | x                  | [swapPtForExactSy] |
+| from Yt    | x        | x                  | x                  | [swapYtForExactSy] |
+| from Sy    | X        | [swapSyForExactPt] | [swapSyForExactYt] | x                  |
+
+[swapPtForExactSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapPtForExactSy
+[swapSyForExactPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapSyForExactPt
+[swapSyForExactYt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapSyForExactYt
+[swapYtForExactSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapYtForExactSy
+
+
+### Mint `X` from `Y`
+
+- [mintPyFromSy]
+- [mintPyFromToken]
+- [mintSyFromToken]
+
+[mintPyFromSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#mintPyFromSy
+[mintPyFromToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#mintPyFromToken
+[mintSyFromToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#mintSyFromToken
+
+### Redeem `X` to `Y`
+
+- [redeemPyToSy]
+- [redeemPyToToken]
+- [redeemSyToToken]
+
+[redeemPyToSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#redeemPyToSy
+[redeemPyToToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#redeemPyToToken
+[redeemSyToToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#redeemSyToToken
+
+### Add liquidity to a pool with dual tokens
+
+- [addLiquidityDualSyAndPt]
+- [addLiquidityDualTokenAndPt]
+
+[addLiquidityDualSyAndPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquidityDualSyAndPt
+[addLiquidityDualTokenAndPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquidityDualTokenAndPt
+
+### Add liquidity to a pool with single token
+
+- [addLiquiditySinglePt]
+- [addLiquiditySingleToken]
+- [addLiquiditySingleSy]
+
+[addLiquiditySinglePt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquiditySinglePt
+[addLiquiditySingleToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquiditySingleToken
+[addLiquiditySingleSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquiditySingleSy
+
+### Remove liquidity from a pool with dual tokens
+
+- [removeLiquidityDualSyAndPt]
+- [removeLiquidityDualTokenAndPt]
+
+[removeLiquidityDualSyAndPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquidityDualSyAndPt
+[removeLiquidityDualTokenAndPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquidityDualTokenAndPt
+
+### Remove liquidity from a pool with single token
+
+- [removeLiquiditySinglePt]
+- [removeLiquiditySingleToken]
+- [removeLiquiditySingleSy]
+
+[removeLiquiditySinglePt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquiditySinglePt
+[removeLiquiditySingleToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquiditySingleToken
+[removeLiquiditySingleSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquiditySingleSy
+=== */

@@ -17,7 +17,7 @@ First, we need to have a `Signer` and/or a `Provider`. Most of the time, `Signer
 ```ts
 import { Wallet, providers } from 'ethers';
 
-const provider = new providers.StaticJsonRpcProvider();
+import { provider } from './playground.mjs';
 
 import { promises as fs } from 'fs';
 
@@ -67,9 +67,9 @@ Before doing any action, we should first have an address of a Pendle Market to i
 const marketAddress = toAddress('0x9ec4c502d989f04ffa9312c9d6e3f872ec91a0f9');
 
 
-import { createERC20, NATIVE_ADDRESS_0xEE } from '@pendle/sdk-v2';
+import { createERC20 } from '@pendle/sdk-v2';
 
-const nativeToken = createERC20(NATIVE_ADDRESS_0xEE, { provider });
+const nativeToken = createERC20(NATIVE_ADDRESS_0x00, { provider });
 console.log(`balance of ${signerAddress} is ${String(await nativeToken.balanceOf(toAddress(signer.address)))}`);
 ```
 Output:
@@ -83,7 +83,7 @@ Now suppose we want to trade some ETH to the market's PT token. We can use `Rout
 ```ts
 import { BN, NATIVE_ADDRESS_0x00 } from '@pendle/sdk-v2';
 
-function swapAvaxForPt(amount: BN, slippage: number) {
+function swapNativeForPt(amount: BN, slippage: number) {
     return router.swapExactTokenForPt(
         marketAddress,
         NATIVE_ADDRESS_0x00,    // token address
@@ -97,7 +97,7 @@ For example, if we want to trade `0.05` ETH with `0.1%` slippage.
 const amountToTrade = BN.from(10).pow((await nativeToken.decimals()) - 2).mul(5);  // 0.05 token
 
 try {
-    const transaction = await swapAvaxForPt(amountToTrade, 0.1);
+    const transaction = await swapNativeForPt(amountToTrade, 0.1);
     console.log(transaction);
 } catch (e) {
     console.error(e);
@@ -109,18 +109,18 @@ Output:
   type: 2,
   chainId: 31337,
   nonce: 455,
-  maxPriorityFeePerGas: BigNumber { _hex: '0x59682f00', _isBigNumber: true },
-  maxFeePerGas: BigNumber { _hex: '0x0f9a2b8a62', _isBigNumber: true },
+  maxPriorityFeePerGas: BigNumber { value: "1500000000" },
+  maxFeePerGas: BigNumber { value: "121708301848" },
   gasPrice: null,
-  gasLimit: BigNumber { _hex: '0x06e6c9', _isBigNumber: true },
+  gasLimit: BigNumber { value: "452480" },
   to: '0x0000000001E4ef00d069e71d6bA041b0A16F7eA0',
-  value: BigNumber { _hex: '0xb1a2bc2ec50000', _isBigNumber: true },
-  data: '0xa5f9931b000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000009ec4c502d989f04ffa9312c9d6e3f872ec91a0f900000000000000000000000000000000000000000000000000a11d60ce5b27aa00000000000000000000000000000000000000000000000000a11d60ce5b27aa000000000000000000000000000000000000000000000000010c864c0297ecc600000000000000000000000000000000000000000000000000b30432ac654884000000000000000000000000000000000000000000000000000000000000000d00000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b1a2bc2ec5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+  value: BigNumber { value: "50000000000000000" },
+  data: '0xa5f9931b000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000009ec4c502d989f04ffa9312c9d6e3f872ec91a0f900000000000000000000000000000000000000000000000000a108a5cfa1318700000000000000000000000000000000000000000000000000a108a5cfa13187000000000000000000000000000000000000000000000000010c63bf04b7528c00000000000000000000000000000000000000000000000000b2ed2a0324e1b3000000000000000000000000000000000000000000000000000000000000000d00000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b1a2bc2ec5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
   accessList: [],
-  hash: '0xa8f7a64476e650b4658fd616ec375b1337dfded737466b050a9e0ad16f79b562',
-  v: 0,
-  r: '0x18836207e64ae82cc054121bb11708c631adaae193ed3dbec1be8d48f23656da',
-  s: '0x4c91dd54748b71f90a33b3c342cad8ebdadf1e459327a19d0bca01a7a520cf91',
+  hash: '0x7992a28571424a2c27e472a653c5f633fc116f0369e03428a804b056a08cabf9',
+  v: 1,
+  r: '0xb05ed6e03ba7865294e4f11cf0cbfc36908d18ef5809c15e11acf208b4509a87',
+  s: '0x03283279264a96e6bc3d512ff7de043e9e9b8270909799f5ea8110212c4910d8',
   from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
   confirmations: 0,
   wait: [Function (anonymous)]
@@ -139,7 +139,7 @@ console.log(`Pt balance of ${signerAddress} is ${String(ptBalance)}`);
 ```
 Output:
 ```
-Pt balance of 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 is 50388636518402180
+Pt balance of 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 is 50363310551654835
 
 ```
 Congratulation, we are now a PT token holder!
@@ -178,18 +178,18 @@ Output:
   type: 2,
   chainId: 31337,
   nonce: 456,
-  maxPriorityFeePerGas: BigNumber { _hex: '0x59682f00', _isBigNumber: true },
-  maxFeePerGas: BigNumber { _hex: '0x0eb370dfc6', _isBigNumber: true },
+  maxPriorityFeePerGas: BigNumber { value: "1500000000" },
+  maxFeePerGas: BigNumber { value: "120781780334" },
   gasPrice: null,
-  gasLimit: BigNumber { _hex: '0x06a099', _isBigNumber: true },
+  gasLimit: BigNumber { value: "434512" },
   to: '0x0000000001E4ef00d069e71d6bA041b0A16F7eA0',
-  value: BigNumber { _hex: '0xb1a2bc2ec50000', _isBigNumber: true },
-  data: '0xa5f9931b000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000009ec4c502d989f04ffa9312c9d6e3f872ec91a0f900000000000000000000000000000000000000000000000000a11cdb59cdcb2d00000000000000000000000000000000000000000000000000a11cdb59cdcb2d000000000000000000000000000000000000000000000000010c856d95ac52a100000000000000000000000000000000000000000000000000b3039e63c83716000000000000000000000000000000000000000000000000000000000000000d00000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b1a2bc2ec5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+  value: BigNumber { value: "50000000000000000" },
+  data: '0xa5f9931b000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000009ec4c502d989f04ffa9312c9d6e3f872ec91a0f900000000000000000000000000000000000000000000000000a108cb729231f800000000000000000000000000000000000000000000000000a108cb729231f8000000000000000000000000000000000000000000000000010c63fdbef3a89d00000000000000000000000000000000000000000000000000b2ed53d4a27069000000000000000000000000000000000000000000000000000000000000000d00000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b1a2bc2ec5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
   accessList: [],
-  hash: '0xeb099ac720ebb538b54f248a14132ad8df8135d2200db5346ba466e90ab66f2d',
-  v: 1,
-  r: '0xb816748b9d0dfaf936916b076db333299343340aa01cf3e9a6926852ff0615a3',
-  s: '0x790e4057021879c81abd00c821b0e14ee7e6d652ca8b505b1fb6182b8ab2f1da',
+  hash: '0xcba364594b9eb9c656320150bfba600b0c62311ec1efcc411feb74ec64abeb29',
+  v: 0,
+  r: '0x8e7e5e7df24ecbbe31c4ab31e4765dbdcee017ab4043d2c3047ea28a263c9ca5',
+  s: '0x10789bb66227a1067ff6951b03e069017e6396def5bd966123e3619acc1ffc88',
   from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
   confirmations: 0,
   wait: [Function (anonymous)]
@@ -209,7 +209,7 @@ console.log(gasUsed);
 ```
 Output:
 ```
-334329
+334499
 
 ```
 ### `callStatic` example
@@ -228,7 +228,7 @@ console.log({
 ```
 Output:
 ```
-{ netPtOut: '50388071943759827', netSyFee: '7530350048500' }
+{ netPtOut: '50359261435325570', netSyFee: '6789547931322' }
 
 ```
 ### `meta-method` example
@@ -253,9 +253,12 @@ In the case of [`swapExactTokenForPt`][Router-SwapExactTokenForPt], the result w
   );
   
   // getting the interesting data:
-  const { netPtOut, netSyFee, priceImpact } = metaMethod.data;
+  const { route, netPtOut, netSyFee, priceImpact } = metaMethod.data;
   
+  const input = await route.buildTokenInput();
+
   console.log({
+    input,
     netPtOut: netPtOut.toString(),
     netSyFee: netSyFee.toString(),
     priceImpact: priceImpact.toString()
@@ -265,7 +268,7 @@ In the case of [`swapExactTokenForPt`][Router-SwapExactTokenForPt], the result w
 
   try {
     const transaction = await metaMethod.send();
-    console.log(`See on block explorer: https://testnet.snowtrace.io/tx/${transaction.hash}`);
+    console.log(transaction);
   } catch (e) {
     console.error(e);
   }
@@ -274,10 +277,143 @@ In the case of [`swapExactTokenForPt`][Router-SwapExactTokenForPt], the result w
 Output:
 ```
 {
-  netPtOut: '50388071943759827',
-  netSyFee: '7530350048500',
-  priceImpact: '576336957168'
+  input: {
+    tokenIn: '0x0000000000000000000000000000000000000000',
+    netTokenIn: BigNumber { value: "50000000000000000" },
+    tokenMintSy: '0x0000000000000000000000000000000000000000',
+    bulk: '0x0000000000000000000000000000000000000000',
+    pendleSwap: '0x0000000000000000000000000000000000000000',
+    swapData: {
+      swapType: 0,
+      extRouter: '0x0000000000000000000000000000000000000000',
+      extCalldata: [],
+      needScale: false
+    }
+  },
+  netPtOut: '50359261435325570',
+  netSyFee: '6789547931322',
+  priceImpact: '527174398947'
 }
-See on block explorer: https://testnet.snowtrace.io/tx/0xd984e7cb7fdc29f508bf419932868f67ab0e2e22626defb9edd0219dad086155
+{
+  type: 2,
+  chainId: 31337,
+  nonce: 457,
+  maxPriorityFeePerGas: BigNumber { value: "1500000000" },
+  maxFeePerGas: BigNumber { value: "106204997088" },
+  gasPrice: null,
+  gasLimit: BigNumber { value: "434499" },
+  to: '0x0000000001E4ef00d069e71d6bA041b0A16F7eA0',
+  value: BigNumber { value: "50000000000000000" },
+  data: '0xa5f9931b000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000009ec4c502d989f04ffa9312c9d6e3f872ec91a0f900000000000000000000000000000000000000000000000000a10555541a6e7500000000000000000000000000000000000000000000000000a10555541a6e75000000000000000000000000000000000000000000000000010c5e38e18162c300000000000000000000000000000000000000000000000000b2e97b4100ec82000000000000000000000000000000000000000000000000000000000000000d00000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b1a2bc2ec5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+  accessList: [],
+  hash: '0x3a6cac9af16ca6e1ea88e541da077515cf9deb67c752368ec415cb0ecde4b67c',
+  v: 0,
+  r: '0x88af124135f8ecc8a800eb9fbac7bdefae5c9505a1ea7b5a4edc41da4e1488cb',
+  s: '0x796359128c9dd2747e0055ec838aff3e947b6a9259dce4dfde2fe79a962474b5',
+  from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  confirmations: 0,
+  wait: [Function (anonymous)]
+}
 
 ```
+## Methods of `Router`
+
+### Swap **exact** `X` for `Y`
+
+|            | to Token              | to Pt                 | to  Yt                | to Sy              |
+| ---------- | --------------------- | --------------------- | --------------------- | ------------------ |
+| from Token | x                     | [swapExactTokenForPt] | [swapExactTokenForYt] |                    |
+| from Pt    | [swapExactPtForToken] | x                     | [swapExactPtForYt]    | [swapExactPtForSy] |
+| from Yt    | [swapExactYtForToken] | [swapExactYtForPt]    | x                     | [swapExactYtForSy] |
+| from Sy    |                       | [swapExactSyForPt]    | [swapExactSyForYt]    | x                  |
+
+[swapExactPtForSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactPtForSy
+[swapExactPtForToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactPtForToken
+[swapExactPtForYt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactPtForYt
+
+[swapExactSyForPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactSyForPt
+[swapExactSyForYt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactSyForYt
+
+[swapExactTokenForPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactTokenForPt
+[swapExactTokenForYt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactTokenForYt
+
+[swapExactYtForPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactYtForPt
+[swapExactYtForSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactYtForSy
+[swapExactYtForToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapExactYtForToken
+
+
+For swapping between token and `sy`, see [mintSyFromToken] and [redeemSyToToken].
+
+[mintSyFromToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#mintSyFromToken
+[redeemSyToToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#redeemSyToToken
+
+### Swap `X` for **exact** `Y`
+
+|            | to Token | to Pt              | to  Yt             | to Sy              |
+| ---------- | -------- | ------------------ | ------------------ | ------------------ |
+| from Token | x        | x                  | x                  | x                  |
+| from Pt    | x        | x                  | x                  | [swapPtForExactSy] |
+| from Yt    | x        | x                  | x                  | [swapYtForExactSy] |
+| from Sy    | X        | [swapSyForExactPt] | [swapSyForExactYt] | x                  |
+
+[swapPtForExactSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapPtForExactSy
+[swapSyForExactPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapSyForExactPt
+[swapSyForExactYt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapSyForExactYt
+[swapYtForExactSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#swapYtForExactSy
+
+
+### Mint `X` from `Y`
+
+- [mintPyFromSy]
+- [mintPyFromToken]
+- [mintSyFromToken]
+
+[mintPyFromSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#mintPyFromSy
+[mintPyFromToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#mintPyFromToken
+[mintSyFromToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#mintSyFromToken
+
+### Redeem `X` to `Y`
+
+- [redeemPyToSy]
+- [redeemPyToToken]
+- [redeemSyToToken]
+
+[redeemPyToSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#redeemPyToSy
+[redeemPyToToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#redeemPyToToken
+[redeemSyToToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#redeemSyToToken
+
+### Add liquidity to a pool with dual tokens
+
+- [addLiquidityDualSyAndPt]
+- [addLiquidityDualTokenAndPt]
+
+[addLiquidityDualSyAndPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquidityDualSyAndPt
+[addLiquidityDualTokenAndPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquidityDualTokenAndPt
+
+### Add liquidity to a pool with single token
+
+- [addLiquiditySinglePt]
+- [addLiquiditySingleToken]
+- [addLiquiditySingleSy]
+
+[addLiquiditySinglePt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquiditySinglePt
+[addLiquiditySingleToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquiditySingleToken
+[addLiquiditySingleSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#addLiquiditySingleSy
+
+### Remove liquidity from a pool with dual tokens
+
+- [removeLiquidityDualSyAndPt]
+- [removeLiquidityDualTokenAndPt]
+
+[removeLiquidityDualSyAndPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquidityDualSyAndPt
+[removeLiquidityDualTokenAndPt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquidityDualTokenAndPt
+
+### Remove liquidity from a pool with single token
+
+- [removeLiquiditySinglePt]
+- [removeLiquiditySingleToken]
+- [removeLiquiditySingleSy]
+
+[removeLiquiditySinglePt]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquiditySinglePt
+[removeLiquiditySingleToken]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquiditySingleToken
+[removeLiquiditySingleSy]: http://playground.pendle.finance/sdk-docs/classes/Router.html#removeLiquiditySingleSy
