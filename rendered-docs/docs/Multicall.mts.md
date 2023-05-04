@@ -10,8 +10,7 @@ Multicall is the preferred way to call contract methods and get hypothetical res
 ### Multicall creation
 ```ts
 import { Multicall, MulticallStatic } from '@pendle/sdk-v2';
-import { providers } from 'ethers';
-const provider = new providers.StaticJsonRpcProvider();
+import { provider } from './playground.mjs';
 
 const chainId = 1;  // 1 for ethereum
 
@@ -69,7 +68,9 @@ async function multicallCall(userAddresses: Address[]) {
 		userAddress => contractWithMulticall.callStatic.balanceOf(userAddress)
   ));
 }
+```
 
+```ts
 import { zip } from '@pendle/sdk-v2';
 
 const balances = await multicallCall(Object.values(USDC_HOLDERS));
@@ -93,7 +94,7 @@ async function multicallCall2(userAddresses: Address[]) {
 ```
 ### Result caching
 
-`Multicall#wrap` will only wrap each contract *once*. If the same contract is called with the same multicall instance, the cached result will be returned. The cached result is stored right in the contract object itself. To access the cached result, you can use the `multicallStaticSymbol` of the `multicall` instance. For example, we can get the cache result of the above USDC `contract` instance as follows:
+`Multicall#wrap` will only wrap each contract *once*. If the same contract is called with the same multicall instance, the cached result will be returned. The cached result is stored in `Multicall#cacheWrappedContract` weakMap. To access the cached result, you can get from the `cacheWrappedContract` weakMap of the `multicall` instance. For example, we can get the cache result of the above USDC `contract` instance as follows:
 ```ts
 const cachedResult = contract[multicall.multicallStaticSymbol];
 console.log(cachedResult);
@@ -138,22 +139,22 @@ const balances1 = await multicallCallOptional(Object.values(USDC_HOLDERS), multi
 // no batching
 const balances2 = await multicallCallOptional(Object.values(USDC_HOLDERS));
 
-console.log(balances1.map(String));
-console.log(balances2.map(String));
+console.log(balances1);
+console.log(balances2);
 ```
 Output:
 ```
 [
-  '2016607719400274',
-  '637027784047075',
-  '1352989279461167',
-  '132410706717295'
+  BigNumber { value: "2016607719400274" },
+  BigNumber { value: "637027784047075" },
+  BigNumber { value: "1352989279461167" },
+  BigNumber { value: "132410706717295" }
 ]
 [
-  '2016607719400274',
-  '637027784047075',
-  '1352989279461167',
-  '132410706717295'
+  BigNumber { value: "2016607719400274" },
+  BigNumber { value: "637027784047075" },
+  BigNumber { value: "1352989279461167" },
+  BigNumber { value: "132410706717295" }
 ]
 
 ```
