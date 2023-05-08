@@ -188,8 +188,6 @@ Beside the functionalities stated in the [ERC20 tutorial with Pendle SDK][ERC20-
 [erc20-tutorial]: ./erc20-tutorial.mts.md
 
 In the case of [`swapExactTokenForPt`][Router-SwapExactTokenForPt], the result will have a field called `data`, which is an object that has the following fields:
-- `input: TokenInputStruct` - the structure to pass to the [corresponding contract method](https://github.com/pendle-finance/pendle-core-internal-v2/blob/main/contracts/interfaces/IPActionSwapPT.sol#L55)
-- `kybercallData: KybercallData` - the information about the route via KyberSwap
 - `netPtOut: BN;` - the hypothetical amount of `pt` can be received.
 - `netSyFee: BN;` - the hypothetical fee, in `SY`.
 - `priceImpact: BN;` the hypothetical price impact. 
@@ -204,12 +202,9 @@ In the case of [`swapExactTokenForPt`][Router-SwapExactTokenForPt], the result w
   );
   
   // getting the interesting data:
-  const { route, netPtOut, netSyFee, priceImpact } = metaMethod.data;
-  
-  const input = await route.buildTokenInput();
+  const { netPtOut, netSyFee, priceImpact } = metaMethod.data;
 
   console.log({
-    input,
     netPtOut: netPtOut.toString(),
     netSyFee: netSyFee.toString(),
     priceImpact: priceImpact.toString()
