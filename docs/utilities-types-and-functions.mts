@@ -28,7 +28,9 @@ import { Address } from '@pendle/sdk-v2';
 === */
 
 /* ===
-In Pendle SDK, we force `Address` to be a string that has `0x` as its prefix. It is used to avoid direct assignment from a string to an Address.
+In Pendle SDK, we force `Address` to be a string that has `0x` as its prefix. 
+This type is defined to avoid using raw string as address.
+The address returned by a contract call often have mixed cases, which sometimes causes bug in comparison. Even though it only checks if the string begins with `0x`, we are still sure that the address is not a raw string. Use `toAddress` to convert a raw address to this type.
 
 # function `toAddress(...)`
 === */
@@ -118,9 +120,9 @@ It is written so so that one of the fields can be omitted, **but not both!** Als
 ### Example
 === */
 
-import { getDefaultProvider, Wallet } from 'ethers';
+import { Wallet } from 'ethers';
+import { provider } from './playground.mjs';
 
-const provider = getDefaultProvider();
 const signer = Wallet.createRandom();
 
 // ok examples
