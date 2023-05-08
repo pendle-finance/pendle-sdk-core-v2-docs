@@ -98,9 +98,8 @@ async function multicallCall2(userAddresses: Address[]) {
 `Multicall#wrap` will only wrap each contract *once*. If the same contract is called with the same multicall instance, the cached result will be returned. The cached result is stored in `Multicall#cacheWrappedContract` weakMap. To access the cached result, you can get from the `cacheWrappedContract` weakMap of the `multicall` instance. For example, we can get the cache result of the above USDC `contract` instance as follows:
 === */
 
-const cachedResult = contract[multicall.multicallStaticSymbol];
-console.log(cachedResult);
-console.log(cachedResult === contractWithMulticall);
+const cachedResult = multicall.wrap(contract); // this will not wrap the contract again, but return the cached result
+console.log(multicall.wrap(contract) === cachedResult); // can wrap multiple times
 
 /* ===
 **Note**: the `Multicall#multicallStaticSymbol` is not *static*. It is local to each `multicall` instance.
