@@ -75,21 +75,21 @@ try {
 Output:
 ```
 readonly wrapped contract {
-  user1Balance: '2016607719400274',
+  user1Balance: '1823369206457527',
   user2Balance: '0',
   symbol: 'USDC',
   name: 'USD Coin',
   allowanceGasUsed: '31726'
 }
 read write wrapped contract {
-  user1Balance: '2016607719400274',
+  user1Balance: '1823369206457527',
   user2Balance: '0',
   symbol: 'USDC',
   name: 'USD Coin',
   allowanceGasUsed: '31726'
 }
 ehtersjs contract {
-  user1Balance: '2016607719400274',
+  user1Balance: '1823369206457527',
   user2Balance: '0',
   symbol: 'USDC',
   name: 'USD Coin',
@@ -177,7 +177,7 @@ Output:
   name: 'USD Coin',
   symbol: 'USDC',
   decimals: 6,
-  userBalance: '2016607719400274'
+  userBalance: '1823369206457527'
 }
 
 ```
@@ -218,7 +218,7 @@ Output:
   name: 'USD Coin',
   symbol: 'USDC',
   decimals: 6,
-  userBalance: '2016607719400274'
+  userBalance: '1823369206457527'
 }
 
 ```
@@ -247,7 +247,7 @@ type MetaMethodExtraParams<T extends MetaMethodType = 'send'> = MulticallStaticP
   gasLimitBufferingPercent?: number;
 };
 
-type MetaMethodType = 'send' | 'callStatic' | 'estimateGas' | 'meta-method' | 'multicallStatic';
+type MetaMethodType = 'send' | 'callStatic' | 'estimateGas' | 'meta-method' | 'multicallStatic' | 'populateTransaction' | 'extractParams';
 ```
 and `MetaMethodReturnType` is a helper type that will be defined for each `MetaMethodType`.
 
@@ -259,9 +259,12 @@ Here is a table for the actual return type for each `MetaMethodType`.
 | `callStatic` | `contract.callStatic` | `Promise<R>` |
 | `estimateGas` | `contract.estimateGas` | `Promise<BigNumber>` |
 | `multicallStatic` | `contract.multicallStatic` | `Promise<R>` |
+| `populateTransaction` | `contract.populateTransaction` | `Promise<PopulatedTransaction>` |
+| `extractParams` | `contract.interface.decodeFunctionData` | `Promise<any[]>` |
 | `meta-method` | `contract.metaCall` | `ContractMetaMethod` |
 
 Here `Promise<R>` is the return type of the contract methods. For example, for ERC20 contract, `balanceOf` will return `Promise<BigNumber>`, `name()` and `symbol()` will return `Promise<string>`.
+`Promise<any[]>` is the return type of params extraction. For example, for `transfer` method of a ERC20 contract, the return type will be `Promise<[to: string, amount: BigNumberish, overrides?: CallOverrides | undefined]>`.
 
 When the `metaMethodType` is `undefined`, the method act like `send.`
 
@@ -294,6 +297,12 @@ async function metaCallExample(contract: WrappedContract<PendleERC20>) {
 
   // estimateGas example
   const transferGasUsed = await contract.metaCall.transfer(user1, amount, { method: 'estimateGas' });
+
+  // populateTransaction example
+  const transferPopulatedTransaction = await contract.metaCall.transfer(user1, amount, { method: 'populateTransaction' });
+
+  // extractParams example
+  const transferParams = await contract.metaCall.transfer(user1, amount, { method: 'extractParams' });
   
   // meta-method example
 
