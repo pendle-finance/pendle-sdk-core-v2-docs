@@ -19,7 +19,7 @@ First, we need to have a `Signer` and/or a `Provider`. Most of the time, `Signer
 
 import { Wallet, providers } from 'ethers';
 
-import { provider } from './playground.mjs';
+import { provider, testAccounts } from './playground.mjs';
 
 import { promises as fs } from 'fs';
 
@@ -29,18 +29,7 @@ import { promises as fs } from 'fs';
  * the created wallet's private key to .private-key.
  */
 
-async function getWallet(provider: providers.Provider) {
-  try {
-      const privateKey = await fs.readFile('.private-key', 'utf8');
-      return new Wallet(privateKey, provider);
-  } catch {
-      const randomSigner = Wallet.createRandom().connect(provider);
-      await fs.writeFile('.private-key', randomSigner.privateKey);
-      return randomSigner;
-  }
-}
-
-const signer = await getWallet(provider);
+const signer = testAccounts[0].wallet;
 
 /* ===
 Here we are using a random wallet. Feel free to change to your own wallet using `.private-key` file.
