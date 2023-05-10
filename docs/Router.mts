@@ -23,17 +23,7 @@ import { provider, testAccounts } from './playground.mjs';
 
 import { promises as fs } from 'fs';
 
-/**
- * Get private key from .private-key to create a new wallet
- * If .private-key does not exists, create a new random wallet and write
- * the created wallet's private key to .private-key.
- */
-
 const signer = testAccounts[0].wallet;
-
-/* ===
-Here we are using a random wallet. Feel free to change to your own wallet using `.private-key` file.
-=== */
 
 import { toAddress } from '@pendle/sdk-v2';
 const signerAddress = toAddress(signer.address);
@@ -61,7 +51,7 @@ const marketAddress = toAddress('0x9ec4c502d989f04ffa9312c9d6e3f872ec91a0f9');
 
 import { createERC20 } from '@pendle/sdk-v2';
 
-const nativeToken = createERC20(NATIVE_ADDRESS_0x00, { provider });
+const nativeToken = createERC20(NATIVE_ADDRESS_0x00, { provider, chainId });
 console.log(`balance of ${signerAddress} is ${String(await nativeToken.balanceOf(toAddress(signer.address)))}`);
 
 /* ===
