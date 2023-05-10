@@ -1,6 +1,8 @@
 
 # Playground for Pendle SDk docs
-
+```ts
+const chainId = 1;
+```
 The Pendle SDK documentation is interactive, including this page. It is written
 in TypeScript and can be execute to get the output! But running in the real
 network is not cheap. To generate the outputs, we run the documentation in a
@@ -102,7 +104,7 @@ Output:
 We can test their balance as follows:
 ```ts
 import { createERC20, NATIVE_ADDRESS_0xEE } from '@pendle/sdk-v2';
-const nativeTokenERC20 = createERC20(NATIVE_ADDRESS_0xEE, { provider });
+const nativeTokenERC20 = createERC20(NATIVE_ADDRESS_0xEE, { provider, chainId });
 console.log(await nativeTokenERC20.balanceOf(testAccounts[0].address));
 ```
 Output:
@@ -124,7 +126,7 @@ async function setRawERC20Balance(address: Address, user: Address, rawAmount: BN
 }
 
 async function setERC20BalanceForAllAccounts(tokenAddress: Address, amount: BN, slot: number, reverse = false) {
-    const tokenDecimals = await createERC20(tokenAddress, { provider }).decimals();
+    const tokenDecimals = await createERC20(tokenAddress, { provider, chainId }).decimals();
     const rawAmount = BN.from(10).pow(tokenDecimals).mul(amount);
     await Promise.all(
         testAccounts.map(({ address: userAddress }) =>
@@ -137,7 +139,7 @@ Here is how we set the balance for USDC.
 ```ts
 const USDCAddress = toAddress('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48');
 const USDCSlot = 9;
-const usdcERC20 = createERC20(USDCAddress, { provider });
+const usdcERC20 = createERC20(USDCAddress, { provider, chainId });
 console.log('Balance before: ', await usdcERC20.balanceOf(testAccounts[0].address));
 await setERC20BalanceForAllAccounts(USDCAddress, BN.from(1000), USDCSlot, false);
 console.log('Balance after:', await usdcERC20.balanceOf(testAccounts[0].address));

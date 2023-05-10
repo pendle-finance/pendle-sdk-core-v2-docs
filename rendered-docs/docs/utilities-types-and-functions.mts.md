@@ -26,7 +26,7 @@ In Pendle SDK, we force `Address` to be a string that has `0x` as its prefix.
 This type is defined to avoid using raw string as address.
 The address returned by a contract call often have mixed cases, which sometimes causes bug in comparison. Even though it only checks if the string begins with `0x`, we are still sure that the address is not a raw string. Use `toAddress` to convert a raw address to this type.
 
-# function `toAddress(...)`
+## function `toAddress(...)`
 ```ts
 import { toAddress } from '@pendle/sdk-v2';
 ```
@@ -37,10 +37,10 @@ _Cast_ a rawAddress to the `Address` type. This function **does not** validate t
 
 ## function `isSameAddress(...)`
 ```ts
-import { isSameAddress } from '@pendle/sdk-v2';
+import { areSameAddresses } from '@pendle/sdk-v2';
 ```
 ```ts
-function isSameAddress(address1: Address, address2: Address): boolean;
+function areSameAddresses(address1: Address, address2: Address): boolean;
 ```
 Check if two addresses are the same, by comparing them in **lowercase**.
 
@@ -77,12 +77,12 @@ Check if a `ChainId` a `MainchainId`
 ```ts
 console.log(isMainchain(1));
 
-console.log(isMainchain(43114));
+console.log(isMainchain(43113));
 ```
 Output:
 ```
 true
-false
+true
 
 ```
 ## type `NetworkConnection`
