@@ -5,3 +5,7 @@ node_modules
 rendered-ts/
 
 .private-key*
+
+temp-dir
+
+.yarn
