@@ -6,6 +6,6 @@ rendered-ts/
 
 .private-key*
 
-.yarn
+temp-dir
 
-temp-dir/
+.yarn
