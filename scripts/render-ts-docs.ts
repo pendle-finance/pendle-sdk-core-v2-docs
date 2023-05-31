@@ -119,7 +119,7 @@ export async function renderTsDocs(content: string, fileName: string) {
                 processTypeScriptContent(content);
             let curResult = '\n```ts\n' + processedContent + '\n```\n';
             if (output.trim() !== '' && !hideOutput) {
-                curResult += '\nOutput:\n\n```' + output + '\n```\n';
+                curResult += '\nOutput:\n\n```' + output.trimEnd() + '\n```\n';
             }
             return curResult;
         }
@@ -147,6 +147,7 @@ async function main() {
             inFileName
         );
         const outFileName = path.join(outDir, inFileName) + '.md';
+        await fs.promises.mkdir(path.dirname(outFileName), { recursive: true });
         await fs.promises.writeFile(outFileName, generatedContent);
     };
 
