@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@pendle/constants": "^1.3.3",
-    "@pendle/sdk-v2": "^2.3.0-testnet",
+    "@pendle/sdk-v2": "^2.3.4",
     "ansi-to-html": "^0.7.2",
     "glob": "^9.3.0",
     "hardhat": "^2.12.7",
