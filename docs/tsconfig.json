@@ -2,7 +2,7 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "module": "ESNext",
-        "target": "es2018",
+        "target": "es2020",
         "moduleResolution": "node",
         "lib": [ "es2021", "es2021.string" ]
     }
