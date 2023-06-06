@@ -148,6 +148,8 @@ Approved amount: BigNumber { value: "1157920892373161954235709850086879078532699
 
 The result is `2^256 - 1`. As stated above, this is a _wrapped_ process.
 
+For the other ERC20 tokens, the process is similar.
+
 ### Step 3. Make a transaction
 
 ```ts
@@ -271,6 +273,6 @@ Output:
 ```
 Balances after exit {
   lpBalance: BigNumber { value: "0" },
-  stEthBalance: BigNumber { value: "9988811966138067025" }
+  stEthBalance: BigNumber { value: "9988813494237818089" }
 }
 ```

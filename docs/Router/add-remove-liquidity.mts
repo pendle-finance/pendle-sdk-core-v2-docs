@@ -77,6 +77,8 @@ console.log(
 
 /* ===
 The result is `2^256 - 1`. As stated above, this is a _wrapped_ process.
+
+For the other ERC20 tokens, the process is similar.
 === */
 
 /* ===
