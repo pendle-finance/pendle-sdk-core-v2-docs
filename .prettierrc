@@ -4,7 +4,7 @@
       "files": "*.{ts,js,mts,json}",
       "options": {
         "bracketSpacing": true,
-        "printWidth": 80,
+        "printWidth": 100,
         "semi": true,
         "singleQuote": true,
         "tabWidth": 4,

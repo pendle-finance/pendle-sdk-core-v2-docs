@@ -5,6 +5,40 @@ import { glob } from 'glob';
 import { evm_revert, evm_snapshot } from './util';
 import fs from 'fs';
 import path from 'path';
+import { resolveIncludePath, replaceAsync } from './utils';
+import z from 'zod';
+
+export const DIRECTIVE_COMMAND_SCHEMA = z.object({
+    include: z.string().optional(),
+});
+
+export async function preprocessTs(filePath: string): Promise<string> {
+    const content = await fs.promises.readFile(filePath, { encoding: 'utf-8' });
+
+    const directivePattern = /^\/\/\/(.*)$/gm;
+
+    const processDirective = async (
+        _match: string,
+        directiveContent: string
+    ) => {
+        if (!directiveContent.startsWith('/')) return '';
+        directiveContent = directiveContent.substring(1);
+        const parsedDirective = DIRECTIVE_COMMAND_SCHEMA.parse(
+            JSON.parse(directiveContent)
+        );
+        if (parsedDirective.include) {
+            const includedFilePath = resolveIncludePath(
+                filePath,
+                parsedDirective.include
+            );
+            const processedIncludedFile = await preprocessTs(includedFilePath);
+            return processedIncludedFile;
+        }
+        return '';
+    };
+
+    return replaceAsync(content, directivePattern, processDirective);
+}
 
 export const docTagRegex = /\/\*\s===(.*?)===\s*\*\//gs;
 export const outputSpearatorTag = '=====\n=====';
@@ -65,16 +99,9 @@ export async function renderTsDocs(content: string, fileName: string) {
     };
 
     const processTypeScriptContent = (content: string) => {
-        let curContent: string;
-        let hideOutput = false;
-        if (
-            (curContent = content.replace(hideOutputTag, '')).length !==
-            content.length
-        ) {
-            content = curContent;
-            hideOutput = true;
-        }
-        return { processedContent: content, hideOutput };
+        const processedContent = content.replace(hideOutputTag, '');
+        let hideOutput = processedContent.length !== content.length;
+        return { processedContent, hideOutput };
     };
 
     const result = Array.from(
@@ -90,9 +117,9 @@ export async function renderTsDocs(content: string, fileName: string) {
             }
             const { processedContent, hideOutput } =
                 processTypeScriptContent(content);
-            let curResult = '```ts\n' + processedContent + '\n```';
+            let curResult = '\n```ts\n' + processedContent + '\n```\n';
             if (output.trim() !== '' && !hideOutput) {
-                curResult += '\nOutput:\n```' + output + '\n```';
+                curResult += '\nOutput:\n\n```' + output.trimEnd() + '\n```\n';
             }
             return curResult;
         }
@@ -114,11 +141,13 @@ async function main() {
     }
 
     const processSingleFile = async (inFileName: string) => {
-        const fileContent = await fs.promises.readFile(inFileName, {
-            encoding: 'utf8',
-        });
-        const generatedContent = await renderTsDocs(fileContent, inFileName);
+        const preprocssedFileContent = await preprocessTs(inFileName);
+        const generatedContent = await renderTsDocs(
+            preprocssedFileContent,
+            inFileName
+        );
         const outFileName = path.join(outDir, inFileName) + '.md';
+        await fs.promises.mkdir(path.dirname(outFileName), { recursive: true });
         await fs.promises.writeFile(outFileName, generatedContent);
     };
 
