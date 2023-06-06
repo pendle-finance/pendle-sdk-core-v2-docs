@@ -80,9 +80,17 @@ Pool](https://app.pendle.finance/pro/pools/0xc374f7ec85f8c7de3207a10bb1978ba104b
 with 10 ETH.
 
 ```ts
-import { toAddress, BN } from '@pendle/sdk-v2';
-const poolAddress = toAddress('0xc374f7ec85f8c7de3207a10bb1978ba104bda3b2');
-const ETH_DECIMALS = BN.from(10).pow(18);
+import { toAddress, BN, createERC20, NATIVE_ADDRESS_0x00 } from '@pendle/sdk-v2';
+const marketAddress = toAddress('0xc374f7ec85f8c7de3207a10bb1978ba104bda3b2');
+
+// Pendle SDK `createERC20` can provide the same functionality of an ERC20
+// to native token (ETH).
+const ethWrappedERC20 = createERC20(NATIVE_ADDRESS_0x00, {
+    chainId: 1, // ethereum chain
+    provider,
+    signer: testAccounts[0].wallet,
+});
+const ETH_DECIMALS = BN.from(10).pow(await ethWrappedERC20.decimals());
 const amountETHToZapIn = ETH_DECIMALS.mul(10);
 ```
 
@@ -91,15 +99,20 @@ Here is how we can do it.
 ### Step 1. Verify our balances before zap
 
 ```ts
-import { createERC20, MarketEntity } from '@pendle/sdk-v2';
-const poolContract = new MarketEntity(poolAddress, {
+import { MarketEntity } from '@pendle/sdk-v2';
+const marketContract = new MarketEntity(marketAddress, {
     chainId: 1,
     provider,
     signer: testAccounts[0].wallet,
 });
+```
+
+
+
+```ts
 {
-    const lpBalance = await poolContract.balanceOf(testAccounts[0].address);
-    const ethBalance = await testAccounts[0].wallet.getBalance();
+    const lpBalance = await marketContract.balanceOf(testAccounts[0].address);
+    const ethBalance = await ethWrappedERC20.balanceOf(testAccounts[0].address);
     console.log('Balances before zap', { lpBalance, ethBalance });
 }
 ```
@@ -114,27 +127,42 @@ Balances before zap {
 ```
 
 ### Step 2. Approve our router
-Since we are using ETH, we do not need to approve.
+Since we are using ETH, we **do not** actually need to approve.
 
-For the other ERC20 tokens, please approve our router as follows:
+However, since `createERC20` wrap native token the same way as a normal ERC20,
+we can still do as follows:
 
 ```ts
-const amountToApprove = 0;  // your amount here
-const approvalTx = await erc20Contract.approve(router.address, amountToApprove);
-await approvalTx.wait();
+await ethWrappedERC20.approve(router.address, amountETHToZapIn).then((tx) => tx?.wait());
+console.log(
+    'Approved amount:',
+    await ethWrappedERC20.allowance(testAccounts[0].address, router.address)
+);
 ```
+
+Output:
+
+```
+Approved amount: BigNumber { value: "115792089237316195423570985008687907853269984665640564039457584007913129639935" }
+```
+
+The result is `2^256 - 1`. As stated above, this is a _wrapped_ process.
 
 ### Step 3. Make a transaction
 
 ```ts
-import { NATIVE_ADDRESS_0x00 } from '@pendle/sdk-v2';
-
 const slippage = 0.2 / 100;
 const tokenInAddress = NATIVE_ADDRESS_0x00;
+const amountTokenIn = amountETHToZapIn;
+```
+
+
+
+```ts
 const zapInTx = await router.addLiquiditySingleToken(
-    poolAddress,
+    marketAddress,
     tokenInAddress,
-    amountETHToZapIn,
+    amountTokenIn,
     slippage
 );
 
@@ -145,7 +173,7 @@ await zapInTx.wait();
 
 ```ts
 {
-    const lpBalance = await poolContract.balanceOf(testAccounts[0].address);
+    const lpBalance = await marketContract.balanceOf(testAccounts[0].address);
     const ethBalance = await testAccounts[0].wallet.getBalance();
     console.log('Balances after zap', { lpBalance, ethBalance });
 }
@@ -155,8 +183,8 @@ Output:
 
 ```
 Balances after zap {
-  lpBalance: BigNumber { value: "4957320026138737000" },
-  ethBalance: BigNumber { value: "9989985641478507745516" }
+  lpBalance: BigNumber { value: "4955310013487455702" },
+  ethBalance: BigNumber { value: "9989988952901184514762" }
 }
 ```
 
@@ -175,13 +203,18 @@ const stEthContract = createERC20(toAddress('0xae7ab96520DE3A18E5e111B5EaAb09531
     provider,
     signer: testAccounts[0].wallet,
 });
-let lpToRemove: BN;
+
+// we remove all LP to stEth.
+const lpToRemove = await marketContract.balanceOf(testAccounts[0].address);
+```
+
+
+
+```ts
 {
-    const lpBalance = await poolContract.balanceOf(testAccounts[0].address);
+    const lpBalance = lpToRemove;
     const stEthBalance = await stEthContract.balanceOf(testAccounts[0].address);
     console.log('Balances before exit', { lpBalance, stEthBalance });
-
-    lpToRemove = lpBalance; // Remove all liquidity
 }
 ```
 
@@ -189,16 +222,24 @@ Output:
 
 ```
 Balances before exit {
-  lpBalance: BigNumber { value: "4957320026138737000" },
+  lpBalance: BigNumber { value: "4955310013487455702" },
   stEthBalance: BigNumber { value: "0" }
 }
 ```
 
 ### Step 2. Approve our router.
+Note that we need to approve with the market contract, not the stEth contract.
 
 ```ts
-const zapOutApproval = await poolContract.approve(router.address, lpToRemove);
+const zapOutApproval = await marketContract.approve(router.address, lpToRemove);
 await zapOutApproval.wait();
+console.log('Approved amount:', marketContract.allowance(testAccounts[0].address, router.address));
+```
+
+Output:
+
+```
+Approved amount: Promise { <pending> }
 ```
 
 ### Step 3. Make transaction
@@ -206,7 +247,7 @@ await zapOutApproval.wait();
 ```ts
 const tokenOutAddress = stEthContract.address;
 const zapOutTx = await router.removeLiquiditySingleToken(
-    poolAddress,
+    marketAddress,
     lpToRemove,
     tokenOutAddress,
     slippage
@@ -219,7 +260,7 @@ await zapOutTx.wait();
 
 ```ts
 {
-    const lpBalance = await poolContract.balanceOf(testAccounts[0].address);
+    const lpBalance = await marketContract.balanceOf(testAccounts[0].address);
     const stEthBalance = await stEthContract.balanceOf(testAccounts[0].address);
     console.log('Balances after exit', { lpBalance, stEthBalance });
 }
@@ -230,6 +271,6 @@ Output:
 ```
 Balances after exit {
   lpBalance: BigNumber { value: "0" },
-  stEthBalance: BigNumber { value: "9989423389432487905" }
+  stEthBalance: BigNumber { value: "9988811966138067025" }
 }
 ```

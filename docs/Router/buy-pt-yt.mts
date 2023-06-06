@@ -64,7 +64,7 @@ const ptContract = await marketContact.ptEntity();
 
 await usdtContract.approve(router.address, amountUSDT).then((tx) => tx.wait());
 console.log(
-    'Approval amount:',
+    'Approved amount:',
     await usdtContract.allowance(testAccounts[0].address, router.address)
 );
 
@@ -131,7 +131,7 @@ const ytContract = await marketContact.ytEntity();
 
 await usdtContract.approve(router.address, amountUSDT).then((tx) => tx.wait());
 console.log(
-    'Approval amount:',
+    'Approved amount:',
     await usdtContract.allowance(testAccounts[0].address, router.address)
 );
 

@@ -128,7 +128,7 @@ Balances before buying PT {
 ```ts
 await usdtContract.approve(router.address, amountUSDT).then((tx) => tx.wait());
 console.log(
-    'Approval amount:',
+    'Approved amount:',
     await usdtContract.allowance(testAccounts[0].address, router.address)
 );
 ```
@@ -136,7 +136,7 @@ console.log(
 Output:
 
 ```
-Approval amount: BigNumber { value: "10000000" }
+Approved amount: BigNumber { value: "10000000" }
 ```
 
 ### Step 3. Make a transaction
@@ -174,7 +174,7 @@ Output:
 
 ```
 Balances after buying PT {
-  ptBalance: BigNumber { value: "10382147" },
+  ptBalance: BigNumber { value: "10382142" },
   usdtBalance: BigNumber { value: "990000000" }
 }
 ```
@@ -216,7 +216,7 @@ Balances before buying YT {
 ```ts
 await usdtContract.approve(router.address, amountUSDT).then((tx) => tx.wait());
 console.log(
-    'Approval amount:',
+    'Approved amount:',
     await usdtContract.allowance(testAccounts[0].address, router.address)
 );
 ```
@@ -224,7 +224,7 @@ console.log(
 Output:
 
 ```
-Approval amount: BigNumber { value: "10000000" }
+Approved amount: BigNumber { value: "10000000" }
 ```
 
 ### Step 3. Make a transaction
@@ -254,7 +254,7 @@ Output:
 
 ```
 Balances after buying YT {
-  ytBalance: BigNumber { value: "257053330" },
+  ytBalance: BigNumber { value: "257083022" },
   usdtBalance: BigNumber { value: "980000000" }
 }
 ```
