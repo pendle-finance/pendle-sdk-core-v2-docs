@@ -10,6 +10,7 @@ Pendle SDK is built on top of [Ethers](https://docs.ethers.io/v5/). While being 
 ### WrappedContract creation
 
 To create a `WrappedContract` , use the function `createContractObject`. In the following example, contract objects for the USDC token.
+
 ```ts
 import { createContractObject, toAddress } from '@pendle/sdk-v2';
 import { PendleERC20, PendleERC20ABI } from '@pendle/sdk-v2';
@@ -23,17 +24,21 @@ const chainId = 1;
 const readonlyWrappedContract = createContractObject<PendleERC20>(USDCAddress, PendleERC20ABI, { provider }); 
 const readWriteWrappedContract = createContractObject<PendleERC20>(USDCAddress, PendleERC20ABI, { signer });
 ```
+
 This function accepts a type parameter `C`, which is the generated contract’s typechain type. Next is the contract’s addresses, and its ABI. The final parameter is the configuration.
 
 The configuration has the `signer` and `provider` similar to the configuration of `PendleEntity`. See [ERC20 contract interaction tutorial with Pendle SDK](./erc20-tutorial.mts.md), as well as the `NetworkConnection` type in [Utilities types and functions](./utilities-types-and-functions.mts.md).
 By default, this function returns `WrappedContract<C>`, but it can also return ethersjs’ Contract, if `doWrap: false` is passed to the configuration.
+
 ```ts
 // Will have type PendleERC20 instead of WrappedContract<PendleERC20>
 const ethersJsContract: PendleERC20 = createContractObject<PendleERC20>(USDCAddress, PendleERC20ABI, { signer, doWrap: false });
 ```
+
 ### Basic contract interaction
 
 A `WrappedContract` object also has *the same* meta classes as ethersjs’ Contract, and they can be used the same way! Here is an example for the read function.
+
 ```ts
 import { Address, BigNumberish, ContractLike } from '@pendle/sdk-v2';
 
@@ -57,7 +62,9 @@ async function exampleReadFunctions(contract: ContractLike<PendleERC20>, user1: 
   };
 }
 ```
+
 To see the functions in action, we can use the following addresses got from the [top USDC holder page](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48#balances)
+
 ```ts
 const user1 = toAddress('0x0a59649758aa4d66e25f08dd01271e891fe52199');
 const user2 = toAddress('0xf977814e90da44bfa03b6295a0616a897441acec');
@@ -72,32 +79,35 @@ try {
   console.error(e);
 }
 ```
+
 Output:
+
 ```
 readonly wrapped contract {
-  user1Balance: '1823369206457527',
-  user2Balance: '0',
+  user1Balance: '389330911486978',
+  user2Balance: '6390000000',
   symbol: 'USDC',
   name: 'USD Coin',
   allowanceGasUsed: '31726'
 }
 read write wrapped contract {
-  user1Balance: '1823369206457527',
-  user2Balance: '0',
+  user1Balance: '389330911486978',
+  user2Balance: '6390000000',
   symbol: 'USDC',
   name: 'USD Coin',
   allowanceGasUsed: '31726'
 }
 ehtersjs contract {
-  user1Balance: '1823369206457527',
-  user2Balance: '0',
+  user1Balance: '389330911486978',
+  user2Balance: '6390000000',
   symbol: 'USDC',
   name: 'USD Coin',
   allowanceGasUsed: '31726'
 }
-
 ```
+
 The write function can also be done in the same way. But please done run it if you don't intend to!
+
 ```ts
 async function exampleWriteFunctions(contract: ContractLike<PendleERC20>, receiver: Address, amount: BigNumberish) {
   // functions
@@ -110,14 +120,17 @@ async function exampleWriteFunctions(contract: ContractLike<PendleERC20>, receiv
 // exampleWriteFunctions(readWriteWrappedContract, user1, tesAmount);
 // exampleWriteFunctions(ethersJsContract, user1, testAmount);
 ```
+
 Though the interfaces are the same, there is a key difference: when there is an error, Pendle SDK will throw a custom error, especially for Pendle Contracts. See [Error handling](./error-handling.mts.md).
 
 
 
 ### Multicall support — The `multicallStatic` meta-class.
+
 ```ts
 import { Multicall, MulticallOverrides } from '@pendle/sdk-v2';
 ```
+
 The `WrappedContract` object has an additional meta-class called `multicallStatic`. It has the same function as the `callStatic` meta-class, but the signature is a bit different.
 
 The signature of a `callStatic` method will have the following form:
@@ -131,12 +144,14 @@ multicallStaticMethod(arg1, arg2, ..., multicallStaticParams?: MulticallStaticPa
 ```
 
 where
+
 ```ts
 type MulticallStaticParams = {
   multicall?: Multicall;
   overrides?: MulticallOverrides;
 };
 ```
+
 The `multicallStatic` is guaranteed to work **correctly**. If `multicall` is not specified, the methods of this meta-class will act as `callStatic`.
 
 Similarly to a `PendleEntity`, like our `ERC20` entity (see [ERC20 contract interaction tutorial with Pendle SDK](./erc20-tutorial.mts.md)), there are two way to use `multicall`.
@@ -146,6 +161,7 @@ Similarly to a `PendleEntity`, like our `ERC20` entity (see [ERC20 contract inte
 #### Initialize the `WrappedContract` with `Multicall`
 
 Pass the `Multicall` instance to the configuration of `createContractObject`. Then use `multicallStatic` to have the *batching* effects of multicall.
+
 ```ts
 {
   async function wrappedContractWithMulticall(contractAddress: Address, userAddress: Address) {
@@ -171,16 +187,18 @@ Pass the `Multicall` instance to the configuration of `createContractObject`. Th
   }
 }
 ```
+
 Output:
+
 ```
 {
   name: 'USD Coin',
   symbol: 'USDC',
   decimals: 6,
-  userBalance: '1823369206457527'
+  userBalance: '389330911486978'
 }
-
 ```
+
 Note that `Promise.all` should be used to have the *batching* effect.
 
 
@@ -188,6 +206,7 @@ Note that `Promise.all` should be used to have the *batching* effect.
 #### Pass `Multicall` to `multicallStatic` methods
 
 `Multicall` instance can also be passed to the calling methods.
+
 ```ts
 {
   async function wrappedContractWithMulticall(contractAddress: Address, userAddress: Address) {
@@ -212,16 +231,18 @@ Note that `Promise.all` should be used to have the *batching* effect.
   }
 }
 ```
+
 Output:
+
 ```
 {
   name: 'USD Coin',
   symbol: 'USDC',
   decimals: 6,
-  userBalance: '1823369206457527'
+  userBalance: '389330911486978'
 }
-
 ```
+
 **Note**: if the contract is already initialized with `Multicall`, but another `Multicall` instance is passed into the `multicallStatic` methods, **the passed one will be used**. So one `WrappedContract` instance can be used with different `Multicall` instance in different contexts.
 
 We encourage using the _wass `Multicall` to `multicallStatic` methods_ style for developing new functions, as the contract can always be called with the user’s defined `Multicall` in different contexts.
@@ -241,6 +262,7 @@ contract.metaCall.methodName(arg1, arg2, ..., metaMethodType?: MetaMethodExtraPa
 ```
 
 where
+
 ```ts
 type MetaMethodExtraParams<T extends MetaMethodType = 'send'> = MulticallStaticParams & {
   method?: T;
@@ -249,6 +271,7 @@ type MetaMethodExtraParams<T extends MetaMethodType = 'send'> = MulticallStaticP
 
 type MetaMethodType = 'send' | 'callStatic' | 'estimateGas' | 'meta-method' | 'multicallStatic' | 'populateTransaction' | 'extractParams';
 ```
+
 and `MetaMethodReturnType` is a helper type that will be defined for each `MetaMethodType`.
 
 Here is a table for the actual return type for each `MetaMethodType`.
@@ -273,6 +296,7 @@ See [`type MetaMethodReturnType`](http://playground.pendle.finance/sdk-docs/type
 
 
 #### Quick example
+
 ```ts
 import { WrappedContract } from '@pendle/sdk-v2';
 

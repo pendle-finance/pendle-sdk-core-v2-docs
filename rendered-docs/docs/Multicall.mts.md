@@ -26,7 +26,10 @@ const multicall = new Multicall({ chainId, provider });
 
 Multicall accepts 2 required parameters in its configuration, which are
 
-- `chainId: ChainId` — the id of the chain to use multicall with. See `ChainId` type in  [Utilities types and functions](./utilities-types-and-functions.mts.md) - `provider: Provider` — the connection to the network.
+- `chainId: ChainId` — the id of the chain to use multicall with. See `ChainId`
+type in  [Utilities types and functions](./utilities-types-and-functions.mts.md)
+
+- `provider: Provider` — the connection to the network.
 
 Additionally, it accepts the following optional parameters:
 
@@ -34,7 +37,8 @@ Additionally, it accepts the following optional parameters:
 
 ### Calling contract methods
 
-To use multicall with ethresjs’ contract, first wrap it, then call it with `callStatic` (which is the only method).
+To use multicall with ethresjs’ contract, first wrap it, then call it with
+`callStatic` (which is the only method).
 
 ```ts
 import { PendleERC20, PendleERC20ABI, Address } from '@pendle/sdk-v2';
@@ -51,7 +55,9 @@ async function singleCall(userAddress: Address) {
 }
 ```
 
-To test the `singleCall` function, we should pass in some addresses. Some interesting addresses can be taken from [etherscan.io's USDC holders page](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48#balances).
+To test the `singleCall` function, we should pass in some addresses. Some
+interesting addresses can be taken from [etherscan.io's USDC holders
+page](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48#balances).
 
 ```ts
 import { toAddress } from '@pendle/sdk-v2';
@@ -75,7 +81,7 @@ console.log(await singleCall(USDC_HOLDERS['Maker: PSM-USDC-A']));
 Output:
 
 ```
-BigNumber { value: "391368720136652" }
+BigNumber { value: "389330911486978" }
 ```
 
 To have the *batching* effect, use it with `Promise.all`
@@ -102,10 +108,10 @@ for (const [holder, balance] of zip(Object.keys(USDC_HOLDERS), balances)) {
 Output:
 
 ```
-Maker: PSM-USDC-A is holding 391368720136652 USDC
-Polygon (Matic): ERC20 Bridge is holding 597570034978787 USDC
-Arbitrum One: L1 Arb - Custom Gateway is holding 1152806464795735 USDC
-Binance 14 is holding 120196135177650 USDC
+Maker: PSM-USDC-A is holding 389330911486978 USDC
+Polygon (Matic): ERC20 Bridge is holding 597629600911685 USDC
+Arbitrum One: L1 Arb - Custom Gateway is holding 1132132903833923 USDC
+Binance 14 is holding 121081597189149 USDC
 ```
 
 You can even use `singleCall` for batching:
@@ -118,11 +124,17 @@ async function multicallCall2(userAddresses: Address[]) {
 
 ### Result caching
 
-`Multicall#wrap` will only wrap each contract *once*. If the same contract is called with the same multicall instance, the cached result will be returned. The cached result is stored in `Multicall#cacheWrappedContract` weakMap. To access the cached result, you can get from the `cacheWrappedContract` weakMap of the `multicall` instance. For example, we can get the cache result of the above USDC `contract` instance as follows:
+`Multicall#wrap` will only wrap each contract *once*. If the same contract is
+called with the same multicall instance, the cached result will be returned. The
+cached result is stored in `Multicall#cacheWrappedContract` weakMap. To access
+the cached result, you can get from the `cacheWrappedContract` weakMap of the
+`multicall` instance. For example, we can get the cache result of the above USDC
+`contract` instance as follows:
 
 ```ts
-const cachedResult = multicall.wrap(contract); // this will not wrap the contract again, but return the cached result
-console.log(multicall.wrap(contract) === cachedResult); // can wrap multiple times
+// this will not wrap the contract again, but return the cached result
+const cachedResult = multicall.wrap(contract); 
+console.log(multicall.wrap(contract) === cachedResult);
 ```
 
 Output:
@@ -131,11 +143,14 @@ Output:
 true
 ```
 
-**Note**: the `Multicall#multicallStaticSymbol` is not *static*. It is local to each `multicall` instance.
+**Note**: the `Multicall#multicallStaticSymbol` is not *static*. It is local to
+*each `multicall` instance.
 
 ### Let the user decides whether to use Multicall
 
-It is also `Multicall.wrap` function, that accepts an optional parameter `Multicall?`. If it is undefined, the calling method will act just like `callStatic`, that is, no multicall!
+It is also `Multicall.wrap` function, that accepts an optional parameter
+`Multicall?`. If it is undefined, the calling method will act just like
+`callStatic`, that is, no multicall!
 
 ```ts
 async function singleCallOptional(userAddress: Address, multicall?: Multicall) {
@@ -161,16 +176,16 @@ Output:
 
 ```
 [
-  BigNumber { value: "391368720136652" },
-  BigNumber { value: "597570034978787" },
-  BigNumber { value: "1152806464795735" },
-  BigNumber { value: "120196135177650" }
+  BigNumber { value: "389330911486978" },
+  BigNumber { value: "597629600911685" },
+  BigNumber { value: "1132132903833923" },
+  BigNumber { value: "121081597189149" }
 ]
 [
-  BigNumber { value: "391368720136652" },
-  BigNumber { value: "597570034978787" },
-  BigNumber { value: "1152806464795735" },
-  BigNumber { value: "120196135177650" }
+  BigNumber { value: "389330911486978" },
+  BigNumber { value: "597629600911685" },
+  BigNumber { value: "1132132903833923" },
+  BigNumber { value: "121081597189149" }
 ]
 ```
 

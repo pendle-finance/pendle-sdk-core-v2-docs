@@ -45,7 +45,7 @@ Output:
 ```
 Test account info: {
   address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-  ethBalance: '10000.0'
+  ethBalance: '9984.970899124234141687'
 }
 ```
 
@@ -174,7 +174,7 @@ Output:
 
 ```
 Balances after buying PT {
-  ptBalance: BigNumber { value: "10401006" },
+  ptBalance: BigNumber { value: "10391360" },
   usdtBalance: BigNumber { value: "990000000" }
 }
 ```
@@ -254,7 +254,7 @@ Output:
 
 ```
 Balances after buying YT {
-  ytBalance: BigNumber { value: "246578020" },
+  ytBalance: BigNumber { value: "252065615" },
   usdtBalance: BigNumber { value: "980000000" }
 }
 ```

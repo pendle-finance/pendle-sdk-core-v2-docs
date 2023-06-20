@@ -125,7 +125,7 @@ console.log(await nativeTokenERC20.balanceOf(testAccounts[0].address));
 Output:
 
 ```
-BigNumber { value: "10000000000000000000000" }
+BigNumber { value: "9999981947658658254751" }
 ```
 
 ### Setting accounts balance for some tokens
@@ -167,7 +167,7 @@ console.log('Balance after:', await usdcERC20.balanceOf(testAccounts[0].address)
 Output:
 
 ```
-Balance before:  BigNumber { value: "0" }
+Balance before:  BigNumber { value: "1099370022" }
 Balance after: BigNumber { value: "1000000000" }
 ```
 

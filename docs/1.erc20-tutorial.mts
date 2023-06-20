@@ -15,7 +15,9 @@ has address
 [`0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48`](https://etherscan.io/address/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48).
 === */
 
-const USDCAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
+import { toAddress } from '@pendle/sdk-v2';
+
+const USDCAddress = toAddress('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48');
 
 /* ===
 To communicate with the contract, we also need two things:
@@ -288,7 +290,7 @@ This meta-method is the default behavior for a method call, which is to perform 
     console.log('Before');
     console.log("Alice's balance:", await erc20OfAlice.balanceOf(Alice.address));
     console.log("Bob's balance:", await erc20OfAlice.balanceOf(Bob.address));
-    console.log("Bob's allowance:", await erc20OfAlice.balanceOf(Alice.address, Bob.address));
+    console.log("Bob's allowance:", await erc20OfAlice.allowance(Alice.address, Bob.address));
     await erc20OfAlice.approve(Bob.address, testAmount, { method: 'send' }).then((transaction) => transaction.wait(1));
     await erc20OfAlice.transfer(Bob.address, testAmount, { method: 'send' }).then((transaction) => transaction.wait(1));
     console.log('After');
@@ -397,7 +399,6 @@ It is at the block `16839151`, with some USDC transfered from `0x81A31Af5d279158
 `0xe245212187AA7f423D09fC60F10CbBD623F97f9a`. Let's see their balance before and after this block.
 === */
 
-import { toAddress } from '@pendle/sdk-v2';
 {
     const block = 16839151;
     const sender = toAddress('0x81A31Af5d27915861Eced7865837599f3A070a2D');
