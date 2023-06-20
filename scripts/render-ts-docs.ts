@@ -131,19 +131,10 @@ export async function renderTsDocs(content: string, fileName: string) {
     return result;
 }
 
-async function main() {
-    function printUsage() {
-        console.info(`Usage:
-    yarn ts-node scripts/render-ts-docs <outDir> <file1> [<file2> ...]
-`);
-    }
-    const outDir = process.argv[2];
-    const fileArgs = process.argv.slice(3);
-    if (outDir == undefined || fileArgs.length === 0) {
-        printUsage();
-        return;
-    }
-
+export async function main(
+    outDir: string,
+    fileArgs: string[]
+) {
     const processSingleFile = async (inFileName: string) => {
         const preprocssedFileContent = await preprocessTs(path.resolve(inFileName));
         const generatedContent = await renderTsDocs(preprocssedFileContent, inFileName);
@@ -167,8 +158,23 @@ async function main() {
     }
 }
 
+async function execMain() {
+    function printUsage() {
+        console.info(`Usage:
+    yarn ts-node scripts/render-ts-docs <outDir> <file1> [<file2> ...]
+`);
+    }
+    const outDir = process.argv[2];
+    const fileArgs = process.argv.slice(3);
+    if (outDir == undefined || fileArgs.length === 0) {
+        printUsage();
+        return;
+    }
+    return main(outDir, fileArgs);
+}
+
 if (require.main === module) {
-    main()
+    execMain()
         .then(() => process.exit(0))
         .catch((e) => {
             console.error(e);

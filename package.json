@@ -1,26 +1,25 @@
 {
-  "name": "pendle-sdk-core-v2-docs",
-  "version": "1.0.0",
-  "description": "Documentation for Pendle SDK-v2",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "@pendle/constants": "^1.3.3",
-    "@pendle/sdk-v2": "^2.3.4",
-    "ansi-to-html": "^0.7.2",
-    "glob": "^9.3.0",
-    "hardhat": "^2.12.7",
-    "prettier": "^2.8.4"
-  },
-  "scripts": {
-    "render-doc": "ts-node ./scripts/render-ts-docs.ts ./rendered-docs",
-    "render-docs": "node ./scripts/render-all-docs.js md ./rendered-docs",
-    "render-ts": "node ./scripts/render-all-docs.js ts ./rendered-ts",
-    "local-fork": "yarn hardhat node"
-  },
-  "devDependencies": {
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.5",
-    "zod": "^3.21.4"
-  }
+    "name": "pendle-sdk-core-v2-docs",
+    "version": "1.0.0",
+    "description": "Documentation for Pendle SDK-v2",
+    "main": "index.js",
+    "license": "MIT",
+    "dependencies": {
+        "@pendle/constants": "^1.3.3",
+        "@pendle/sdk-v2": "^2.3.4",
+        "ansi-to-html": "^0.7.2",
+        "glob": "^9.3.0",
+        "hardhat": "^2.12.7",
+        "prettier": "^2.8.4"
+    },
+    "scripts": {
+        "render-doc": "ts-node ./scripts/render-ts-docs.ts ./rendered-docs",
+        "render-all-docs": "ts-node ./scripts/render-all-docs.ts",
+        "local-fork": "yarn hardhat node"
+    },
+    "devDependencies": {
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.5",
+        "zod": "^3.21.4"
+    }
 }
