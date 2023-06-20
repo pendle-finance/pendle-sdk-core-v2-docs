@@ -24,7 +24,7 @@ with 5 ETH. We can do it as follow.
 
 === */
 
-import { toAddress, BN, createERC20, NATIVE_ADDRESS_0x00 } from '@pendle/sdk-v2';
+import { toAddress, BN, NATIVE_ADDRESS_0x00 } from '@pendle/sdk-v2';
 const ETH_DECIMALS = 18n;
 
 const marketAddress = toAddress('0xc374f7ec85f8c7de3207a10bb1978ba104bda3b2');

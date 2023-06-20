@@ -138,6 +138,7 @@ const slotData: Record<string, [tokenAddress: Address, slot: number, reverse: bo
     DAI: [toAddress('0x6b175474e89094c44da98b954eedeac495271d0f'), 2, false],
     // WETH: [toAddress('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'), 3, false],
     FRAX: [toAddress('0x853d955acef822db058eb8505911ed77f175b99e'), 0, false],
+    USDC: [toAddress('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'), 9, false],
 };
 
 for (const [tokenAddress, slot, reverse] of Object.values(slotData)) {
