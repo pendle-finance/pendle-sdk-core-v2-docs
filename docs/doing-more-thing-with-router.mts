@@ -12,8 +12,8 @@ Here is how we can do it.
 ## Preparation
 === */
 
-//// { "include": "../common/prepare-provider-and-signer.mts" }
-/// <reference path="../common/prepare-provider-and-signer.d.ts" />
+//// { "include": "./common/prepare-provider-and-signer.mts" }
+/// <reference path="./common/prepare-provider-and-signer.d.ts" />
 
 /* ===
 ## The magic `method` parameters.

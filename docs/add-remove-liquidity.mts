@@ -7,14 +7,14 @@
 ## Preparation
 === */
 
-//// { "include": "../common/prepare-provider-and-signer.mts" }
-/// <reference path="../common/prepare-provider-and-signer.d.ts" />
+//// { "include": "./common/prepare-provider-and-signer.mts" }
+/// <reference path="./common/prepare-provider-and-signer.d.ts" />
 
 /* ===
 ## Create Pendle SDK Router
 === */
-//// { "include": "../common/create-router.mts" }
-/// <reference path="../common/create-router.d.ts" />
+//// { "include": "./common/create-router.mts" }
+/// <reference path="./common/create-router.d.ts" />
 
 /* ===
 ## Add liquidity

@@ -32,7 +32,7 @@ some test accounts with filled balances in a local forked network. (Checkout
 
 ```ts
 import ethers from 'ethers';
-import { provider, testAccounts } from '../playground.mjs';
+import { provider, testAccounts } from './playground.mjs';
 
 {
     const address = testAccounts[0].address;
@@ -185,8 +185,8 @@ Output:
 
 ```
 Balances after zap {
-  lpBalance: BigNumber { value: "4955310013487455702" },
-  ethBalance: BigNumber { value: "9989988952901184514762" }
+  lpBalance: BigNumber { value: "4944206537097323082" },
+  ethBalance: BigNumber { value: "9989992787887956844370" }
 }
 ```
 
@@ -224,7 +224,7 @@ Output:
 
 ```
 Balances before exit {
-  lpBalance: BigNumber { value: "4955310013487455702" },
+  lpBalance: BigNumber { value: "4944206537097323082" },
   stEthBalance: BigNumber { value: "0" }
 }
 ```
@@ -273,6 +273,6 @@ Output:
 ```
 Balances after exit {
   lpBalance: BigNumber { value: "0" },
-  stEthBalance: BigNumber { value: "9988813494237818089" }
+  stEthBalance: BigNumber { value: "9990030993263357503" }
 }
 ```
