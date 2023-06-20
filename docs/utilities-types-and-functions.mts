@@ -1,11 +1,17 @@
 /* ===
 # Utilities types and functions
 
----
+Here are some small, but useful types and functions used across places in Pendle
+SDK.
 
+---
+=== */
+
+/* ===
 ## Used external types and functions
 
-We use some external packages, mainly `ethers`. So before reading further, please be sure that you are familiar with them first.
+We use some external packages, mainly `ethers`. So before reading further,
+please be sure that you are familiar with them first.
 === */
 
 import type { providers, Signer } from 'ethers';
@@ -22,16 +28,21 @@ type Provider = providers.Provider;
 import { Address } from '@pendle/sdk-v2';
 
 /* ===
-```ts
-  type Address = `0x${string}`;
-```
+Please refer to [Address API reference][pendle-sdk-Address].
+
+This type is defined to avoid using raw string as address. The address returned
+by a contract call often have mixed cases, which sometimes causes bug in
+comparison.
+
+This type is an [Opaque](https://en.wikipedia.org/wiki/Opaque_data_type) type
+with the help of a private unique symbol. Similar implementation can be found in
+popular libraries such as
+[ts-essentials](https://github.com/ts-essentials/ts-essentials/tree/master/lib/opaque).
+We implemented our own, as the generated documentation and the IDE intellisense
+are nicer than using the library.
 === */
 
 /* ===
-In Pendle SDK, we force `Address` to be a string that has `0x` as its prefix. 
-This type is defined to avoid using raw string as address.
-The address returned by a contract call often have mixed cases, which sometimes causes bug in comparison. Even though it only checks if the string begins with `0x`, we are still sure that the address is not a raw string. Use `toAddress` to convert a raw address to this type.
-
 ## function `toAddress(...)`
 === */
 
@@ -41,9 +52,14 @@ import { toAddress } from '@pendle/sdk-v2';
 ```ts
 function toAddress(rawAddress: string): Address
 ```
-_Cast_ a rawAddress to the `Address` type. This function **does not** validate the `rawAddress` string. The resulting `Address` will be transformed to lowercase.
+_Cast_ a rawAddress to the `Address` type. This function **does not** validate
+the `rawAddress` string. The resulting `Address` will be transformed to
+lowercase.
 
-## function `isSameAddress(...)`
+=== */
+
+/* ===
+## function `areSameAddresses(...)`
 === */
 
 import { areSameAddresses } from '@pendle/sdk-v2';
@@ -54,6 +70,12 @@ function areSameAddresses(address1: Address, address2: Address): boolean;
 ```
 Check if two addresses are the same, by comparing them in **lowercase**.
 
+With the current `Address` type, addresses can also be compared directly with
+the `===` operator. This function was used before having the `Address` type,
+but it is still nice to have.
+=== */
+
+/* ===
 ## type `ChainId`
 === */
 
@@ -64,7 +86,9 @@ import { ChainId } from '@pendle/sdk-v2';
 type ChainId = 1 | 43113 | 80001 | 43114;
 ```
 This type is a union of the chains’ IDs that are supported by Pendle.
+=== */
 
+/* ===
 ## type `MainchainId`
 === */
 
@@ -76,14 +100,16 @@ type MainchainId = 1 | 43113;
 ```
 
 This type is a union of the main chains’ IDs that are supported by Pendle.
+=== */
 
+/* ===
 ## function `isMainchain(...)`
 === */
 
 import { isMainchain } from '@pendle/sdk-v2';
 
 /* ===
-```tsx
+```ts
 export function isMainchain(chainId: ChainId): chainId is MainchainId;
 ```
 
@@ -128,7 +154,7 @@ const signer = Wallet.createRandom();
 // ok examples
 const nc1: NetworkConnection = { provider };
 const nc2: NetworkConnection = { signer };
-const nc3: NetworkConnection = { provider, signer};
+const nc3: NetworkConnection = { provider, signer };
 
 // not ok example
 // const nc4: NetworkConnection = {};
@@ -153,18 +179,3 @@ const nc5 = { provider, aRandomField: 'foo' };
 const nc6 = copyNetworkConnection(nc5);
 // Print the keys of nc2
 console.log(Object.keys(nc6));
-
-/* ===
-## type `ContractLike<T>`
-=== */
-
-import { ContractLike } from '@pendle/sdk-v2';
-
-/* ===
-
-```tsx
-type ContractLike<T extends Contract = Contract> = T | WrappedContract<T>;
-```
-
-See this type in [Pendle SDK’s WrappedContract](./WrappedContract.mts.md)
-=== */
