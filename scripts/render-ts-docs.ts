@@ -17,21 +17,16 @@ export async function preprocessTs(filePath: string): Promise<string> {
 
     const directivePattern = /^\/\/\/(.*)$/gm;
 
-    const processDirective = async (
-        _match: string,
-        directiveContent: string
-    ) => {
+    const processDirective = async (_match: string, directiveContent: string) => {
         if (!directiveContent.startsWith('/')) return '';
         directiveContent = directiveContent.substring(1);
-        const parsedDirective = DIRECTIVE_COMMAND_SCHEMA.parse(
-            JSON.parse(directiveContent)
-        );
+        const parsedDirective = DIRECTIVE_COMMAND_SCHEMA.parse(JSON.parse(directiveContent));
         if (parsedDirective.include) {
-            const includedFilePath = resolveIncludePath(
-                filePath,
-                parsedDirective.include
+            const includedFilePath = resolveIncludePath(filePath, parsedDirective.include);
+            const processedIncludedFile = await preprocessTs(includedFilePath).then((content) =>
+                replaceImportPath(filePath, includedFilePath, content)
             );
-            const processedIncludedFile = await preprocessTs(includedFilePath);
+
             return processedIncludedFile;
         }
         return '';
@@ -40,12 +35,28 @@ export async function preprocessTs(filePath: string): Promise<string> {
     return replaceAsync(content, directivePattern, processDirective);
 }
 
+export function replaceImportPath(
+    filePath: string,
+    importedFilePath: string,
+    importedFileContent: string
+): string {
+    const importPattern = /import (.*?) from ['"](.*?)['"]/g;
+    const dir = path.dirname(filePath);
+    return importedFileContent.replace(
+        importPattern,
+        (_match, importGroup: string, importedFileGroup: string): string => {
+            let replacedFilePath = resolveIncludePath(importedFilePath, importedFileGroup);
+            if ('./'.includes(replacedFilePath[0])) {
+                replacedFilePath = './' + path.relative(dir, replacedFilePath);
+            }
+            return `import ${importGroup} from '${replacedFilePath}'`;
+        }
+    );
+}
+
 export const docTagRegex = /\/\*\s===(.*?)===\s*\*\//gs;
 export const outputSpearatorTag = '=====\n=====';
-export const outputSeparatorTagRegex = new RegExp(
-    `(${outputSpearatorTag})`,
-    'gs'
-);
+export const outputSeparatorTagRegex = new RegExp(`(${outputSpearatorTag})`, 'gs');
 export const hideOutputTag = /\/\/\s*?@hideOutput\s*?$/gm;
 
 const headerCode = `
@@ -87,10 +98,7 @@ export async function renderTsDocs(content: string, fileName: string) {
                 .join('\n') +
             footerCode;
 
-        const output = await execTypescript(
-            typescriptCode,
-            fileName.replace(/\.ts$/, '.mts')
-        );
+        const output = await execTypescript(typescriptCode, fileName.replace(/\.ts$/, '.mts'));
         return output.split(outputSeparatorTagRegex);
     })();
 
@@ -104,26 +112,22 @@ export async function renderTsDocs(content: string, fileName: string) {
         return { processedContent, hideOutput };
     };
 
-    const result = Array.from(
-        zip(parsedContent, parsedOutput),
-        ([content, output], index) => {
-            content = content.trim();
-            if (index % 2 === 1) {
-                return processMarkdownContent(content);
-            }
-
-            if (content.length === 0) {
-                return '';
-            }
-            const { processedContent, hideOutput } =
-                processTypeScriptContent(content);
-            let curResult = '\n```ts\n' + processedContent + '\n```\n';
-            if (output.trim() !== '' && !hideOutput) {
-                curResult += '\nOutput:\n\n```' + output.trimEnd() + '\n```\n';
-            }
-            return curResult;
+    const result = Array.from(zip(parsedContent, parsedOutput), ([content, output], index) => {
+        content = content.trim();
+        if (index % 2 === 1) {
+            return processMarkdownContent(content);
         }
-    ).join('\n');
+
+        if (content.length === 0) {
+            return '';
+        }
+        const { processedContent, hideOutput } = processTypeScriptContent(content);
+        let curResult = '\n```ts\n' + processedContent + '\n```\n';
+        if (output.trim() !== '' && !hideOutput) {
+            curResult += '\nOutput:\n\n```' + output.trimEnd() + '\n```\n';
+        }
+        return curResult;
+    }).join('\n');
     return result;
 }
 
@@ -141,19 +145,14 @@ async function main() {
     }
 
     const processSingleFile = async (inFileName: string) => {
-        const preprocssedFileContent = await preprocessTs(inFileName);
-        const generatedContent = await renderTsDocs(
-            preprocssedFileContent,
-            inFileName
-        );
+        const preprocssedFileContent = await preprocessTs(path.resolve(inFileName));
+        const generatedContent = await renderTsDocs(preprocssedFileContent, inFileName);
         const outFileName = path.join(outDir, inFileName) + '.md';
         await fs.promises.mkdir(path.dirname(outFileName), { recursive: true });
         await fs.promises.writeFile(outFileName, generatedContent);
     };
 
-    const files = (
-        await Promise.all(fileArgs.map((fileArg) => glob(fileArg)))
-    ).flat();
+    const files = (await Promise.all(fileArgs.map((fileArg) => glob(fileArg)))).flat();
 
     const localForkProvider = new providers.StaticJsonRpcProvider();
     const snapshot = await evm_snapshot(localForkProvider);

@@ -18,7 +18,8 @@ export async function replaceAsync(
 
 export function resolveIncludePath(mainFilePath: string, includedFilePath: string) {
     if (!includedFilePath.startsWith('.')) {
-        return path.resolve('./' + includedFilePath);
+        // return path.resolve('./' + includedFilePath);
+        return includedFilePath;
     }
     const mainFileRelativeDir = path.dirname(mainFilePath);
     return path.resolve(mainFileRelativeDir, includedFilePath);
