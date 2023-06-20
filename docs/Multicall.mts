@@ -136,5 +136,26 @@ console.log(balances1);
 console.log(balances2);
 
 /* ===
+## Using `Multicall` with `Router`
+
+`multicall` can be passed to Pendle SDK `Router` as follows:
+=== */
+
+import { Router } from '@pendle/sdk-v2';
+import { testAccounts } from './playground.mjs';
+const router = Router.getRouter({
+    chainId: 1,
+    provider,
+    signer: testAccounts[0].wallet,
+
+    multicall, // <----- pass multicall here
+});
+
+/* ===
+It is **advisable** to pass Multicall into Pendle SDK `Router` so 
+that it can take advantages of the intermediate calculation.
+=== */
+
+/* ===
 [ethers-Contract]: https://docs.ethers.org/v5/api/contract/contract/
 === */

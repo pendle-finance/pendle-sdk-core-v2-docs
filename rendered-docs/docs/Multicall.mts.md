@@ -7,7 +7,7 @@ Multicall is the preferred way to call contract methods and get hypothetical
 results. Pendle SDK has integrated
 [Multicall](https://github.com/makerdao/multicall) by makerdao as a core
 component. Our multicall component is designed so that it is compatible with
-ethersjs’ Contract, as well as our own component, can be used everywhere
+[ethersjs’ Contract][ethers-Contract], as well as our own component, can be used everywhere
 comfortably, but users also have the option to opt-out of using it if they don’t
 want to.
 
@@ -173,3 +173,24 @@ Output:
   BigNumber { value: "120196135177650" }
 ]
 ```
+
+## Using `Multicall` with `Router`
+
+`multicall` can be passed to Pendle SDK `Router` as follows:
+
+```ts
+import { Router } from '@pendle/sdk-v2';
+import { testAccounts } from './playground.mjs';
+const router = Router.getRouter({
+    chainId: 1,
+    provider,
+    signer: testAccounts[0].wallet,
+
+    multicall, // <----- pass multicall here
+});
+```
+
+It is **advisable** to pass Multicall into Pendle SDK `Router` so 
+that it can take advantages of the intermediate calculation.
+
+[ethers-Contract]: https://docs.ethers.org/v5/api/contract/contract/
