@@ -27,7 +27,7 @@ some test accounts with filled balances in a local forked network. (Checkout
 === */
 
 import ethers from 'ethers';
-import { provider, testAccounts } from '../playground.mjs';
+import { provider, testAccounts } from '../sdk-doc-playground.mjs';
 
 {
     const address = testAccounts[0].address;

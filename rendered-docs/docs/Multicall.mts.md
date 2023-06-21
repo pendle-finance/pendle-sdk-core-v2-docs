@@ -21,7 +21,7 @@ want to.
 
 ```ts
 import { Multicall } from '@pendle/sdk-v2';
-import { provider } from './playground.mjs';
+import { provider } from './sdk-doc-playground.mjs';
 
 const chainId = 1; // 1 for ethereum
 
@@ -85,7 +85,7 @@ console.log(await singleCall(USDC_HOLDERS['Maker: PSM-USDC-A']));
 Output:
 
 ```
-BigNumber { value: "433543903703739" }
+BigNumber { value: "431722858735941" }
 ```
 
 To have the *batching* effect, use it with `Promise.all`
@@ -112,10 +112,10 @@ for (const [holder, balance] of zip(Object.keys(USDC_HOLDERS), balances)) {
 Output:
 
 ```
-Maker: PSM-USDC-A is holding 433543903703739 USDC
-Polygon (Matic): ERC20 Bridge is holding 603020984512487 USDC
-Arbitrum One: L1 Arb - Custom Gateway is holding 1120111438376188 USDC
-Binance 14 is holding 182363923326287 USDC
+Maker: PSM-USDC-A is holding 431722858735941 USDC
+Polygon (Matic): ERC20 Bridge is holding 605658369590959 USDC
+Arbitrum One: L1 Arb - Custom Gateway is holding 1120124145728251 USDC
+Binance 14 is holding 184384382500926 USDC
 ```
 
 You can even use `singleCall` for batching:
@@ -180,16 +180,16 @@ Output:
 
 ```
 [
-  BigNumber { value: "433543903703739" },
-  BigNumber { value: "603020984512487" },
-  BigNumber { value: "1120111438376188" },
-  BigNumber { value: "182363923326287" }
+  BigNumber { value: "431722858735941" },
+  BigNumber { value: "605658369590959" },
+  BigNumber { value: "1120124145728251" },
+  BigNumber { value: "184384382500926" }
 ]
 [
-  BigNumber { value: "433543903703739" },
-  BigNumber { value: "603020984512487" },
-  BigNumber { value: "1120111438376188" },
-  BigNumber { value: "182363923326287" }
+  BigNumber { value: "431722858735941" },
+  BigNumber { value: "605658369590959" },
+  BigNumber { value: "1120124145728251" },
+  BigNumber { value: "184384382500926" }
 ]
 ```
 
@@ -199,7 +199,7 @@ Output:
 
 ```ts
 import { Router } from '@pendle/sdk-v2';
-import { testAccounts } from './playground.mjs';
+import { testAccounts } from './sdk-doc-playground.mjs';
 const router = Router.getRouter({
     chainId: 1,
     provider,

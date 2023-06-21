@@ -27,7 +27,7 @@ We have already prepared a module called [playground](./playground.mts) to provi
 Let's import them!
 === */
 
-import { provider, testAccounts } from './playground.mjs';
+import { provider, testAccounts } from './sdk-doc-playground.mjs';
 const [Alice, Bob] = testAccounts;
 
 console.log("Alice's address: ", Alice.address);

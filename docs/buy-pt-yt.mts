@@ -16,7 +16,7 @@
 /// <reference path="./common/create-router.d.ts" />
 
 /* ===
-## By PT
+## Buy PT
 Suppose that we want to buy PT in
 [USDT](https://app.pendle.finance/pro/markets/0x30e0dc9a1d33eac83211a1113de238b3ce826950/swap?view=pt&chain=ethereum)
 with 10 USDT.
@@ -99,7 +99,7 @@ await buyPtTx.wait();
 }
 
 /* ===
-## By YT
+## Buy YT
 Suppose that we want to buy YT in
 [USDT](https://app.pendle.finance/pro/markets/0x30e0dc9a1d33eac83211a1113de238b3ce826950/swap?view=pt&chain=ethereum)
 with 10 USDT. That is, in the same market, with the same parameters.

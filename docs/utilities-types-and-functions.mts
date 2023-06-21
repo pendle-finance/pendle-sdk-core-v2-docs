@@ -147,7 +147,7 @@ It is written so so that one of the fields can be omitted, **but not both!** Als
 === */
 
 import { Wallet } from 'ethers';
-import { provider } from './playground.mjs';
+import { provider } from './sdk-doc-playground.mjs';
 
 const signer = Wallet.createRandom();
 

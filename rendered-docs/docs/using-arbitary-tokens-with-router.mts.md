@@ -16,7 +16,7 @@ Pool](https://app.pendle.finance/pro/pools/0xc374f7ec85f8c7de3207a10bb1978ba104b
 But this time we want to do it with 100 USDT.
 
 ```ts
-import { provider, testAccounts } from './playground.mjs';
+import { provider, testAccounts } from './sdk-doc-playground.mjs';
 import { toAddress, BN, createERC20 } from '@pendle/sdk-v2';
 const USDTAddress = toAddress('0xdac17f958d2ee523a2206206994597c13d831ec7');
 const USDTContract = createERC20(USDTAddress, {
@@ -157,7 +157,7 @@ console.log({ lpAmount });
 Output:
 
 ```
-{ lpAmount: BigNumber { value: "27372157812622086" } }
+{ lpAmount: BigNumber { value: "27965381628590099" } }
 ```
 
 You can even remove liquidity to a different token than output token of Standardized Yield!
@@ -178,7 +178,7 @@ console.log(USDCBalance);
 Output:
 
 ```
-BigNumber { value: "1099922334" }
+BigNumber { value: "1102076365" }
 ```
 
 [IStandardizedYield Contract]: https://github.com/pendle-finance/pendle-core-v2/blob/bc08c7aaf82c7975cf8591aef2fca3fe92a743b2/contracts/interfaces/IStandardizedYield.sol#L135-L143

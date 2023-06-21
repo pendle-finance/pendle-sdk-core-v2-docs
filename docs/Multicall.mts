@@ -19,7 +19,7 @@ want to.
 === */
 
 import { Multicall } from '@pendle/sdk-v2';
-import { provider } from './playground.mjs';
+import { provider } from './sdk-doc-playground.mjs';
 
 const chainId = 1; // 1 for ethereum
 
@@ -157,7 +157,7 @@ console.log(balances2);
 === */
 
 import { Router } from '@pendle/sdk-v2';
-import { testAccounts } from './playground.mjs';
+import { testAccounts } from './sdk-doc-playground.mjs';
 const router = Router.getRouter({
     chainId: 1,
     provider,

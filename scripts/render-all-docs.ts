@@ -2,7 +2,7 @@ import { main } from './render-ts-docs';
 const outDir = './rendered-docs';
 
 const files = [
-    './docs/playground.mts', // always render this first.
+    './docs/sdk-doc-playground.mts', // always render this first.
     './docs/*.mts',
 ];
 

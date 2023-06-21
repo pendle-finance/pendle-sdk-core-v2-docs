@@ -88,21 +88,21 @@ Output:
 
 ```
 readonly wrapped contract {
-  user1Balance: '433543903703739',
+  user1Balance: '431722858735941',
   user2Balance: '6390000000',
   symbol: 'USDC',
   name: 'USD Coin',
   allowanceGasUsed: '31726'
 }
 read write wrapped contract {
-  user1Balance: '433543903703739',
+  user1Balance: '431722858735941',
   user2Balance: '6390000000',
   symbol: 'USDC',
   name: 'USD Coin',
   allowanceGasUsed: '31726'
 }
 ehtersjs contract {
-  user1Balance: '433543903703739',
+  user1Balance: '431722858735941',
   user2Balance: '6390000000',
   symbol: 'USDC',
   name: 'USD Coin',
@@ -199,7 +199,7 @@ Output:
   name: 'USD Coin',
   symbol: 'USDC',
   decimals: 6,
-  userBalance: '433543903703739'
+  userBalance: '431722858735941'
 }
 ```
 
@@ -243,7 +243,7 @@ Output:
   name: 'USD Coin',
   symbol: 'USDC',
   decimals: 6,
-  userBalance: '433543903703739'
+  userBalance: '431722858735941'
 }
 ```
 

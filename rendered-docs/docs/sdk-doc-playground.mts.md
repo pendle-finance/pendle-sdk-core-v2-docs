@@ -3,7 +3,7 @@ hide_table_of_contents: true
 ---
 
 
-# Playground for Pendle SDk docs
+# Playground for Pendle SDK docs
 
 ```ts
 const chainId = 1;
@@ -129,7 +129,7 @@ console.log(await nativeTokenERC20.balanceOf(testAccounts[0].address));
 Output:
 
 ```
-BigNumber { value: "9974803828191078221370" }
+BigNumber { value: "9999980442043336624783" }
 ```
 
 ### Setting accounts balance for some tokens
@@ -171,7 +171,7 @@ console.log('Balance after:', await usdcERC20.balanceOf(testAccounts[0].address)
 Output:
 
 ```
-Balance before:  BigNumber { value: "1099768758" }
+Balance before:  BigNumber { value: "1102076365" }
 Balance after: BigNumber { value: "1000000000" }
 ```
 

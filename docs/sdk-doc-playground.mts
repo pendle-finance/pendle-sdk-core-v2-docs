@@ -1,5 +1,5 @@
 /* ===
-# Playground for Pendle SDk docs
+# Playground for Pendle SDK docs
 === */
 
 const chainId = 1;

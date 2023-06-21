@@ -35,7 +35,7 @@ some test accounts with filled balances in a local forked network. (Checkout
 
 ```ts
 import ethers from 'ethers';
-import { provider, testAccounts } from './playground.mjs';
+import { provider, testAccounts } from './sdk-doc-playground.mjs';
 
 {
     const address = testAccounts[0].address;
@@ -49,7 +49,7 @@ Output:
 ```
 Test account info: {
   address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-  ethBalance: '9984.974489829368581193'
+  ethBalance: '9984.968717237610394181'
 }
 ```
 
@@ -77,7 +77,7 @@ Output:
 Router address: 0x0000000001e4ef00d069e71d6ba041b0a16f7ea0
 ```
 
-## By PT
+## Buy PT
 Suppose that we want to buy PT in
 [USDT](https://app.pendle.finance/pro/markets/0x30e0dc9a1d33eac83211a1113de238b3ce826950/swap?view=pt&chain=ethereum)
 with 10 USDT.
@@ -178,12 +178,12 @@ Output:
 
 ```
 Balances after buying PT {
-  ptBalance: BigNumber { value: "10390800" },
+  ptBalance: BigNumber { value: "10376940" },
   usdtBalance: BigNumber { value: "990000000" }
 }
 ```
 
-## By YT
+## Buy YT
 Suppose that we want to buy YT in
 [USDT](https://app.pendle.finance/pro/markets/0x30e0dc9a1d33eac83211a1113de238b3ce826950/swap?view=pt&chain=ethereum)
 with 10 USDT. That is, in the same market, with the same parameters.
@@ -258,7 +258,7 @@ Output:
 
 ```
 Balances after buying YT {
-  ytBalance: BigNumber { value: "252493988" },
+  ytBalance: BigNumber { value: "260774790" },
   usdtBalance: BigNumber { value: "980000000" }
 }
 ```

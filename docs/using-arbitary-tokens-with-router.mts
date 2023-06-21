@@ -12,7 +12,7 @@ Pool](https://app.pendle.finance/pro/pools/0xc374f7ec85f8c7de3207a10bb1978ba104b
 But this time we want to do it with 100 USDT.
 === */
 
-import { provider, testAccounts } from './playground.mjs';
+import { provider, testAccounts } from './sdk-doc-playground.mjs';
 import { toAddress, BN, createERC20 } from '@pendle/sdk-v2';
 const USDTAddress = toAddress('0xdac17f958d2ee523a2206206994597c13d831ec7');
 const USDTContract = createERC20(USDTAddress, {

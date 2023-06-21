@@ -32,7 +32,7 @@ import {
     ERC20Entity,
     Multicall,
 } from '@pendle/sdk-v2';
-import { provider } from './playground.mjs';
+import { provider } from './sdk-doc-playground.mjs';
 const FRAX_USDCContractAddress = toAddress(
     '0x7b246b8dbc2a640bf2d8221890cee8327fc23917'
 );
@@ -173,7 +173,7 @@ Use `MarketEntity#redeemRewards` to perform the reward redeeming transaction
 for a given user. As this is a write contract, a signer is require.
 === */
 
-import { testAccounts } from './playground.mjs';
+import { testAccounts } from './sdk-doc-playground.mjs';
 
 {
     const writeContract = new MarketEntity(FRAX_USDCContractAddress, {

@@ -19,7 +19,7 @@ First, we need to have a `Signer` and/or a `Provider`. Most of the time, `Signer
 
 import { Wallet, providers } from 'ethers';
 
-import { provider, testAccounts } from './playground.mjs';
+import { provider, testAccounts } from './sdk-doc-playground.mjs';
 
 import { promises as fs } from 'fs';
 
