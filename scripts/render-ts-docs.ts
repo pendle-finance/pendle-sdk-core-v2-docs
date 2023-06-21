@@ -141,6 +141,22 @@ export async function main(outDir: string, fileArgs: string[]) {
     };
 
     const processSingleFile = async (inFileName: string) => {
+        if (path.extname(inFileName) === '.md') {
+            return processSingleMdFile(inFileName);
+        }
+        return processSingleTsFile(inFileName);
+    };
+
+    const processSingleMdFile = async (inFileName: string) => {
+        const content = await fs.promises
+            .readFile(inFileName, { encoding: 'utf-8' })
+            .then(postProcessMd);
+        const outFileName = path.join(outDir, inFileName);
+        await fs.promises.mkdir(path.dirname(outFileName), { recursive: true });
+        await fs.promises.writeFile(outFileName, content);
+    };
+
+    const processSingleTsFile = async (inFileName: string) => {
         const preprocssedFileContent = await preprocessTs(path.resolve(inFileName));
         const generatedContent = await renderTsDocs(preprocssedFileContent, inFileName).then(
             postProcessMd
