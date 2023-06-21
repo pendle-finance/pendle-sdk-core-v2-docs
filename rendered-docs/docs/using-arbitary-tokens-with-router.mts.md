@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 
 # Using arbitrary token with Pendle SDK Router
 
@@ -153,7 +157,7 @@ console.log({ lpAmount });
 Output:
 
 ```
-{ lpAmount: BigNumber { value: "28499835731283878" } }
+{ lpAmount: BigNumber { value: "27372157812622086" } }
 ```
 
 You can even remove liquidity to a different token than output token of Standardized Yield!
@@ -174,7 +178,7 @@ console.log(USDCBalance);
 Output:
 
 ```
-BigNumber { value: "1099370022" }
+BigNumber { value: "1099922334" }
 ```
 
 [IStandardizedYield Contract]: https://github.com/pendle-finance/pendle-core-v2/blob/bc08c7aaf82c7975cf8591aef2fca3fe92a743b2/contracts/interfaces/IStandardizedYield.sol#L135-L143

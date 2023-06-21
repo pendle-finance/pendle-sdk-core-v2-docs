@@ -131,13 +131,20 @@ export async function renderTsDocs(content: string, fileName: string) {
     return result;
 }
 
-export async function main(
-    outDir: string,
-    fileArgs: string[]
-) {
+export async function main(outDir: string, fileArgs: string[]) {
+    const frontMatter = await fs.promises
+        .readFile('./shared-front-matter.md', { encoding: 'utf-8' })
+        .catch(() => '');
+
+    const postProcessMd = (content: string): string => {
+        return `${frontMatter}\n${content}`;
+    };
+
     const processSingleFile = async (inFileName: string) => {
         const preprocssedFileContent = await preprocessTs(path.resolve(inFileName));
-        const generatedContent = await renderTsDocs(preprocssedFileContent, inFileName);
+        const generatedContent = await renderTsDocs(preprocssedFileContent, inFileName).then(
+            postProcessMd
+        );
         const outFileName = path.join(outDir, inFileName) + '.md';
         await fs.promises.mkdir(path.dirname(outFileName), { recursive: true });
         await fs.promises.writeFile(outFileName, generatedContent);
@@ -148,14 +155,18 @@ export async function main(
     const localForkProvider = new providers.StaticJsonRpcProvider();
     const snapshot = await evm_snapshot(localForkProvider);
 
+    let processedFileCount = 0;
+
     for (const file of files) {
         console.log(`Processing ${file}`);
         try {
             await processSingleFile(file);
+            ++processedFileCount;
         } finally {
             await evm_revert(localForkProvider, snapshot);
         }
     }
+    console.log(`[Done]: ${processedFileCount}/${files.length} files processed`);
 }
 
 async function execMain() {

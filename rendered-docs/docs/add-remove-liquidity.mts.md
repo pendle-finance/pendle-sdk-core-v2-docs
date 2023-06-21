@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 
 # Add liquidity to and remove liquidity from Pendle Pool with arbitrary token
 ---
@@ -46,7 +50,7 @@ Output:
 ```
 Test account info: {
   address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-  ethBalance: '9984.964939005838578233'
+  ethBalance: '9984.968888410618255456'
 }
 ```
 
@@ -121,8 +125,8 @@ Output:
 
 ```
 Balances before zap {
-  lpBalance: BigNumber { value: "7416368129527641797" },
-  ethBalance: BigNumber { value: "9984964939005838578233" }
+  lpBalance: BigNumber { value: "7415068235880081501" },
+  ethBalance: BigNumber { value: "9984968888410618255456" }
 }
 ```
 
@@ -185,8 +189,8 @@ Output:
 
 ```
 Balances after zap {
-  lpBalance: BigNumber { value: "12360253713841889028" },
-  ethBalance: BigNumber { value: "9974962973269195985983" }
+  lpBalance: BigNumber { value: "12358497054348577057" },
+  ethBalance: BigNumber { value: "9974967032036909156384" }
 }
 ```
 
@@ -224,7 +228,7 @@ Output:
 
 ```
 Balances before exit {
-  lpBalance: BigNumber { value: "12360253713841889028" },
+  lpBalance: BigNumber { value: "12358497054348577057" },
   stEthBalance: BigNumber { value: "0" }
 }
 ```
@@ -273,6 +277,6 @@ Output:
 ```
 Balances after exit {
   lpBalance: BigNumber { value: "0" },
-  stEthBalance: BigNumber { value: "24974602590458448453" }
+  stEthBalance: BigNumber { value: "24974696018125219734" }
 }
 ```

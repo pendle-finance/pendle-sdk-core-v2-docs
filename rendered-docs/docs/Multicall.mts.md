@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 
 # Multicall
 
@@ -81,7 +85,7 @@ console.log(await singleCall(USDC_HOLDERS['Maker: PSM-USDC-A']));
 Output:
 
 ```
-BigNumber { value: "389330911486978" }
+BigNumber { value: "433543903703739" }
 ```
 
 To have the *batching* effect, use it with `Promise.all`
@@ -108,10 +112,10 @@ for (const [holder, balance] of zip(Object.keys(USDC_HOLDERS), balances)) {
 Output:
 
 ```
-Maker: PSM-USDC-A is holding 389330911486978 USDC
-Polygon (Matic): ERC20 Bridge is holding 597629600911685 USDC
-Arbitrum One: L1 Arb - Custom Gateway is holding 1132132903833923 USDC
-Binance 14 is holding 121081597189149 USDC
+Maker: PSM-USDC-A is holding 433543903703739 USDC
+Polygon (Matic): ERC20 Bridge is holding 603020984512487 USDC
+Arbitrum One: L1 Arb - Custom Gateway is holding 1120111438376188 USDC
+Binance 14 is holding 182363923326287 USDC
 ```
 
 You can even use `singleCall` for batching:
@@ -176,16 +180,16 @@ Output:
 
 ```
 [
-  BigNumber { value: "389330911486978" },
-  BigNumber { value: "597629600911685" },
-  BigNumber { value: "1132132903833923" },
-  BigNumber { value: "121081597189149" }
+  BigNumber { value: "433543903703739" },
+  BigNumber { value: "603020984512487" },
+  BigNumber { value: "1120111438376188" },
+  BigNumber { value: "182363923326287" }
 ]
 [
-  BigNumber { value: "389330911486978" },
-  BigNumber { value: "597629600911685" },
-  BigNumber { value: "1132132903833923" },
-  BigNumber { value: "121081597189149" }
+  BigNumber { value: "433543903703739" },
+  BigNumber { value: "603020984512487" },
+  BigNumber { value: "1120111438376188" },
+  BigNumber { value: "182363923326287" }
 ]
 ```
 

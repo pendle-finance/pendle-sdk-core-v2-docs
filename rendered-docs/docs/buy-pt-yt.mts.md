@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 
 # Buy PT and YT token with Pendle SDK.
 
@@ -45,7 +49,7 @@ Output:
 ```
 Test account info: {
   address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-  ethBalance: '9984.970899124234141687'
+  ethBalance: '9984.974489829368581193'
 }
 ```
 
@@ -174,7 +178,7 @@ Output:
 
 ```
 Balances after buying PT {
-  ptBalance: BigNumber { value: "10391360" },
+  ptBalance: BigNumber { value: "10390800" },
   usdtBalance: BigNumber { value: "990000000" }
 }
 ```
@@ -254,7 +258,7 @@ Output:
 
 ```
 Balances after buying YT {
-  ytBalance: BigNumber { value: "252065615" },
+  ytBalance: BigNumber { value: "252493988" },
   usdtBalance: BigNumber { value: "980000000" }
 }
 ```

@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 
 # Playground for Pendle SDk docs
 
@@ -125,7 +129,7 @@ console.log(await nativeTokenERC20.balanceOf(testAccounts[0].address));
 Output:
 
 ```
-BigNumber { value: "9999981947658658254751" }
+BigNumber { value: "9999984793785190352543" }
 ```
 
 ### Setting accounts balance for some tokens
@@ -167,7 +171,7 @@ console.log('Balance after:', await usdcERC20.balanceOf(testAccounts[0].address)
 Output:
 
 ```
-Balance before:  BigNumber { value: "1099370022" }
+Balance before:  BigNumber { value: "1099922334" }
 Balance after: BigNumber { value: "1000000000" }
 ```
 
