@@ -31,7 +31,7 @@ Ethers.js for the usage of `provider` and `signer`.
 
 To demonstrate the usage of Pendle SDK, we will use a prepared `provider` and
 some test accounts with filled balances in a local forked network. (Checkout
-[playground.mts](../playground.mts.md) to see how they are created).
+[playground.mts](./sdk-doc-playground.mts.md) to see how they are created).
 
 ```ts
 import ethers from 'ethers';
@@ -49,7 +49,7 @@ Output:
 ```
 Test account info: {
   address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-  ethBalance: '9984.968717237610394181'
+  ethBalance: '9959.797726308990816409'
 }
 ```
 
@@ -122,7 +122,7 @@ Output:
 
 ```
 Balances before buying PT {
-  ptBalance: BigNumber { value: "0" },
+  ptBalance: BigNumber { value: "10376940" },
   usdtBalance: BigNumber { value: "1000000000" }
 }
 ```
@@ -178,7 +178,7 @@ Output:
 
 ```
 Balances after buying PT {
-  ptBalance: BigNumber { value: "10376940" },
+  ptBalance: BigNumber { value: "20754229" },
   usdtBalance: BigNumber { value: "990000000" }
 }
 ```
@@ -210,7 +210,7 @@ Output:
 
 ```
 Balances before buying YT {
-  ytBalance: BigNumber { value: "0" },
+  ytBalance: BigNumber { value: "260774790" },
   usdtBalance: BigNumber { value: "990000000" }
 }
 ```
@@ -258,7 +258,7 @@ Output:
 
 ```
 Balances after buying YT {
-  ytBalance: BigNumber { value: "260774790" },
+  ytBalance: BigNumber { value: "521475959" },
   usdtBalance: BigNumber { value: "980000000" }
 }
 ```

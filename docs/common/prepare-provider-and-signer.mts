@@ -23,7 +23,7 @@ Ethers.js for the usage of `provider` and `signer`.
 
 To demonstrate the usage of Pendle SDK, we will use a prepared `provider` and
 some test accounts with filled balances in a local forked network. (Checkout
-[playground.mts](../playground.mts) to see how they are created).
+[playground.mts](../sdk-doc-playground.mts) to see how they are created).
 === */
 
 import ethers from 'ethers';

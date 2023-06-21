@@ -32,7 +32,7 @@ Ethers.js for the usage of `provider` and `signer`.
 
 To demonstrate the usage of Pendle SDK, we will use a prepared `provider` and
 some test accounts with filled balances in a local forked network. (Checkout
-[playground.mts](../playground.mts.md) to see how they are created).
+[playground.mts](./sdk-doc-playground.mts.md) to see how they are created).
 
 ```ts
 import ethers from 'ethers';
@@ -50,7 +50,7 @@ Output:
 ```
 Test account info: {
   address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-  ethBalance: '9984.962431474063914962'
+  ethBalance: '9959.796037708252906401'
 }
 ```
 
@@ -125,8 +125,8 @@ Output:
 
 ```
 Balances before zap {
-  lpBalance: BigNumber { value: "7415060155749829537" },
-  ethBalance: BigNumber { value: "9984962431474063914962" }
+  lpBalance: BigNumber { value: "7415056052395711065" },
+  ethBalance: BigNumber { value: "9959796037708252906401" }
 }
 ```
 
@@ -189,8 +189,8 @@ Output:
 
 ```
 Balances after zap {
-  lpBalance: BigNumber { value: "12358483288388593847" },
-  ethBalance: BigNumber { value: "9974960366344521708826" }
+  lpBalance: BigNumber { value: "12358477257712936422" },
+  ethBalance: BigNumber { value: "9949795341003257331395" }
 }
 ```
 
@@ -228,8 +228,8 @@ Output:
 
 ```
 Balances before exit {
-  lpBalance: BigNumber { value: "12358483288388593847" },
-  stEthBalance: BigNumber { value: "0" }
+  lpBalance: BigNumber { value: "12358477257712936422" },
+  stEthBalance: BigNumber { value: "24974694703001963936" }
 }
 ```
 
@@ -277,6 +277,6 @@ Output:
 ```
 Balances after exit {
   lpBalance: BigNumber { value: "0" },
-  stEthBalance: BigNumber { value: "24974694703001963936" }
+  stEthBalance: BigNumber { value: "49949397129142156720" }
 }
 ```

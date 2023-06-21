@@ -157,7 +157,7 @@ console.log({ lpAmount });
 Output:
 
 ```
-{ lpAmount: BigNumber { value: "27965381628590099" } }
+{ lpAmount: BigNumber { value: "27526493643865688" } }
 ```
 
 You can even remove liquidity to a different token than output token of Standardized Yield!
@@ -178,7 +178,7 @@ console.log(USDCBalance);
 Output:
 
 ```
-BigNumber { value: "1102076365" }
+BigNumber { value: "1100711387" }
 ```
 
 [IStandardizedYield Contract]: https://github.com/pendle-finance/pendle-core-v2/blob/bc08c7aaf82c7975cf8591aef2fca3fe92a743b2/contracts/interfaces/IStandardizedYield.sol#L135-L143

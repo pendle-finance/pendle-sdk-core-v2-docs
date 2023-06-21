@@ -23,9 +23,9 @@ export async function preprocessTs(filePath: string): Promise<string> {
         const parsedDirective = DIRECTIVE_COMMAND_SCHEMA.parse(JSON.parse(directiveContent));
         if (parsedDirective.include) {
             const includedFilePath = resolveIncludePath(filePath, parsedDirective.include);
-            const processedIncludedFile = await preprocessTs(includedFilePath).then((content) =>
-                replaceImportPath(filePath, includedFilePath, content)
-            );
+            const processedIncludedFile = await preprocessTs(includedFilePath)
+                .then((content) => replaceImportPath(filePath, includedFilePath, content))
+                .then((content) => replaceMarkdownLink(filePath, includedFilePath, content));
 
             return processedIncludedFile;
         }
@@ -35,24 +35,33 @@ export async function preprocessTs(filePath: string): Promise<string> {
     return replaceAsync(content, directivePattern, processDirective);
 }
 
-export function replaceImportPath(
-    filePath: string,
-    importedFilePath: string,
-    importedFileContent: string
-): string {
-    const importPattern = /import (.*?) from ['"](.*?)['"]/g;
-    const dir = path.dirname(filePath);
-    return importedFileContent.replace(
-        importPattern,
-        (_match, importGroup: string, importedFileGroup: string): string => {
+export function genReplacePath(
+    pattern: RegExp,
+    replacer: (pathReplacer: (importedFileGroup: string) => string, ...rest: string[]) => string
+) {
+    return (filePath: string, importedFilePath: string, importedFileContent: string): string => {
+        const dir = path.dirname(filePath);
+        const pathReplacer = (importedFileGroup: string) => {
             let replacedFilePath = resolveIncludePath(importedFilePath, importedFileGroup);
-            if ('./'.includes(replacedFilePath[0])) {
-                replacedFilePath = './' + path.relative(dir, replacedFilePath);
-            }
-            return `import ${importGroup} from '${replacedFilePath}'`;
-        }
-    );
+            if (!'./'.includes(replacedFilePath[0])) return replacedFilePath;
+            return './' + path.relative(dir, replacedFilePath);
+        };
+        return importedFileContent.replace(pattern, (...rest: string[]) =>
+            replacer(pathReplacer, ...rest)
+        );
+    };
 }
+
+const replaceImportPath = genReplacePath(
+    /import (.*?) from ['"](.*?)['"]/gms,
+    (pathReplacer, _match, importGroup, importedFileGroup) =>
+        `import ${importGroup} from '${pathReplacer(importedFileGroup)}'`
+);
+
+const replaceMarkdownLink = genReplacePath(
+    /\[(.*?)\]\((.*?)\)/gms,
+    (pathReplacer, _match, label, link) => `[${label}](${pathReplacer(link)})`
+);
 
 export const docTagRegex = /\/\*\s===(.*?)===\s*\*\//gs;
 export const outputSpearatorTag = '=====\n=====';
